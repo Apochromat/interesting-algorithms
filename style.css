@@ -1,72 +1,80 @@
-html, body {
-    height: 100%;
-    margin: 0;
-    padding: 0;
+html,
+body {
+  height: 100%;
+  margin: 0;
+  padding: 0;
 }
 .main {
-    display: flex;
-    padding-top: 82px;
-    flex-direction: row;
-    justify-content: space-between;
-    height: 100%;
-    background-image: url("bg.jpg");
+  display: flex;
+  padding-top: 82px;
+  flex-direction: row;
+  justify-content: space-between;
+  height: 100%;
 }
-.mainf div{
-    border: solid;
-    border-color: red;
+.mainf div {
+  border: solid;
+  border-color: red;
 }
 .center {
-    background-color: rgba(255,255,255, 0.3);
-    flex-grow: 1;
-    flex-shrink: 0;
+  background-color: rgba(255, 255, 255, 0.3);
+  flex-grow: 1;
+  flex-shrink: 0;
 }
 .article {
-    display: flex;
-    flex-direction: column;
-    justify-content: center;
-    align-items: center;
-    height: 40%;
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+  align-items: center;
+  height: 40%;
 }
 .info {
-    text-align: center;
-    margin-left: auto;
-    margin-right: auto;
-    width: 42em;
-    font-family: "Arial", serif;
-    font-size: 20px;
-    border-bottom: 2px solid gray;
+  text-align: center;
+  margin-left: auto;
+  margin-right: auto;
+  width: 42em;
+  font-family: "Arial", serif;
+  font-size: 20px;
+  border-bottom: 2px solid gray;
 }
 
 h1 {
-    font-family: 'Playfair Display', 'Arial Black', sans-serif;
-    font-size: 44px;
-    font-weight: normal;
+  font-family: "Playfair Display", "Arial Black", sans-serif;
+  font-size: 44px;
+  font-weight: normal;
 }
 .header {
-    display: flex;
-    flex-direction: row;
-    justify-content: space-around;
-    background-color: white;
-    height: 82px;
-    border-bottom: groove;
-    border-color: lightgray;
-    border-width: 3px;
-    width: 100%;
-    position:fixed;
-    
+  display: flex;
+  flex-direction: row;
+  justify-content: space-around;
+  background-color: white;
+  height: 82px;
+  border-bottom: groove;
+  border-color: lightgray;
+  border-width: 3px;
+  width: 100%;
+  position: fixed;
 }
 .brand {
-    font-family: 'Playfair Display', 'Arial Black', sans-serif;
-    font-size: 30px;
-    font-weight:500;
-    padding-left: 22px;
-    padding-top: 20px;
+  font-family: "Playfair Display", "Arial Black", sans-serif;
+  font-size: 30px;
+  font-weight: 500;
+  padding-left: 22px;
+  padding-top: 20px;
 }
 .slogan {
-    font-family: 'Playfair Display', 'Arial Black', sans-serif;
-    font-size: 42px;
+  font-family: "Playfair Display", "Arial Black", sans-serif;
+  font-size: 42px;
 }
 
+html, body {
+  margin: 0;
+  padding: 0;
+}
 
-
-
+.background {
+  position: absolute;
+  display: block;
+  top: 0;
+  left: 0;
+  z-index: -1;
+}
