@@ -1,76 +1,34 @@
-html,
-body {
-  height: 100%;
+html, body {
   margin: 0;
   padding: 0;
 }
 .main {
+  margin: auto;
   display: flex;
-  padding-top: 82px;
+  padding-top: 10%;
   flex-direction: row;
-  justify-content: space-between;
-  height: 100%;
-}
-.mainf div {
-  border: solid;
-  border-color: red;
-}
-.center {
-  background-color: rgba(255, 255, 255, 0.3);
-  flex-grow: 1;
-  flex-shrink: 0;
-}
-.article {
-  display: flex;
-  flex-direction: column;
   justify-content: center;
-  align-items: center;
-  height: 40%;
-}
-.info {
-  text-align: center;
-  margin-left: auto;
-  margin-right: auto;
-  width: 42em;
-  font-family: "Arial", serif;
-  font-size: 20px;
+  width: 50%;
   border-bottom: 2px solid gray;
 }
-
+.names {
+  margin: auto;
+  display: flex;
+  padding-top: 3%;
+  flex-direction: row;
+  justify-content: space-around;
+  width: 50%;
+}
 h1 {
   font-family: "Playfair Display", "Arial Black", sans-serif;
   font-size: 44px;
   font-weight: normal;
 }
-.header {
-  display: flex;
-  flex-direction: row;
-  justify-content: space-around;
-  background-color: white;
-  height: 82px;
-  border-bottom: groove;
-  border-color: lightgray;
-  border-width: 3px;
-  width: 100%;
-  position: fixed;
-}
-.brand {
+h2 {
   font-family: "Playfair Display", "Arial Black", sans-serif;
-  font-size: 30px;
-  font-weight: 500;
-  padding-left: 22px;
-  padding-top: 20px;
+  font-size: 44px;
+  font-weight: normal;
 }
-.slogan {
-  font-family: "Playfair Display", "Arial Black", sans-serif;
-  font-size: 42px;
-}
-
-html, body {
-  margin: 0;
-  padding: 0;
-}
-
 .background {
   position: absolute;
   display: block;
