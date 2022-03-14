@@ -1,5 +1,1 @@
-#include <iostream>
-using namespace std;
-int main(){
-cout<<"Tets in visual studio";
-}
+print(Tested in VS Code)
