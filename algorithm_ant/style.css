@@ -11,24 +11,10 @@ html, body {
   width: 50%;
   border-bottom: 2px solid gray;
 }
-.names {
-  margin: auto;
-  display: flex;
-  padding-top: 3%;
-  flex-direction: row;
-  justify-content: space-around;
-  width: 55%;
-}
 h1 {
   font-family: "Playfair Display", "Arial Black", sans-serif;
   font-size: 44px;
   font-weight: normal;
-}
-h2 {
-  font-family: "Playfair Display", "Arial Black", sans-serif;
-  font-size: 44px;
-  font-weight: normal;
-  text-align: center;
 }
 .background {
   position: absolute;

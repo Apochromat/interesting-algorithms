@@ -1,0 +1,40 @@
+<!DOCTYPE html>
+<html lang="ru">
+<head>
+    <meta charset="utf-8" />
+    <title> Interesting Algorithms </title>
+    <link rel="shortcut icon" href="../favicon.ico" type="image/x-icon">
+    <link href="style.css" rel="stylesheet">
+    <link href="../menu_style.css" rel="stylesheet">
+    <link href="https://fonts.googleapis.com/css?family=Playfair+Display" rel="stylesheet">
+</head>
+<body>
+    <canvas class = "background"></canvas>
+    <script src="../particles.min.js"></script>
+    <script>
+        window.onload= function() {
+            Particles.init({ selector: '.background', connectParticles: true, maxParticles:150, color: '#aaaaaa' });
+        };
+    </script>
+    <input type="checkbox" id="nav-toggle" hidden>
+    <nav class="nav">
+        <label for="nav-toggle" class="nav-toggle" onclick></label>
+        <h2 class="logo"> 
+            TEAM 17 
+        </h2>
+        <ul>
+            <li><a href="../algorithm_a/algorithm_a.html">Алгоритм A*</a>
+            <li><a href="../algorithm_clustering/algorithm_clustering.html">Алгоритм кластеризации</a>
+            <li><a href="../algorithm_genetic/algorithm_genetic.html">Генетический алгоритм</a>
+            <li><a href="">Муравьиный алгоритм</a>
+            <li><a href="../decision_tree/decision_tree.html">Дерево решений</a>
+            <li><a href="../neural_network/neural_network.html">Нейронная сеть</a>
+        </ul>
+    </nav>
+    <div class="main">
+        <h1>Муравьи</h1>
+</body>
+</html>
+
+
+
