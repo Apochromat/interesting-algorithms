@@ -35,6 +35,7 @@ h2 a{
   text-decoration: none;
 }
 .background {
+  background-color: rgb(243, 243, 243);
   position: absolute;
   display: block;
   top: 0;
