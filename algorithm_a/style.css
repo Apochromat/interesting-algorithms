@@ -1,14 +1,14 @@
-.mainContainer{
+.mainContainer {
   margin-left: 40px;
 }
 
-.mainContainer > .algorithmName > h3 {
-  position: inherit;
+.mainContainer > .algorithmName {
+  padding-bottom: 8px;
+  border-bottom: 2px solid gray;
 }
 
 .mainContainer > .algorithmName > h3 {
   margin: 10px auto 0px auto;
-  border-bottom: 2px solid gray;
   font-family: "Playfair Display", "Arial Black", sans-serif;
   font-size: 36px;
   font-weight: normal;
@@ -26,10 +26,39 @@
   padding: 15px;
 }
 
-.mainContainer > .algorithmBox > .algorithmOptions {
-  flex:1;
+.mainContainer > .algorithmBox > .algorithmOptions > * {
+  margin: 0 auto 20px auto;
+  border: 3px solid grey;
 }
 
-.mainContainer > .algorithmBox > .algorithmView{
-  flex:2;
+.mainContainer > .algorithmBox > .algorithmOptions > .about > * {
+  margin: 10px;
+}
+
+.mainContainer > .algorithmBox > .algorithmOptions {
+  display: flex;
+  flex-direction: column;
+  flex: 1;
+}
+
+.mainContainer > .algorithmBox > .algorithmOptions h4 {
+  text-align: left;
+  margin: 10px 10px auto 10px;
+  font-family: "Playfair Display", "Arial Black", sans-serif;
+  font-size: 24px;
+}
+
+.mainContainer > .algorithmBox > .algorithmView {
+  flex: 2;
+  margin-right: 40px;
+}
+
+#ioTable {
+  background-color: white;
+}
+
+#ioTable td {
+  width: 15px;
+  height: 15px;
+  border: 2px solid black;
 }

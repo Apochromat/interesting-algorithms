@@ -106,9 +106,7 @@
 
 [id='nav-toggle']:checked ~ .nav {
     left: 0;
-    box-shadow:4px 0px 10px 0px rgba(0,0,0, 0.5);
-    -moz-box-shadow:4px 0px 20px 0px rgba(0,0,0, 0.5);
-    -webkit-box-shadow:4px 0px 20px 0px rgba(0,0,0, 0.5);
+    box-shadow:4px 0px 10px 0px rgba(0,0,0, 0.2);
     overflow-y: auto;
 }
 
