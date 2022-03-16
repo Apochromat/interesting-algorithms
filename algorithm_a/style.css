@@ -1,25 +1,35 @@
-html, body {
-  margin: 0;
-  padding: 0;
+.mainContainer{
+  margin-left: 40px;
 }
-.main {
-  margin: auto;
-  display: flex;
-  padding-top: 10%;
-  flex-direction: row;
-  justify-content: center;
-  width: 50%;
+
+.mainContainer > .algorithmName > h3 {
+  position: inherit;
+}
+
+.mainContainer > .algorithmName > h3 {
+  margin: 10px auto 0px auto;
   border-bottom: 2px solid gray;
-}
-h1 {
   font-family: "Playfair Display", "Arial Black", sans-serif;
-  font-size: 44px;
+  font-size: 36px;
   font-weight: normal;
+  text-align: center;
 }
-.background {
-  position: absolute;
-  display: block;
-  top: 0;
-  left: 0;
-  z-index: -1;
+
+.mainContainer > .algorithmBox {
+  display: flex;
+}
+
+.mainContainer > .algorithmBox > * {
+  margin: 20px;
+  border-radius: 10px;
+  background-color: rgba(255, 255, 255, 0.616);
+  padding: 15px;
+}
+
+.mainContainer > .algorithmBox > .algorithmOptions {
+  flex:1;
+}
+
+.mainContainer > .algorithmBox > .algorithmView{
+  flex:2;
 }
