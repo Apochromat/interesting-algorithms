@@ -35,11 +35,10 @@ h2 a{
   text-decoration: none;
 }
 .background {
-  background-color: rgb(238, 238, 238);
+  background-color: rgb(243, 243, 243);
   position: absolute;
   display: block;
   top: 0;
   left: 0;
   z-index: -1;
 }
-
