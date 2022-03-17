@@ -45,3 +45,62 @@ h2 a{
   left: 0;
   z-index: -1;
 }
+
+.mainContainer {
+  margin-left: 40px;
+}
+
+.mainContainer > .algorithmName {
+  padding-bottom: 8px;
+  border-bottom: 2px solid gray;
+}
+
+.mainContainer > .algorithmName > h3 {
+  margin: 10px auto 0px auto;
+  font-family: "Playfair Display", "Arial Black", sans-serif;
+  font-size: 36px;
+  font-weight: normal;
+  text-align: center;
+}
+
+.mainContainer > .algorithmBox {
+  display: flex;
+}
+
+.mainContainer > .algorithmBox > * {
+  margin: 20px;
+  border-radius: 10px;
+  background-color: rgba(255, 255, 255, 0.616);
+  padding: 15px;
+}
+
+.mainContainer > .algorithmBox > .algorithmOptions > * {
+  margin: 0 auto 20px auto;
+  width: 100%;
+  border: 3px solid grey;
+  display: flex;
+  flex-direction: column;
+}
+
+.mainContainer > .algorithmBox > .algorithmOptions > .about > * {
+  margin: 10px;
+}
+
+.mainContainer > .algorithmBox > .algorithmOptions {
+  min-width: 250px;
+  display: flex;
+  flex-direction: column;
+  flex: 1;
+}
+
+.mainContainer > .algorithmBox > .algorithmOptions h4 {
+  text-align: left;
+  margin: 10px 10px auto 10px;
+  font-family: "Playfair Display", "Arial Black", sans-serif;
+  font-size: 24px;
+}
+
+.mainContainer > .algorithmBox > .algorithmView {
+  flex: 2;
+  margin-right: 40px;
+}
