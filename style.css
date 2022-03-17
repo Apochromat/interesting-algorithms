@@ -2,6 +2,9 @@ html, body {
   margin: 0;
   padding: 0;
 }
+html {
+  background-color: rgb(243, 243, 243);
+}
 .main {
   margin: auto;
   display: flex;
@@ -35,6 +38,7 @@ h2 a{
   text-decoration: none;
 }
 .background {
+  background-color: rgb(243, 243, 243);
   position: absolute;
   display: block;
   top: 0;

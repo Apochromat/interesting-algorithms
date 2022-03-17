@@ -24,11 +24,15 @@
     -moz-transition: left 0.3s;
     transition: left 0.3s;
     /* определяем цвет фона панели */
-    background: rgb(255, 255, 255);
+    background: rgba(243, 243, 243, 0);
     /* поверх других элементов */
     z-index: 2000;
 }
 
+
+[id='nav-toggle']:checked ~ .nav {
+    background-color: rgb(243, 243, 243);
+}
 
 /**
  * Кнопка переключения панели
@@ -102,9 +106,7 @@
 
 [id='nav-toggle']:checked ~ .nav {
     left: 0;
-    box-shadow:4px 0px 10px 0px rgba(0,0,0, 0.5);
-    -moz-box-shadow:4px 0px 20px 0px rgba(0,0,0, 0.5);
-    -webkit-box-shadow:4px 0px 20px 0px rgba(0,0,0, 0.5);
+    box-shadow:4px 0px 10px 0px rgba(0, 0, 0, 0.2);
     overflow-y: auto;
 }
 
