@@ -39,6 +39,7 @@
 }
 
 .mainContainer > .algorithmBox > .algorithmOptions {
+  min-width: 250px;
   display: flex;
   flex-direction: column;
   flex: 1;
@@ -95,4 +96,28 @@ button:active{
 
 #clearAll, #setClear {
   border: 4px solid #a10606;
+}
+
+td.clear {
+  background-color: white;
+}
+
+td.wall {
+  background-color: #616161;
+}
+
+td.input {
+  background-color: #0a76d0;
+}
+
+td.output {
+  background-color: #ffa500;
+}
+
+td.visited {
+  background-color: #e1f594;
+}
+
+td.way {
+  background-color: #94f5b2;
 }
