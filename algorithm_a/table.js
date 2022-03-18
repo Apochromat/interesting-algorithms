@@ -15,8 +15,6 @@ document.addEventListener("DOMContentLoaded", ready);
 function ready() {
   document.querySelector("#buildTable").onclick = function () {
     tableCreate();
-    tableSizeAdjust();
-    console.log("Table created");
   };
   document.getElementById("tableSizeSlider").onclick = function () {
     document.getElementById('tableSizeLabel').innerHTML = this.value;
@@ -30,10 +28,103 @@ function ready() {
   document.getElementById("run").onclick = function () { run()}
 }
 
-function buildMaze() {
+function randInt(min, max, except=1000) { // min and max included 
+  let num = Math.floor(Math.random() * (max - min + 1) + min);
+  while (num == except) {
+    num = Math.floor(Math.random() * (max - min + 1) + min);
+  } 
+  return num
+}
+
+//Вызов построения лабиринта
+function buildMaze() {  
+  mazeConstructor(0, objectTable.size-1, 0, objectTable.size-1, objectTable.cellMatrix, randInt(0, 1), 1000);
   console.log("Build Maze");
 }
 
+function getTableSlice(type, index, matrix) {  //types: "column", "row"
+  switch(type){
+    case "row":
+      return matrix[parseInt(index)];
+    case "column":
+      slice = [];
+      for (let i = 0; i < matrix.length; i++) {
+        slice.push(matrix[i][parseInt(index)])        
+      }
+      return slice;
+  }
+}
+
+function mazeConstructor(beginI, endI, beginJ, endJ, matrix, figure, avoidCell) {
+    switch (figure) { //0 - строим столбец, 1 - строим строку
+      case 0:
+        let columnIndex = randInt(beginJ+1, endJ-1, avoidCell)
+        let column = getTableSlice("column", columnIndex, matrix); //Берем столбец таблицы, между случайными индексами строк
+        for (element of column) coloriseCell(element, -1);
+        avoidCell = randInt(1, column.length - 1);
+        coloriseCell(column[avoidCell], 0);
+        
+        if (columnIndex - beginJ >= 3){
+          let matrixLeft = [];
+          let tempLeft = [];
+          for (let i = beginI; i <= endI; i++) {
+            for (let j = beginJ; j < columnIndex; j++) {
+              tempLeft.push(objectTable.cellMatrix[i][j]);
+            }
+            matrixLeft.push(tempLeft);
+            tempLeft = [];
+          }
+          mazeConstructor(beginI, endI, beginJ, columnIndex - 1, matrixLeft, figure == 0 ? 1 : 0, avoidCell);
+        }
+        if (endJ - columnIndex >= 3) {
+          let matrixRight = [];
+          let tempRight = [];
+          for (let i = beginI; i <= endI; i++) {
+            for (let j = columnIndex + 1; j <= endJ; j++) {
+              tempRight.push(objectTable.cellMatrix[i][j]);
+            }
+            matrixRight.push(tempRight);
+            tempRight = [];
+          }
+          mazeConstructor(beginI, endI, columnIndex + 1, endJ, matrixRight, figure == 0 ? 1 : 0, avoidCell);
+        }
+        break;
+      case 1:
+        let rowIndex = randInt(beginI+1, endI-1);
+        let row = getTableSlice("row", rowIndex, matrix);    //Берем строку таблицы, между случайными индексами столбцов
+        for (element of row) coloriseCell(element, -1);
+        avoidCell = randInt(1, row.length - 1);
+        coloriseCell(row[avoidCell], 0);
+
+        if (rowIndex - beginI >= 3){
+          let matrixUp = [];
+          let tempUp = [];
+          for (let j = beginI; j < rowIndex; j++) {
+            for (let i = beginJ; i <= endJ; i++) {
+              tempUp.push(objectTable.cellMatrix[j][i]);
+            }
+            matrixUp.push(tempUp);
+            tempUp = [];
+          }
+          mazeConstructor(beginI, rowIndex - 1, beginJ, endJ, matrixUp, figure == 0 ? 1 : 0, avoidCell);
+        }
+        if (endI - rowIndex >= 3) {
+          let matrixDown = [];
+          let tempDown = [];
+          for (let j = rowIndex + 1; j <= endI; j++) {
+            for (let i = beginJ; i <= endJ; i++) {
+              tempDown.push(objectTable.cellMatrix[j][i]);
+            }
+            matrixDown.push(tempDown);
+            tempDown = [];
+          }
+          mazeConstructor(rowIndex + 1, endI, beginJ, endJ, matrixDown, figure == 0 ? 1 : 0, avoidCell);
+        }
+        break;
+    }
+}
+
+//Вызов запуска A*
 function run() {
   console.log("Run");
 }
@@ -51,8 +142,8 @@ function clearAll() {
 }
 
 //Раскраска ячейки по глобальному state, если он не передается в функцию, strictState требуется для покраски в реальном времени
-function coloriseCell(cell, strictState=0) {
-  switch (strictState == 0 ? state : strictState) {
+function coloriseCell(cell, strictState = -2) {
+  switch (strictState == -2 ? state : strictState) {
     case 0:   //Clear
       cell.setAttribute("class", `ioTableCell clear`);
       if (cell == objectTable.cellInput) {
@@ -94,26 +185,21 @@ function coloriseCell(cell, strictState=0) {
   }
 }
 
-//"Подгон" размера ячеек таблицы, чтобы они были квадратными и занимали всю доступную площадь
-function tableSizeAdjust() {
-  var boxSize = Math.min(window.innerHeight - 180, window.innerWidth - document.querySelector('.algorithmOptions').offsetWidth - 200);
-  objectTable.table.setAttribute("width", `${boxSize}px`);
-  objectTable.table.setAttribute("height", `${boxSize}px`);
-  for (element of objectTable.cellList) {
-    element.setAttribute("width", `${Math.floor(boxSize / objectTable.size)}px`);
-    element.setAttribute("height", `${Math.floor(boxSize / objectTable.size) - 3}px`);
-    element.onclick = function(e){
-      coloriseCell(e.target);
-    }
-  }
-}
-
 //Создание таблицы, установление objectTable для взаимодействия
 function tableCreate() {
+  //Удаление таблицы, если она существует
   if (document.getElementById("ioTable") != null) {
     var todel = document.getElementById("ioTable");
     todel.remove();
+    objectTable.cellMatrix = [];
+    objectTable.cellList = [];
+    objectTable.cellInput = null;
+    objectTable.cellOutput = null;
+    objectTable.matrix = [];
+    objectTable.table = null;
   }
+
+  //Построение таблицы
   var size = parseInt(document.getElementById("tableSizeSlider").value);
   var algorithmView = document.getElementsByClassName("algorithmView")[0];
   var table = document.createElement("table");
@@ -132,6 +218,8 @@ function tableCreate() {
   algorithmView.appendChild(table);
   table.setAttribute("border", "1px");
   table.setAttribute("id", "ioTable");
+
+  //Заполнение objectTable
   objectTable.size = size;
   let matrix = [];
   for (element of document.getElementsByClassName("ioTableCell")) {
@@ -144,4 +232,16 @@ function tableCreate() {
   }
   objectTable.cellMatrix.push(matrix);
   objectTable.table = document.getElementById("ioTable");
+
+  //"Подгон" размера ячеек таблицы, чтобы они были квадратными и занимали всю доступную площадь
+  var boxSize = Math.min(window.innerHeight - 180, window.innerWidth - document.querySelector('.algorithmOptions').offsetWidth - 200);
+  objectTable.table.setAttribute("width", `${boxSize}px`);
+  objectTable.table.setAttribute("height", `${boxSize}px`);
+  for (element of objectTable.cellList) {
+    element.setAttribute("width", `${Math.floor(boxSize / objectTable.size)}px`);
+    element.setAttribute("height", `${Math.floor(boxSize / objectTable.size) - 3}px`);
+    element.onclick = function(e){
+      coloriseCell(e.target);
+    }
+  }
 }
