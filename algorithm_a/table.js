@@ -8,6 +8,13 @@ var objectTable = {
   matrix: []            //Массив типов (clear, input, output, wall) ячеек в виде двумерного массива
 };
 
+class Point {
+  constructor(x, y) {
+      this.x = x;
+      this.y = y;
+  }
+}
+
 var state = -1; // Режим рисования: 0 - очистить, 1 - вход, 2 - выход, -1 - стенка, 3 - просмотрено, 4 - правильный путь
 
 //Выполнение при инициализации, привязка Слушателей
@@ -38,90 +45,92 @@ function randInt(min, max, except=1000) { // min and max included
 
 //Вызов построения лабиринта
 function buildMaze() {  
-  mazeConstructor(0, objectTable.size-1, 0, objectTable.size-1, objectTable.cellMatrix, randInt(0, 1), 1000);
+  mazeConstructor();
   console.log("Build Maze");
 }
 
-function getTableSlice(type, index, matrix) {  //types: "column", "row"
-  switch(type){
-    case "row":
-      return matrix[parseInt(index)];
-    case "column":
-      slice = [];
-      for (let i = 0; i < matrix.length; i++) {
-        slice.push(matrix[i][parseInt(index)])        
-      }
-      return slice;
-  }
+function XOR(a,b) {
+  return ( a || b ) && !( a && b );
 }
 
-function mazeConstructor(beginI, endI, beginJ, endJ, matrix, figure, avoidCell) {
-    switch (figure) { //0 - строим столбец, 1 - строим строку
-      case 0:
-        let columnIndex = randInt(beginJ+1, endJ-1, avoidCell)
-        let column = getTableSlice("column", columnIndex, matrix); //Берем столбец таблицы, между случайными индексами строк
-        for (element of column) coloriseCell(element, -1);
-        avoidCell = randInt(1, column.length - 1);
-        coloriseCell(column[avoidCell], 0);
-        
-        if (columnIndex - beginJ >= 3){
-          let matrixLeft = [];
-          let tempLeft = [];
-          for (let i = beginI; i <= endI; i++) {
-            for (let j = beginJ; j < columnIndex; j++) {
-              tempLeft.push(objectTable.cellMatrix[i][j]);
-            }
-            matrixLeft.push(tempLeft);
-            tempLeft = [];
-          }
-          mazeConstructor(beginI, endI, beginJ, columnIndex - 1, matrixLeft, figure == 0 ? 1 : 0, avoidCell);
-        }
-        if (endJ - columnIndex >= 3) {
-          let matrixRight = [];
-          let tempRight = [];
-          for (let i = beginI; i <= endI; i++) {
-            for (let j = columnIndex + 1; j <= endJ; j++) {
-              tempRight.push(objectTable.cellMatrix[i][j]);
-            }
-            matrixRight.push(tempRight);
-            tempRight = [];
-          }
-          mazeConstructor(beginI, endI, columnIndex + 1, endJ, matrixRight, figure == 0 ? 1 : 0, avoidCell);
-        }
-        break;
-      case 1:
-        let rowIndex = randInt(beginI+1, endI-1);
-        let row = getTableSlice("row", rowIndex, matrix);    //Берем строку таблицы, между случайными индексами столбцов
-        for (element of row) coloriseCell(element, -1);
-        avoidCell = randInt(1, row.length - 1);
-        coloriseCell(row[avoidCell], 0);
+function mazeConstructor() {
+  for (iterator of objectTable.cellList) {
+    coloriseCell(iterator, -1);
+  }
+  koeff = (objectTable.size % 2 == 1) ? 1 : 0;
+  let x = 0;
+  let y = 0;
 
-        if (rowIndex - beginI >= 3){
-          let matrixUp = [];
-          let tempUp = [];
-          for (let j = beginI; j < rowIndex; j++) {
-            for (let i = beginJ; i <= endJ; i++) {
-              tempUp.push(objectTable.cellMatrix[j][i]);
-            }
-            matrixUp.push(tempUp);
-            tempUp = [];
+  var to_check = [];
+  if (y - 2 >= 0) {
+    to_check.push(new Point(x, y - 2));
+  }
+  if (y + 2 < (objectTable.size + koeff)) {
+    to_check.push(new Point(x, y + 2));
+  }
+  if (x - 2 >= 0) {
+    to_check.push(new Point(x - 2, y));
+  }
+  if (x + 2 < (objectTable.size + koeff)) {
+    to_check.push(new Point(x + 2, y));
+  }
+
+  while (to_check.length > 0) {
+    var index = randInt(0, to_check.length - 1);
+    var cell = to_check[index];
+    x = cell.x;
+    y = cell.y;
+    coloriseCell(objectTable.cellMatrix[y][x], 0);
+    to_check.splice(index, 1);
+  
+    // The cell you just cleared needs to be connected with another clear cell.
+    // Look two orthogonal spaces away from the cell you just cleared until you find one that is not a wall.
+    // Clear the cell between them.
+    d = ["up", "down", "right", "left"];
+    while (d.length > 0) {
+      let dir_index = randInt(0, d.length - 1);
+      switch (d[dir_index]) {
+        case "up":
+          if (y - 2 >= 0 && (objectTable.cellMatrix[y - 2][x].getAttribute("class") == "ioTableCell clear")) {
+            coloriseCell(objectTable.cellMatrix[y - 1][x], 0);
+            d = [];
           }
-          mazeConstructor(beginI, rowIndex - 1, beginJ, endJ, matrixUp, figure == 0 ? 1 : 0, avoidCell);
-        }
-        if (endI - rowIndex >= 3) {
-          let matrixDown = [];
-          let tempDown = [];
-          for (let j = rowIndex + 1; j <= endI; j++) {
-            for (let i = beginJ; i <= endJ; i++) {
-              tempDown.push(objectTable.cellMatrix[j][i]);
-            }
-            matrixDown.push(tempDown);
-            tempDown = [];
+          break;
+        case "down":
+          if (y + 2 < (objectTable.size + koeff) && (objectTable.cellMatrix[y + 2][x].getAttribute("class") == "ioTableCell clear")) {
+            coloriseCell(objectTable.cellMatrix[y + 1][x], 0);
+            d = [];
           }
-          mazeConstructor(rowIndex + 1, endI, beginJ, endJ, matrixDown, figure == 0 ? 1 : 0, avoidCell);
-        }
-        break;
+          break;
+        case "right":
+          if (x - 2 >= 0 && (objectTable.cellMatrix[y][x - 2].getAttribute("class") == "ioTableCell clear")) {
+            coloriseCell(objectTable.cellMatrix[y][x - 1], 0);
+            d = [];
+          }
+          break;
+        case "left":
+          if (x + 2 < (objectTable.size + koeff) && (objectTable.cellMatrix[y][x + 2].getAttribute("class") == "ioTableCell clear")) {
+            coloriseCell(objectTable.cellMatrix[y][x + 1], 0);
+            d = [];
+          }
+          break;
+      }
+      d.splice(dir_index, 1);
     }
+    // Add valid cells that are two orthogonal spaces away from the cell you cleared.
+    if (y - 2 >= 0 && (objectTable.cellMatrix[y - 2][x].getAttribute("class") == "ioTableCell wall")) {
+      to_check.push(new Point(x, y - 2));
+    }
+    if (y + 2 < (objectTable.size + koeff) && (objectTable.cellMatrix[y + 2][x].getAttribute("class") == "ioTableCell wall")) {
+      to_check.push(new Point(x, y + 2));
+    }
+    if (x - 2 >= 0 && (objectTable.cellMatrix[y][x - 2].getAttribute("class") == "ioTableCell wall")) {
+      to_check.push(new Point(x - 2, y));
+    }
+    if (x + 2 < (objectTable.size + koeff) && (objectTable.cellMatrix[y][x + 2].getAttribute("class") == "ioTableCell wall")) {
+      to_check.push(new Point(x + 2, y));
+    }
+  }
 }
 
 //Вызов запуска A*
