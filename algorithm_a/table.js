@@ -53,13 +53,20 @@ function XOR(a,b) {
   return ( a || b ) && !( a && b );
 }
 
+function safeColor(x, y, color) {
+  if (x > -1 && x < objectTable.size && y > -1 && y < objectTable.size) {
+    coloriseCell(objectTable.cellMatrix[y][x], color);
+  }
+}
+
 function mazeConstructor() {
   for (iterator of objectTable.cellList) {
     coloriseCell(iterator, -1);
   }
-  koeff = (objectTable.size % 2 == 1) ? 1 : 0;
+  koeff = (objectTable.size % 2 == 1) ? 0 : 1;
   let x = 0;
   let y = 0;
+  var ver =40;
 
   var to_check = [];
   if (y - 2 >= 0) {
@@ -80,7 +87,8 @@ function mazeConstructor() {
     var cell = to_check[index];
     x = cell.x;
     y = cell.y;
-    coloriseCell(objectTable.cellMatrix[y][x], 0);
+    safeColor(x, y, 0);
+    //coloriseCell(objectTable.cellMatrix[y][x], 0);
     to_check.splice(index, 1);
   
     // The cell you just cleared needs to be connected with another clear cell.
@@ -92,26 +100,38 @@ function mazeConstructor() {
       switch (d[dir_index]) {
         case "up":
           if (y - 2 >= 0 && (objectTable.cellMatrix[y - 2][x].getAttribute("class") == "ioTableCell clear")) {
-            coloriseCell(objectTable.cellMatrix[y - 1][x], 0);
-            d = [];
+            if (randInt(0, 100) < ver) {
+              //coloriseCell(objectTable.cellMatrix[y - 1][x], 0);
+              safeColor(x, y-1, 0);
+              d = [];
+            }
           }
           break;
         case "down":
           if (y + 2 < (objectTable.size + koeff) && (objectTable.cellMatrix[y + 2][x].getAttribute("class") == "ioTableCell clear")) {
-            coloriseCell(objectTable.cellMatrix[y + 1][x], 0);
-            d = [];
+            if (randInt(0, 100) < ver) {
+              //coloriseCell(objectTable.cellMatrix[y + 1][x], 0);
+              safeColor(x, y+1, 0);
+              d = [];
+            }
           }
           break;
         case "right":
           if (x - 2 >= 0 && (objectTable.cellMatrix[y][x - 2].getAttribute("class") == "ioTableCell clear")) {
-            coloriseCell(objectTable.cellMatrix[y][x - 1], 0);
-            d = [];
+            if (randInt(0, 100) < ver) {
+              //coloriseCell(objectTable.cellMatrix[y][x - 1], 0);
+              safeColor(x-1, y, 0);
+              d = [];
+            }
           }
           break;
         case "left":
           if (x + 2 < (objectTable.size + koeff) && (objectTable.cellMatrix[y][x + 2].getAttribute("class") == "ioTableCell clear")) {
-            coloriseCell(objectTable.cellMatrix[y][x + 1], 0);
-            d = [];
+            if (randInt(0, 100) < ver) {
+              //coloriseCell(objectTable.cellMatrix[y][x + 1], 0);
+              safeColor(x+1, y, 0);
+              d = [];
+            }
           }
           break;
       }
