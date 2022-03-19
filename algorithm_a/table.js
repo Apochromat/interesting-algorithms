@@ -9,9 +9,9 @@ var objectTable = {
 };
 
 class Point {
-  constructor(x, y) {
-      this.x = x;
-      this.y = y;
+  constructor(i, j) {
+      this.i = i;
+      this.j = j;
   }
 }
 
@@ -45,112 +45,87 @@ function randInt(min, max, except=1000) { // min and max included
 
 //Вызов построения лабиринта
 function buildMaze() {  
-  mazeConstructor();
+  dfsMazeConstructor();
   console.log("Build Maze");
 }
 
-function XOR(a,b) {
-  return ( a || b ) && !( a && b );
+//Ищет объект точки среди тех, что не были посещены
+function findPoint(unvisited, i, j) {
+  for (el of unvisited) {
+    if (el.i == i && el.j == j) return el;
+  }
+  return null;
 }
 
-function safeColor(x, y, color) {
-  if (x > -1 && x < objectTable.size && y > -1 && y < objectTable.size) {
-    coloriseCell(objectTable.cellMatrix[y][x], color);
+//Выдает случайное направление для змеи лабиринта
+function findDirection(point, unvisited) {
+  let x = point.j;
+  let y = point.i;
+  let d = ["up", "down", "right", "left"];
+  while (d.length > 0) {
+    let dir_index = randInt(0, d.length - 1);
+    switch (d[dir_index]) {
+      case "up":
+        if ((y - 2 >= 0) && (findPoint(unvisited, y-2, x) != null)) return(findPoint(unvisited, y-2, x));
+        break;
+      case "down":
+        if ((y + 2 < objectTable.size) && (findPoint(unvisited, y+2, x) != null)) return(findPoint(unvisited, y+2, x));
+        break;
+      case "right":
+        if ((x - 2 >= 0) && (findPoint(unvisited, y, x-2) != null)) return(findPoint(unvisited, y, x-2));
+        break;
+      case "left":
+        if ((x + 2 < objectTable.size) && (findPoint(unvisited, y, x+2) != null)) return(findPoint(unvisited, y, x+2));
+        break;
+    }
+    d.splice(dir_index, 1);
   }
+  return null;
 }
 
-function mazeConstructor() {
-  for (iterator of objectTable.cellList) {
-    coloriseCell(iterator, -1);
+function findPointBetweenPoints(point1, point2) {
+  if (point1.i == point2.i){
+    return new Point(point1.i, Math.min(point1.j, point2.j) + 1);
   }
-  koeff = (objectTable.size % 2 == 1) ? 0 : 1;
-  let x = 0;
-  let y = 0;
-  var ver =40;
+  return new Point(Math.min(point1.i, point2.i) + 1, point1.j);
+}
 
-  var to_check = [];
-  if (y - 2 >= 0) {
-    to_check.push(new Point(x, y - 2));
-  }
-  if (y + 2 < (objectTable.size + koeff)) {
-    to_check.push(new Point(x, y + 2));
-  }
-  if (x - 2 >= 0) {
-    to_check.push(new Point(x - 2, y));
-  }
-  if (x + 2 < (objectTable.size + koeff)) {
-    to_check.push(new Point(x + 2, y));
-  }
+function deepFirstSearch(point, used, unvisited) {
+  if (unvisited.indexOf(point) != -1) unvisited.splice(unvisited.indexOf(point), 1);
+	while (findDirection(point, unvisited) != null) {
+    next = findDirection(point, unvisited);
+    unvisited.splice(unvisited.indexOf(next), 1);
+		used.push(next);
+    let neighbour = findPointBetweenPoints(point, next);
+    coloriseCell(objectTable.cellMatrix[neighbour.i][neighbour.j], 0);
+		deepFirstSearch(next, used, unvisited);
+	}
+}
 
-  while (to_check.length > 0) {
-    var index = randInt(0, to_check.length - 1);
-    var cell = to_check[index];
-    x = cell.x;
-    y = cell.y;
-    safeColor(x, y, 0);
-    //coloriseCell(objectTable.cellMatrix[y][x], 0);
-    to_check.splice(index, 1);
-  
-    // The cell you just cleared needs to be connected with another clear cell.
-    // Look two orthogonal spaces away from the cell you just cleared until you find one that is not a wall.
-    // Clear the cell between them.
-    d = ["up", "down", "right", "left"];
-    while (d.length > 0) {
-      let dir_index = randInt(0, d.length - 1);
-      switch (d[dir_index]) {
-        case "up":
-          if (y - 2 >= 0 && (objectTable.cellMatrix[y - 2][x].getAttribute("class") == "ioTableCell clear")) {
-            if (randInt(0, 100) < ver) {
-              //coloriseCell(objectTable.cellMatrix[y - 1][x], 0);
-              safeColor(x, y-1, 0);
-              d = [];
-            }
-          }
-          break;
-        case "down":
-          if (y + 2 < (objectTable.size + koeff) && (objectTable.cellMatrix[y + 2][x].getAttribute("class") == "ioTableCell clear")) {
-            if (randInt(0, 100) < ver) {
-              //coloriseCell(objectTable.cellMatrix[y + 1][x], 0);
-              safeColor(x, y+1, 0);
-              d = [];
-            }
-          }
-          break;
-        case "right":
-          if (x - 2 >= 0 && (objectTable.cellMatrix[y][x - 2].getAttribute("class") == "ioTableCell clear")) {
-            if (randInt(0, 100) < ver) {
-              //coloriseCell(objectTable.cellMatrix[y][x - 1], 0);
-              safeColor(x-1, y, 0);
-              d = [];
-            }
-          }
-          break;
-        case "left":
-          if (x + 2 < (objectTable.size + koeff) && (objectTable.cellMatrix[y][x + 2].getAttribute("class") == "ioTableCell clear")) {
-            if (randInt(0, 100) < ver) {
-              //coloriseCell(objectTable.cellMatrix[y][x + 1], 0);
-              safeColor(x+1, y, 0);
-              d = [];
-            }
-          }
-          break;
+function dfsMazeConstructor() {
+  var used = [new Point(0, 0)];
+  var unvisited = [];
+  //Красим ячейки в сетку
+  for (let i = 0; i < objectTable.size; i++) {
+    for (let j = 0; j < objectTable.size; j++) {
+      coloriseCell(objectTable.cellMatrix[i][j], -1);
+      if ((i%2==0)&&(j%2==0)) {
+        coloriseCell(objectTable.cellMatrix[i][j], 0);
+        unvisited.push(new Point(i, j))
       }
-      d.splice(dir_index, 1);
-    }
-    // Add valid cells that are two orthogonal spaces away from the cell you cleared.
-    if (y - 2 >= 0 && (objectTable.cellMatrix[y - 2][x].getAttribute("class") == "ioTableCell wall")) {
-      to_check.push(new Point(x, y - 2));
-    }
-    if (y + 2 < (objectTable.size + koeff) && (objectTable.cellMatrix[y + 2][x].getAttribute("class") == "ioTableCell wall")) {
-      to_check.push(new Point(x, y + 2));
-    }
-    if (x - 2 >= 0 && (objectTable.cellMatrix[y][x - 2].getAttribute("class") == "ioTableCell wall")) {
-      to_check.push(new Point(x - 2, y));
-    }
-    if (x + 2 < (objectTable.size + koeff) && (objectTable.cellMatrix[y][x + 2].getAttribute("class") == "ioTableCell wall")) {
-      to_check.push(new Point(x + 2, y));
     }
   }
+  
+  //Если таблица четная, то случайно красим край
+  if (objectTable.size % 2 == 0) {
+    for (let i = 0; i < objectTable.size; i++) {
+      if (randInt(0, 100) < 40) coloriseCell(objectTable.cellMatrix[objectTable.size - 1][i], 0);
+      if (randInt(0, 100) < 40) coloriseCell(objectTable.cellMatrix[i][objectTable.size - 1], 0);
+    }
+  }
+  
+  deepFirstSearch(unvisited[randInt(0, unvisited.length - 1)], used, unvisited);
+
 }
 
 //Вызов запуска A*
@@ -245,7 +220,6 @@ function tableCreate() {
   }
   table.appendChild(tableBody);
   algorithmView.appendChild(table);
-  table.setAttribute("border", "1px");
   table.setAttribute("id", "ioTable");
 
   //Заполнение objectTable
