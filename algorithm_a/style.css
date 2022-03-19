@@ -19,6 +19,11 @@ button:active{
   border: 2px solid black;
 }
 
+#runBox {
+  display: flex;
+  flex-direction: row;
+}
+
 #setInput {
   border: 4px solid #0a76d0;
 }
@@ -33,6 +38,30 @@ button:active{
 
 #run {
   border: 4px solid #049924;
+  margin-right: 5px;
+  flex: 7;
+}
+
+#indicator {
+  flex: 1;
+  margin-left: 0;
+  border: 1px solid #000000;
+}
+
+.idle {
+  background-color: rgb(255, 255, 255);
+}
+
+.running {
+  background-color: rgb(255, 248, 152);
+}
+
+.success {
+  background-color: rgb(142, 255, 119);
+}
+
+.fail {
+  background-color: rgb(255, 108, 108);
 }
 
 #clearAll, #setClear {
@@ -55,10 +84,15 @@ td.output {
   background-color: #ffa500;
 }
 
-td.visited {
+td.open {
   background-color: #e1f594;
 }
 
+td.closed {
+  background-color: #78c764;
+}
+
+
 td.way {
-  background-color: #94f5b2;
+  background-color: #94f5d0;
 }

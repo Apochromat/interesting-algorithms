@@ -62,17 +62,20 @@
         </div>
         <div class="settings">
           <div>
-            <label id="tableSizeLabel">15</label>
-            <input id="tableSizeSlider" type="range" min="5" max="30" value="15" />
+            <label id="tableSizeLabel">17</label>
+            <input id="tableSizeSlider" type="range" min="5" max="40" value="17" />
           </div>
-          <button id="buildTable">Построить таблицу</button>
+          <button id="buildTable">Построить поле</button>
           <button id="buildMaze">Построить лабиринт</button>
           <button id="setInput">Обозначить вход</button>
           <button id="setOutput">Обозначить выход</button>
           <button id="setWall">Обозначить стенку</button>
           <button id="setClear">Очистить клетку</button>
           <button id="clearAll">Очистить все</button>
-          <button id="run">Запустить алгоритм</button>
+          <div id="runBox">
+            <button id="run">Запустить</button>
+            <button id="indicator" disabled></button>
+          </div>
         </div>
       </div>
       <div class="algorithmView"></div>

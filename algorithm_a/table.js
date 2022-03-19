@@ -9,15 +9,19 @@ var objectTable = {
 };
 
 class Point {
-  constructor(i, j) {
+  constructor(i, j, cell = null) {
       this.i = i;
       this.j = j;
+      this.cell = cell;
   }
 }
 
-var state = -1; // Режим рисования: 0 - очистить, 1 - вход, 2 - выход, -1 - стенка, 3 - просмотрено, 4 - правильный путь
+var state = -1; // Режим рисования: 0 - очистить, 1 - вход, 2 - выход, -1 - стенка, 3 - open, 4 - closed, 5 - правильный путь
+var searchSpeed = 200;
+var traceSpeed = 75;
+var maxWay = 10000;
 
-//Выполнение при инициализации, привязка Слушателей
+//Выполнение при инициализации, привязка обработчиков
 document.addEventListener("DOMContentLoaded", ready);
 function ready() {
   document.querySelector("#buildTable").onclick = function () {
@@ -33,6 +37,7 @@ function ready() {
   document.getElementById("setClear").onclick = function () { setPaintState(0)}
   document.getElementById("clearAll").onclick = function () { clearAll()}
   document.getElementById("run").onclick = function () { run()}
+  setIndicator(0);
 }
 
 function randInt(min, max, except=1000) { // min and max included 
@@ -45,11 +50,38 @@ function randInt(min, max, except=1000) { // min and max included
 
 //Вызов построения лабиринта
 function buildMaze() {  
-  dfsMazeConstructor();
-  console.log("Build Maze");
+  setIndicator(0);
+  objectTable.cellInput = null;
+  objectTable.cellOutput = null;
+  if (objectTable.table == null){
+    alert("Не создано поле")
+  }
+  else {
+    dfsMazeConstructor();
+  }
 }
 
-//Ищет объект точки среди тех, что не были посещены
+//Вызов запуска A*
+function run() {
+  if (objectTable.table == null){
+    alert("Не создано поле")
+  }
+  else if ((objectTable.cellInput == null) || (objectTable.cellOutput == null)){
+    alert("Ее указано начало или конец пути");
+  }
+  else {
+    setIndicator(1);
+    for (el of objectTable.cellList) {
+      let attr = el.getAttribute("class");
+      if ((attr == "ioTableCell open") || (attr == "ioTableCell closed") || (attr == "ioTableCell way")) {
+        el.setAttribute("class", "ioTableCell clear")
+      }
+    }
+    aStar(objectTable.cellInput, objectTable.cellOutput);
+  }
+}
+
+//Ищет объект точки среди тех, что массиве
 function findPoint(unvisited, i, j) {
   for (el of unvisited) {
     if (el.i == i && el.j == j) return el;
@@ -83,6 +115,35 @@ function findDirection(point, unvisited) {
   return null;
 }
 
+//Создает задержку
+function delay(delayInms) {
+  return new Promise(resolve => {
+    setTimeout(() => {
+      resolve(2);
+    }, delayInms);
+  });
+}
+
+function setIndicator(state){
+  butt = document.getElementById("indicator");
+  switch (state) {
+    case 0:
+      butt.setAttribute("class", "idle");
+      break;
+    case 1:
+      butt.setAttribute("class", "running");
+      break;
+    case 2:
+      butt.setAttribute("class", "success");
+      break;
+    case 3:
+      butt.setAttribute("class", "fail");
+      break;
+  }
+}
+
+//Функции построителя лабиринтов
+
 function findPointBetweenPoints(point1, point2) {
   if (point1.i == point2.i){
     return new Point(point1.i, Math.min(point1.j, point2.j) + 1);
@@ -115,7 +176,7 @@ function dfsMazeConstructor() {
       }
     }
   }
-  
+
   //Если таблица четная, то случайно красим край
   if (objectTable.size % 2 == 0) {
     for (let i = 0; i < objectTable.size; i++) {
@@ -128,25 +189,157 @@ function dfsMazeConstructor() {
 
 }
 
-//Вызов запуска A*
-function run() {
-  console.log("Run");
+//Функции для А*
+
+function h(point1, point2){
+  return 2.5*Math.sqrt(((point1.i - point2.i)**2)+((point1.j - point2.j)**2));
+}
+
+function getPointByCell(cell){
+  for (let i = 0; i < objectTable.size; i++) {
+    for (let j = 0; j < objectTable.size; j++) {
+      if (objectTable.cellMatrix[i][j] == cell) return new Point(i, j, cell);      
+    }
+  }
+}
+
+function getIndexByCell (array, cell) {
+  for (let i = 0; i < array.length; i++) {
+    if (array[i].cell == cell) return i;
+  }
+}
+
+function getIndexByPoint (array, point) {
+  for (let i = 0; i < array.length; i++) {
+    if (array[i] == point) return i;
+  }
+}
+
+function minF(array, F, points){
+  var min = maxWay;
+  var minPoint;
+  for (el of array) {
+    if (F[getIndexByPoint(points, el)] < min) {
+      min = F[getIndexByPoint(points, el)];
+      minPoint = el;
+    }
+  }
+  return minPoint;
+}
+
+function anyNeighbours(point, points){
+  var neighbours = [];
+  if(point.i - 1 >= 0){
+    if (findPoint(points, point.i - 1, point.j) != null) neighbours.push(findPoint(points, point.i - 1, point.j));
+  }
+  if(point.i + 1 < objectTable.size){
+    if (findPoint(points, point.i + 1, point.j) != null) neighbours.push(findPoint(points, point.i + 1, point.j));
+  }
+  if(point.j - 1 >= 0) {
+    if (findPoint(points, point.i, point.j - 1) != null) neighbours.push(findPoint(points, point.i, point.j - 1));
+  }
+  if(point.j + 1 < objectTable.size) {
+    if (findPoint(points, point.i, point.j + 1) != null) neighbours.push(findPoint(points, point.i, point.j + 1));
+  }
+  return neighbours;
+}
+
+function unclosedNeighbours(closed, point, points){
+  var allNeighbours = anyNeighbours(point, points);
+  var neighbours = [];
+  for (el of allNeighbours) {
+    if (closed.indexOf(el) == -1) neighbours.push(el);
+  }
+  return neighbours
+}
+
+async function traceWay(map, points, end, start){
+  var point;
+  var way = [];
+  index = end;
+  while (index != start){
+    point = points[index];
+    way.push(point.cell);
+    index = map[index];
+  }
+  while (way.length > 0) {
+    el = way.pop();
+    await delay(traceSpeed);
+    coloriseCell(el, 5);
+  }
+}
+
+async function aStar (startCell, endCell) {
+  var points = [];
+  for (el of objectTable.cellList) {
+    if (el.getAttribute("class") == `ioTableCell clear`) points.push(getPointByCell(el));
+    if (el.getAttribute("class") == `ioTableCell input`) points.push(getPointByCell(el));
+    if (el.getAttribute("class") == `ioTableCell output`) points.push(getPointByCell(el));
+  }
+  var closed = [];
+  var open = [points[getIndexByCell(points, startCell)]];
+  var map = [];
+  var G = [];
+  var F = [];
+  var end;
+  var start = getIndexByCell(points, startCell);
+  for (let i = 0; i < points.length; i++) {
+    G[i] = maxWay;
+  }
+  G[getIndexByCell(points, startCell)] = 0;
+  F[getIndexByCell(points, startCell)] = G[getIndexByCell(points, startCell)] + h(getPointByCell(startCell), getPointByCell(endCell));
+  while (open.length > 0) {
+    await delay(searchSpeed);
+    var curr = minF(open, F, points);
+    if (curr.cell == endCell) {
+      traceWay(map, points, end, start);
+      setIndicator(2);
+      return true;
+    }
+    end = getIndexByPoint(points, curr);
+    open.splice(open.indexOf(curr), 1);
+    closed.push(curr);
+    if ((curr.cell != endCell) && (curr.cell != startCell)) coloriseCell(curr.cell, 4);
+    for(el of unclosedNeighbours(closed, curr, points)) {
+      if ((el.cell != endCell) && (el.cell != startCell)) coloriseCell(el.cell, 3);
+      tempG = G[getIndexByPoint(points, curr)] + 1;
+      if ((open.indexOf(el) == -1) || (tempG < G[getIndexByPoint(points, el)])) {
+        map[getIndexByPoint(points, el)] = getIndexByPoint(points, curr);
+        G[getIndexByPoint(points, el)] = tempG;
+        F[getIndexByPoint(points, el)] = G[getIndexByPoint(points, el)] + h(el, getPointByCell(endCell));
+      }
+      if (open.indexOf(el) == -1) open.push(el);
+    }
+  }
+  setIndicator(3);
+  return false
 }
 
 //Функции для рисования
 function setPaintState(newState) {
+  setIndicator(0);
   state = newState;
-  console.log(`State: ${state}`);
 }
 
 function clearAll() {
+  setIndicator(0);
   for (element of objectTable.cellList) {
     element.setAttribute("class", `ioTableCell clear`);
   }
+  objectTable.cellInput = null;
+  objectTable.cellOutput = null;
 }
 
 //Раскраска ячейки по глобальному state, если он не передается в функцию, strictState требуется для покраски в реальном времени
 function coloriseCell(cell, strictState = -2) {
+  if (cell == objectTable.cellInput) {
+    cell.setAttribute("class", `ioTableCell clear`);
+    objectTable.cellInput = null;
+  }
+  if (cell == objectTable.cellOutput) {
+    cell.setAttribute("class", `ioTableCell clear`);
+    objectTable.cellOutput = null;
+  }
   switch (strictState == -2 ? state : strictState) {
     case 0:   //Clear
       cell.setAttribute("class", `ioTableCell clear`);
@@ -167,23 +360,26 @@ function coloriseCell(cell, strictState = -2) {
       }
       break;
     case 1:   //Input
-      cell.setAttribute("class", `ioTableCell input`);
       if (objectTable.cellInput != null) {
         objectTable.cellInput.setAttribute("class", `ioTableCell clear`);
       }
+      cell.setAttribute("class", `ioTableCell input`);
       objectTable.cellInput = cell;
       break;
     case 2:   //Output
-      cell.setAttribute("class", `ioTableCell output`);
       if (objectTable.cellOutput != null) {
         objectTable.cellOutput.setAttribute("class", `ioTableCell clear`);
       }
+      cell.setAttribute("class", `ioTableCell output`);
       objectTable.cellOutput = cell;
       break;
-    case 3:   //Visited
-      cell.setAttribute("class", `ioTableCell visited`);
+    case 3:   //Open
+      cell.setAttribute("class", `ioTableCell open`);
       break;
-    case 4:   //Way
+    case 4:   //Closed
+      cell.setAttribute("class", `ioTableCell closed`);
+      break;
+    case 5:   //Way
       cell.setAttribute("class", `ioTableCell way`);
       break;
   }
@@ -191,6 +387,7 @@ function coloriseCell(cell, strictState = -2) {
 
 //Создание таблицы, установление objectTable для взаимодействия
 function tableCreate() {
+  setIndicator(0);
   //Удаление таблицы, если она существует
   if (document.getElementById("ioTable") != null) {
     var todel = document.getElementById("ioTable");
