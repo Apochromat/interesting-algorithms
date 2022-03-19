@@ -317,6 +317,12 @@ async function aStar (startCell, endCell) {
 
 //Функции для рисования
 function setPaintState(newState) {
+  for (el of objectTable.cellList) {
+    let attr = el.getAttribute("class");
+    if ((attr == "ioTableCell open") || (attr == "ioTableCell closed") || (attr == "ioTableCell way")) {
+      el.setAttribute("class", "ioTableCell clear")
+    }
+  }
   setIndicator(0);
   state = newState;
 }
@@ -339,6 +345,14 @@ function coloriseCell(cell, strictState = -2) {
   if (cell == objectTable.cellOutput) {
     cell.setAttribute("class", `ioTableCell clear`);
     objectTable.cellOutput = null;
+  }
+  if (strictState == -2){
+    for (el of objectTable.cellList) {
+      let attr = el.getAttribute("class");
+      if ((attr == "ioTableCell open") || (attr == "ioTableCell closed") || (attr == "ioTableCell way")) {
+        el.setAttribute("class", "ioTableCell clear")
+      }
+    }
   }
   switch (strictState == -2 ? state : strictState) {
     case 0:   //Clear
