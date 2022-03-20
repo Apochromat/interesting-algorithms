@@ -67,7 +67,7 @@ function run() {
     alert("Не создано поле")
   }
   else if ((objectTable.cellInput == null) || (objectTable.cellOutput == null)){
-    alert("Ее указано начало или конец пути");
+    alert("Не указано начало или конец пути");
   }
   else {
     setIndicator(1);
@@ -192,7 +192,7 @@ function dfsMazeConstructor() {
 //Функции для А*
 
 function h(point1, point2){
-  return 2.5*Math.sqrt(((point1.i - point2.i)**2)+((point1.j - point2.j)**2));
+  return 3*Math.sqrt(((point1.i - point2.i)**2)+((point1.j - point2.j)**2));
 }
 
 function getPointByCell(cell){
