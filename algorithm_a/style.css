@@ -6,40 +6,136 @@ table, th, td {
   border: 1px solid black;
   border-collapse: collapse;
 }
+p{
+  font-size: 17px;
+}
+
+#SizeSlider{
+  display: block;
+  display: flex;
+  flex-direction: row;
+  justify-content: center;
+  padding-top: 16px;
+  padding-bottom: 15px;
+}
+#tableSizeLabel{
+  margin-left: 15px;
+  font-size: 20px;
+}
+#tableSizeSlider{
+  margin-top: 6.5px;
+}
+input[type='range'] {
+  width: 200px;
+  height: 3px;
+  -webkit-appearance: none;
+  background-color: rgb(143, 142, 142);
+  border: 2px solid gray;
+  box-shadow: 0 0 16px rgba(255, 255, 255, 0.6) inset; 
+  border-radius: 4px;
+}
+input[type='range']::-webkit-slider-runnable-track {
+  height: 18px;
+  -webkit-appearance: none;
+}
+input[type='range']::-webkit-slider-thumb {
+  width: 18px;
+  -webkit-appearance: none;
+  height: 18px;
+  cursor: grab;
+  background: #ececec;
+  border: 2px solid gray;
+  box-shadow: 0 0 16px rgba(255, 255, 255, 0.3) inset; 
+  border-radius: 100%;
+}
 
 button{
   margin: 5px 15px 10px 15px;
   height: 30px;
+  background-color:rgb(241, 239, 239);
   font-family: "Times New Roman", "Arial Black", sans-serif;
   font-size: 18px;
   border-radius: 5px;
+  border: 3px solid rgb(66, 66, 66);
+}
+button:hover{
+  background-color: whitesmoke;
 }
 button:active{
-  background-color: #a0a0a0;
-  border: 2px solid black;
+  color: whitesmoke; 
+}
+
+#buildTable, #buildMaze{
+  border: 3px solid rgb(66, 66, 66);
+}
+#buildTable:hover, #buildMaze:hover{
+  border: 3.4px solid rgb(78, 78, 78);
+}
+#buildTable:active, #buildMaze:active{
+  background-color: rgb(78, 78, 78);
+  border: 3.4px solid rgb(78, 78, 78);
+}
+
+#setInput {
+  border: 3px solid #2b88d4;
+}
+#setInput:hover{
+  border: 3.4px solid #1495ff;
+}
+#setInput:active{
+  background-color: #1495ff;
+  border: 3.4px solid #1495ff;
+}
+
+#setOutput {
+  border: 3px solid #e99c0e;
+}
+#setOutput:hover{
+  border: 3.4px solid #ffbe45;
+}
+#setOutput:active{
+  background-color: #ffbe45;
+  border: 3.4px solid #ffbe45;
+}
+
+#setWall {
+  border: 3px solid #616161;
+}
+#setWall:hover{
+  border: 3.4px solid #8d8c8c;
+}
+#setWall:active{
+  background-color: #8d8c8c;
+  border: 3.4px solid #8d8c8c;
+}
+
+#clearAll, #setClear {
+  border: 3px solid #a10606;
+}
+#clearAll:hover, #setClear:hover{
+  border: 3.4px solid #d80707;
+}
+#clearAll:active, #setClear:active{
+  background-color: #d80707;
+  border: 3.4px solid #d80707;
 }
 
 #runBox {
   display: flex;
   flex-direction: row;
+  padding-top: 10px;
 }
-
-#setInput {
-  border: 4px solid #0a76d0;
-}
-
-#setOutput {
-  border: 4px solid #ffa500;
-}
-
-#setWall {
-  border: 4px solid #616161;
-}
-
 #run {
-  border: 4px solid #049924;
+  border: 3px solid #049924;
   margin-right: 5px;
   flex: 7;
+}
+#run:hover{
+  border: 3.4px solid #03c02c;
+}
+#run:active{
+  background-color: #03c02c;
+  border: 3.4px solid #03c02c;
 }
 
 #indicator {
@@ -62,10 +158,6 @@ button:active{
 
 .fail {
   background-color: rgb(255, 108, 108);
-}
-
-#clearAll, #setClear {
-  border: 4px solid #a10606;
 }
 
 td.clear {

@@ -71,7 +71,9 @@ h2 a{
   margin: 20px;
   border-radius: 10px;
   background-color: rgba(255, 255, 255, 0.616);
-  padding: 15px;
+  padding-top: 15px;
+  padding-left: 15px;
+  padding-right: 19px;
 }
 
 .mainContainer > .algorithmBox > .algorithmOptions > * {
