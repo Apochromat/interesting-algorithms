@@ -2,14 +2,17 @@ var canvas = document.getElementById("canvasCluster");
 var ctx = canvas.getContext("2d");
 var coordsPoint = [];
 var coordsPointCluster = [];
+var maxLen = 300;
 
 
-function createCanvas(){
+function clearCanvas(){
   canvas.removeEventListener("mousedown", pushPointListener);
   canvas.removeEventListener("mousedown", pushPointClusterListener);
   coordsPoint = [];
   coordsPointCluster = [];
-
+  fiilCanvas();
+}
+function fiilCanvas() {
   canvas.width = window.innerWidth*0.58;
   canvas.height = window.innerHeight*0.6;
   ctx.fillStyle = "rgba(211, 211, 211, 0.3)";
@@ -22,7 +25,8 @@ function createCanvas(){
 function pushPointListener(e) {
   var Point = {
     x: e.pageX - e.target.offsetLeft,
-    y: e.pageY - e.target.offsetTop 
+    y: e.pageY - e.target.offsetTop,
+    nearPoint: 0 
   };
   coordsPoint.push(Point);
   ctx.beginPath();
@@ -57,18 +61,19 @@ function pushPointCluster(){
 function kMedium(){
   canvas.removeEventListener("mousedown", pushPointListener);
   canvas.removeEventListener("mousedown", pushPointClusterListener);
+  if (coordsPoint.length == 0) {
+    alert("Обозначьте вершину");
+    return 0;
+  }
+  if (coordsPointCluster.length == 0) {
+    alert("Обозначьте центр кластера");
+    return 0;
+  }
   minStroke();
   for (let i = 0; i < 10; i++) {
     setTimeout(function() {
       ctx.clearRect(0, 0, canvas.width, canvas.height);
-      canvas.width = window.innerWidth*0.58;
-      canvas.height = window.innerHeight*0.6;
-      ctx.fillStyle = "rgba(211, 211, 211, 0.3)";
-      ctx.strokeStyle = "gray";
-      ctx.lineWidth = 5;
-      ctx.fillRect(0, 0, canvas.width, canvas.height);
-      ctx.strokeRect(0, 0, canvas.width, canvas.height);
-  
+      fiilCanvas();
       drawPoint();
       replacePointCluster();
       minStroke();
@@ -133,4 +138,36 @@ function drawPoint(){
     ctx.fill();
   }
 }
-
+function hierarchical() {
+  ctx.clearRect(0, 0, canvas.width, canvas.height);
+  fiilCanvas();
+  drawPoint();
+  for (let i = 0; i < coordsPoint.length; i++) {
+    var minLen = 999999;
+    for (let j = 0; j < coordsPoint.length; j++) {
+      if (i != j) {
+        let len = Math.sqrt(Math.pow((coordsPoint[i].x - coordsPoint[j].x), 2) + Math.pow((coordsPoint[i].y - coordsPoint[j].y), 2));
+        if (len < minLen && len < maxLen) {
+          minLen = len;
+          coordsPoint[i].nearPoint = j;
+        }
+      }
+    }   
+  }
+  console.log(coordsPoint);
+  for (let i = 0; i < coordsPoint.length; i++) {
+    for (let j = 0; j < coordsPoint.length; j++) {
+      if (i != j) {
+        if (coordsPoint[i].nearPoint == j && coordsPoint[j].nearPoint == i) {
+          ctx.beginPath();
+          ctx.moveTo(coordsPoint[i].x, coordsPoint[i].y);
+          ctx.lineTo(coordsPoint[j].x, coordsPoint[j].y);
+          ctx.strokeStyle = "black"; 
+          ctx.lineWidth = "2"; 
+          ctx.stroke(); 
+          console.log(1);
+        }
+      }   
+    }
+  }
+} 
