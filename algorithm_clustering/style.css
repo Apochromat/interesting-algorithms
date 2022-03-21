@@ -1,16 +1,2 @@
 
-button {
-    margin: 5px 15px 10px 15px;
-    height: 30px;
-    background-color:rgb(241, 239, 239);
-    font-family: "Times New Roman", "Arial Black", sans-serif;
-    font-size: 18px;
-    border-radius: 5px;
-    border: 3px solid rgb(66, 66, 66);
-  }
-button:hover{
-    background-color: whitesmoke;
-}
-button:active{
-    color: whitesmoke; 
-}
+

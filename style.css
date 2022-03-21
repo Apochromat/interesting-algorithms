@@ -1,6 +1,8 @@
 html, body {
   margin: 0;
   padding: 0;
+  height: 100vh;
+  background-color: rgb(68, 68, 68);
 }
 html {
   background-color: rgb(243, 243, 243);
@@ -23,13 +25,14 @@ html {
   width: 55%;
 }
 h1 {
-  font-family: "Playfair Display", "Arial Black", sans-serif;
-  font-size: 44px;
-  font-weight: normal;
+  font-family: "Montserrat Alternates", "Arial Black", sans-serif;
+  font-size: 62px;
+  font-weight:normal;
+  text-align: center;
   color: whitesmoke;
 }
 h2 {
-  font-family: "Playfair Display", "Arial Black", sans-serif;
+  font-family: "Montserrat Alternates", "Arial Black", sans-serif;
   font-size: 44px;
   font-weight: normal;
   text-align: center;
@@ -61,8 +64,8 @@ h2 a:hover{
 }
 
 .mainContainer > .algorithmName > h3 {
-  margin: 10px auto 0px auto;
-  font-family: "Playfair Display", "Arial Black", sans-serif;
+  margin: 0px auto;
+  font-family: "Montserrat Alternates", "Arial Black", sans-serif;
   font-size: 36px;
   font-weight: normal;
   text-align: center;
@@ -101,4 +104,20 @@ h2 a:hover{
   flex: 2;
   margin-right: 40px;
   padding: 15px;
+}
+button{
+  margin: 5px 15px 10px 15px;
+  height: 30px;
+  background-color: rgb(66, 66, 66);
+  font-family: "Montserrat Alternates", "Arial Black", sans-serif;
+  font-size: 18px;
+  border-radius: 5px;
+  border: 3px solid rgb(66, 66, 66);
+  color: whitesmoke; 
+}
+button:hover{
+  border: 3.4px solid rgb(78, 78, 78);
+}
+button:active{
+  background-color: rgb(78, 78, 78); 
 }

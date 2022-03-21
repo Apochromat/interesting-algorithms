@@ -45,7 +45,7 @@
     /* относительно левого края панели */
     left: 320px;
     /* отступ от верхнего края панели */
-    top: 1em;
+    top: 0.5em;
     /* внутренние отступы */
     padding: 0.5em;
     /* определяем цвет фона переключателя
@@ -106,7 +106,7 @@
 
 [id='nav-toggle']:checked ~ .nav {
     left: 0;
-    box-shadow:0px 0px 5px 0px rgba(255, 255, 255, 0.2);
+    box-shadow:5px 0px 5px 0px rgba(0, 0, 0, 0.2);
     overflow-y: auto;
 }
 
@@ -139,7 +139,7 @@
     font-size: 1.3em;
     line-height: 1.3em;
     opacity: 0;
-    font-family: "Playfair Display", "Arial Black";
+    font-family: "Dosis", sans-serif;
     font-size: 44px;
     transform: scale(0.1, 0.1);
     -ms-transform: scale(0.1, 0.1);
@@ -241,7 +241,7 @@
     display: inline-block;
     position: relative;
     padding: 0;
-    font-family: 'Playfair Display', sans-serif;
+    font-family: "Montserrat Alternates", sans-serif;
     font-weight: 300;
     font-size: 1.2em;
     color: whitesmoke;
