@@ -2,7 +2,6 @@ html, body {
   margin: 0;
   padding: 0;
   height: 100vh;
-  background-color: rgb(68, 68, 68);
 }
 html {
   background-color: rgb(243, 243, 243);
@@ -47,7 +46,6 @@ h2 a:hover{
   color: rgb(141, 141, 141);
 }
 .background {
-  background-color: rgb(68, 68, 68);
   position: absolute;
   display: block;
   top: 0;
@@ -122,4 +120,9 @@ button:hover{
 }
 button:active{
   background-color: rgb(78, 78, 78); 
+}
+
+
+.p5Canvas {
+  z-index: -100;
 }
