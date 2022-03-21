@@ -1,7 +1,6 @@
 #canv {
     margin: 0 auto;
     background-color: white;
-    border: 2px solid black;
     border-radius: 5px;
 }
 
@@ -10,34 +9,16 @@
     flex: 1;
 } 
 
-button{
-    margin: 5px 15px 10px 15px;
-    height: 30px;
-    background-color:rgb(241, 239, 239);
-    font-family: "Times New Roman", "Arial Black", sans-serif;
-    font-size: 18px;
-    border-radius: 5px;
-    border: 3px solid rgb(66, 66, 66);
-  }
-button:hover{
-    background-color: whitesmoke;
-  }
-button:active{
-    color: whitesmoke; 
-  }
-
-#clearAll, #setClear {
-    border: 3px solid #a10606;
-  }
-#clearAll:hover, #setClear:hover{
+#clearAll:hover{
     border: 3.4px solid #d80707;
   }
-#clearAll:active, #setClear:active{
+#clearAll:active{
     background-color: #d80707;
     border: 3.4px solid #d80707;
   }
 #run {
     border: 3px solid #049924;
+    background-color: #049924;
   }
 #run:hover{
     border: 3.4px solid #03c02c;
