@@ -19,6 +19,7 @@ p{
   padding-bottom: 15px;
 }
 #tableSizeLabel{
+  color: whitesmoke;
   margin-left: 15px;
   font-size: 20px;
 }
@@ -30,7 +31,7 @@ input[type='range'] {
   height: 3px;
   -webkit-appearance: none;
   background-color: rgb(143, 142, 142);
-  border: 2px solid gray;
+  border: 2px solid rgb(66, 66, 66);
   box-shadow: 0 0 16px rgba(255, 255, 255, 0.6) inset; 
   border-radius: 4px;
 }
@@ -44,7 +45,7 @@ input[type='range']::-webkit-slider-thumb {
   height: 18px;
   cursor: grab;
   background: #ececec;
-  border: 2px solid gray;
+  border: 2px solid rgb(66, 66, 66);
   box-shadow: 0 0 16px rgba(255, 255, 255, 0.3) inset; 
   border-radius: 100%;
 }
@@ -52,66 +53,43 @@ input[type='range']::-webkit-slider-thumb {
 button{
   margin: 5px 15px 10px 15px;
   height: 30px;
-  background-color:rgb(241, 239, 239);
+  background-color: rgb(66, 66, 66);
   font-family: "Times New Roman", "Arial Black", sans-serif;
   font-size: 18px;
   border-radius: 5px;
   border: 3px solid rgb(66, 66, 66);
+  color: whitesmoke; 
 }
 button:hover{
-  background-color: whitesmoke;
+  border: 3.4px solid #999999;
 }
 button:active{
   color: whitesmoke; 
 }
-
-#buildTable, #buildMaze{
-  border: 3px solid rgb(66, 66, 66);
-}
-#buildTable:hover, #buildMaze:hover{
+#buildTable:hover, #buildMaze:hover, #setWall:hover{
   border: 3.4px solid rgb(78, 78, 78);
 }
-#buildTable:active, #buildMaze:active{
+#buildTable:active, #buildMaze:active, #setWall:active{
   background-color: rgb(78, 78, 78);
   border: 3.4px solid rgb(78, 78, 78);
 }
 
-#setInput {
-  border: 3px solid #2b88d4;
-}
 #setInput:hover{
-  border: 3.4px solid #1495ff;
+  border: 3.4px solid #005ba5;
 }
 #setInput:active{
-  background-color: #1495ff;
-  border: 3.4px solid #1495ff;
+  background-color: #005ba5;
+  border: 3.4px solid #005ba5;
 }
 
-#setOutput {
-  border: 3px solid #e99c0e;
-}
 #setOutput:hover{
-  border: 3.4px solid #ffbe45;
+  border: 3.4px solid #ff9306;
 }
 #setOutput:active{
-  background-color: #ffbe45;
-  border: 3.4px solid #ffbe45;
+  background-color: #ff9306;
+  border: 3.4px solid #ff9306;
 }
 
-#setWall {
-  border: 3px solid #616161;
-}
-#setWall:hover{
-  border: 3.4px solid #8d8c8c;
-}
-#setWall:active{
-  background-color: #8d8c8c;
-  border: 3.4px solid #8d8c8c;
-}
-
-#clearAll, #setClear {
-  border: 3px solid #a10606;
-}
 #clearAll:hover, #setClear:hover{
   border: 3.4px solid #d80707;
 }
@@ -126,6 +104,7 @@ button:active{
   padding-top: 10px;
 }
 #run {
+  background-color: #049924;
   border: 3px solid #049924;
   margin-right: 5px;
   flex: 7;
@@ -141,23 +120,23 @@ button:active{
 #indicator {
   flex: 1;
   margin-left: 0;
-  border: 1px solid #000000;
+  border: 3px solid rgb(66, 66, 66);
 }
 
 .idle {
-  background-color: rgb(255, 255, 255);
+  background-color: #999999;
 }
 
 .running {
-  background-color: rgb(255, 248, 152);
+  background-color: #fff570;
 }
 
 .success {
-  background-color: rgb(142, 255, 119);
+  background-color: #03c02c;
 }
 
 .fail {
-  background-color: rgb(255, 108, 108);
+  background-color: #d80707;
 }
 
 td.clear {
@@ -165,26 +144,26 @@ td.clear {
 }
 
 td.wall {
-  background-color: #616161;
+  background-color: rgb(66, 66, 66);
 }
 
 td.input {
-  background-color: #0a76d0;
+  background-color: #005ba5;
 }
 
 td.output {
-  background-color: #ffa500;
+  background-color: #ff9306;
 }
 
 td.open {
-  background-color: #e1f594;
+  background-color: #e2ff70;
 }
 
 td.closed {
-  background-color: #78c764;
+  background-color: #08ce33;
 }
 
 
 td.way {
-  background-color: #94f5d0;
+  background-color: #55fcbc;
 }

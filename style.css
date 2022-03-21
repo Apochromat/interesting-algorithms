@@ -85,13 +85,13 @@ h2 a:hover{
 .mainContainer > .algorithmBox > .algorithmOptions > * {
   margin: 0 auto 20px auto;
   width: 100%;
-  border: 3px solid grey;
   display: flex;
   flex-direction: column;
 }
 
 .mainContainer > .algorithmBox > .algorithmOptions {
   min-width: 250px;
+  max-height: 440px;
   display: flex;
   flex-direction: column;
   flex: 1;
@@ -100,4 +100,5 @@ h2 a:hover{
 .mainContainer > .algorithmBox > .algorithmView {
   flex: 2;
   margin-right: 40px;
+  padding: 15px;
 }
