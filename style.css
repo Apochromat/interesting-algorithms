@@ -26,19 +26,24 @@ h1 {
   font-family: "Playfair Display", "Arial Black", sans-serif;
   font-size: 44px;
   font-weight: normal;
+  color: whitesmoke;
 }
 h2 {
   font-family: "Playfair Display", "Arial Black", sans-serif;
   font-size: 44px;
   font-weight: normal;
   text-align: center;
+  color: whitesmoke;
 }
 h2 a{
-  color: black;
+  color: whitesmoke;
   text-decoration: none;
 }
+h2 a:hover{
+  color: rgb(141, 141, 141);
+}
 .background {
-  background-color: rgb(243, 243, 243);
+  background-color: rgb(68, 68, 68);
   position: absolute;
   display: block;
   top: 0;
@@ -61,6 +66,7 @@ h2 a{
   font-size: 36px;
   font-weight: normal;
   text-align: center;
+  color: whitesmoke;
 }
 
 .mainContainer > .algorithmBox {
@@ -70,7 +76,7 @@ h2 a{
 .mainContainer > .algorithmBox > * {
   margin: 20px;
   border-radius: 10px;
-  background-color: rgba(255, 255, 255, 0.616);
+  background-color: rgba(22, 27, 34, 0.616);
   padding: 15px;
 }
 
@@ -82,22 +88,11 @@ h2 a{
   flex-direction: column;
 }
 
-.mainContainer > .algorithmBox > .algorithmOptions > .about > * {
-  margin: 10px;
-}
-
 .mainContainer > .algorithmBox > .algorithmOptions {
   min-width: 250px;
   display: flex;
   flex-direction: column;
   flex: 1;
-}
-
-.mainContainer > .algorithmBox > .algorithmOptions h4 {
-  text-align: left;
-  margin: 10px 10px auto 10px;
-  font-family: "Playfair Display", "Arial Black", sans-serif;
-  font-size: 24px;
 }
 
 .mainContainer > .algorithmBox > .algorithmView {

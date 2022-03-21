@@ -142,6 +142,7 @@ function hierarchical() {
   ctx.clearRect(0, 0, canvas.width, canvas.height);
   fiilCanvas();
   drawPoint();
+  coordsPointCluster = [];
   for (let i = 0; i < coordsPoint.length; i++) {
     var minLen = 999999;
     for (let j = 0; j < coordsPoint.length; j++) {
