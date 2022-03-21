@@ -1,4 +1,4 @@
-var brushSize = 6;
+var brushSize = 3;
 var brushColor = "rgb(1, 1, 1)";
 var pixelSide = 56;
 var d;
@@ -12,11 +12,11 @@ function ready() {
 
 function run(){
     var data = d.calculate();
-    console.log(convoluteMatrix(data, 0, 0.25));
+    console.log(makeDataForResponsing(convoluteMatrix(data, 1, 0.25)));
 }
 
 function convoluteMatrix(matrix, type = 0, threshold = 0) {
-    var convolutedMatrix = [];
+    var data = [];
     for (let i = 0; i < pixelSide; i++) {
         let temp = [];
         for (let j = 0; j < pixelSide; j++) {
@@ -25,10 +25,20 @@ function convoluteMatrix(matrix, type = 0, threshold = 0) {
             temp.push(value)
             j++;
         }
-        convolutedMatrix.push(temp);
+        data.push(temp);
         i++;
     }
-    return convolutedMatrix
+    return data
+}
+
+function makeDataForResponsing(matrix) {
+    var data = []
+    for (let i = 0; i < 28; i++) {
+      for (let j = 0; j < 28; j++) {
+            data.push([matrix[i][j]]);
+      }
+    }
+    return data
 }
 
 function DCanvas(canvas) {

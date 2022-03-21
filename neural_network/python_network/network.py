@@ -48,7 +48,7 @@ class Network():
             if (vectorised[i][0] > maximum):
                 maximum = vectorised[i][0]
                 output = i
-        return i
+        return output
 
 
     def SGD(self, training_data, epochs, mini_batch_size, eta, test_data=None):
