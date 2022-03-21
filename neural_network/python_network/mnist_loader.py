@@ -2,6 +2,11 @@ import gzip
 import pickle
 import numpy as np
 
+def zipper(arrayA, arrayB):
+    output = []
+    for x in range(len(arrayA)):
+        output.append({arrayA[x], arrayB[x]})
+
 def load_data():
     path = "mnist.pkl.gz"
     file = gzip.open(path)
