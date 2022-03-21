@@ -36,23 +36,21 @@
         </div>
         <div class="algorithmBox">
           <div class="algorithmOptions">
-            <div class="about">
-              <h4>Об алгоритме</h4>
-              <p>
-                Алгоритм кластеризации — один из эффективных полиномиальных алгоритмов 
-                для нахождения приближённых решений задачи коммивояжёра, а также 
-                решения аналогичных задач поиска маршрутов на графах.
-              </p>
-            </div>
             <div class="settings">
-              <p>Настройки</p>
+              <button id = "create" onclick = "clearCanvas()"> Создать/Очистить </button>
+              <button onclick = "pushPoint()"> Поставить вершину </button>
+              <button onclick = "pushPointCluster()"> Поставить центр кластера </button>
+              <button onclick = "kMedium()"> Алгоритм К-средних </button>
+              <button onclick = "hierarchical()"> Алгоритм Иерархический </button>
+              <button onclick = ""> Сравнить алгоритмы </button>
             </div>
           </div>
           <div class="algorithmView">
-            <p>Поле алгоритма</p>
+            <canvas id = "canvasCluster"></canvas>
           </div>
         </div>
     </div>
+    <script src = "cluster.js"></script>
 </body>
 </html>
 
