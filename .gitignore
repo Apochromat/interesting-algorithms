@@ -1,2 +1,4 @@
 **/.idea
-neural_network\python_network\__pycache__
+neural_network/python_network/__pycache__
+neural_network/python_network/__pycache__/mnist_loader.cpython-310.pyc
+neural_network/python_network/__pycache__/network.cpython-310.pyc
