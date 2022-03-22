@@ -2,12 +2,14 @@ var canvas = document.getElementById("canvasCluster");
 var ctx = canvas.getContext("2d");
 var coordsPoint = [];
 var coordsPointCluster = [];
-var maxLen = 300;
-
+var maxLen = 220;
+var numCenter = 3;
+document.getElementById("tableSizeSlider").onclick = function () {
+  document.getElementById('tableSizeLabel').innerHTML = this.value;
+}
 
 function clearCanvas(){
   canvas.removeEventListener("mousedown", pushPointListener);
-  canvas.removeEventListener("mousedown", pushPointClusterListener);
   coordsPoint = [];
   coordsPointCluster = [];
   fiilCanvas();
@@ -34,43 +36,20 @@ function pushPointListener(e) {
   ctx.fillStyle = "rgb(128,128,128, 0.9)";
   ctx.fill();
 } 
-function pushPointClusterListener(e) {
-  ctx.beginPath();
-  ctx.arc(e.pageX - e.target.offsetLeft, e.pageY - e.target.offsetTop, 8, 0, Math.PI*2);
-  var color = '#' + (Math.random().toString(16) + '000000').substring(2,8).toUpperCase();
-  ctx.fillStyle = color;
-  ctx.fill();
-  var Point = {
-    x: e.pageX - e.target.offsetLeft,
-    y: e.pageY - e.target.offsetTop,
-    color: color,
-    neigbourPoints: []
-  };
-  coordsPointCluster.push(Point);
-} 
 
 function pushPoint(){
-  canvas.removeEventListener("mousedown", pushPointClusterListener);
   canvas.addEventListener("mousedown", pushPointListener);
-}
-function pushPointCluster(){
-  canvas.removeEventListener("mousedown", pushPointListener);
-  canvas.addEventListener("mousedown", pushPointClusterListener);
 }
 
 function kMedium(){
   canvas.removeEventListener("mousedown", pushPointListener);
-  canvas.removeEventListener("mousedown", pushPointClusterListener);
   if (coordsPoint.length == 0) {
     alert("Обозначьте вершину");
     return 0;
   }
-  if (coordsPointCluster.length == 0) {
-    alert("Обозначьте центр кластера");
-    return 0;
-  }
+  findCenter();
   minStroke();
-  for (let i = 0; i < 10; i++) {
+  for (let i = 0; i < 5; i++) 
     setTimeout(function() {
       ctx.clearRect(0, 0, canvas.width, canvas.height);
       fiilCanvas();
@@ -78,13 +57,70 @@ function kMedium(){
       replacePointCluster();
       minStroke();
     }, 2000);
+}
+function findCenter() {
+  let Point = {
+    x: 0,
+    y: 0,
+    index: 0,
+    color: "blue"
+  };
+  let curI = Math.floor(Math.random()*(coordsPoint.length));
+  Point.x = coordsPoint[curI].x, Point.y = coordsPoint[curI].y, Point.index = curI; 
+  coordsPointCluster.push(Point);
+  for (let i = 1; i < numCenter; i++) {
+
+    let maxPoint = {
+      x: 0,
+      y: 0,
+      index: 0,
+      color: "blue"
+    };
+    let maxPointer = -1, pointer;
+    let maxLenForCenter = []
+    maxLenForCenter.length = coordsPointCluster.length;
+    for (let index = 0; index < maxLenForCenter.length; index++) maxLenForCenter[index] = -1;
+
+    for (let j = 0; j < coordsPoint.length; j++) {
+      let lenForCenter = []
+      lenForCenter.length = coordsPointCluster.length;
+      for (let index = 0; index < maxLenForCenter.length; index++) lenForCenter[index] = -1;
+      
+      let flag = true;
+      for (let k = 0; k < coordsPointCluster.length; k++) 
+        if(coordsPointCluster[k].index == j) flag = false;
+        
+      
+      if(flag)
+        for (let k = 0; k < coordsPointCluster.length; k++) 
+            lenForCenter[k] = Math.sqrt(Math.pow((coordsPointCluster[k].x - coordsPoint[j].x), 2) + Math.pow((coordsPointCluster[k].y - coordsPoint[j].y), 2));
+        
+        pointer = 0;
+        for (let k = 0; k < lenForCenter.length; k++){
+          if (lenForCenter[k] > maxLenForCenter[k]) 
+            pointer++;
+          if (lenForCenter[k] <= maxLen) {
+            pointer -= 10;
+          }
+        }
+          console.log(pointer);  
+        if (maxPointer <= pointer) {
+          maxLenForCenter = lenForCenter;
+          
+          maxPointer = pointer;
+          maxPoint.x = coordsPoint[j].x, maxPoint.y = coordsPoint[j].y, maxPoint.index = j, maxPoint.color = '#' + (Math.random().toString(16) + '000000').substring(2,8).toUpperCase();
+        }
+      }
+    coordsPointCluster.push(maxPoint);
   }
+  console.log("coords");
+  console.log(coordsPointCluster);
 }
 
 function minStroke(){
-  for (let i = 0; i < coordsPointCluster.length; i++) {
+  for (let i = 0; i < coordsPointCluster.length; i++) 
     coordsPointCluster[i].neigbourPoints = [];
-  }
+  
   for (let i = 0; i < coordsPoint.length; i++) {
     var minPoint = {
       x: 0,
@@ -113,7 +149,6 @@ function minStroke(){
     ctx.lineWidth = "2"; 
     ctx.stroke(); 
   };
-  console.log(coordsPointCluster);
 }
 function replacePointCluster(){
   for (let i = 0; i < coordsPointCluster.length; i++) {
@@ -143,9 +178,9 @@ function hierarchical() {
   fiilCanvas();
   drawPoint();
   coordsPointCluster = [];
-  for (let i = 0; i < coordsPoint.length; i++) {
+  for (let i = 0; i < coordsPoint.length; i++) 
     var minLen = 999999;
-    for (let j = 0; j < coordsPoint.length; j++) {
+    for (let j = 0; j < coordsPoint.length; j++) 
       if (i != j) {
         let len = Math.sqrt(Math.pow((coordsPoint[i].x - coordsPoint[j].x), 2) + Math.pow((coordsPoint[i].y - coordsPoint[j].y), 2));
         if (len < minLen && len < maxLen) {
@@ -153,12 +188,9 @@ function hierarchical() {
           coordsPoint[i].nearPoint = j;
         }
       }
-    }   
-  }
-  console.log(coordsPoint);
-  for (let i = 0; i < coordsPoint.length; i++) {
-    for (let j = 0; j < coordsPoint.length; j++) {
-      if (i != j) {
+  for (let i = 0; i < coordsPoint.length; i++) 
+    for (let j = 0; j < coordsPoint.length; j++) 
+      if (i != j) 
         if (coordsPoint[i].nearPoint == j && coordsPoint[j].nearPoint == i) {
           ctx.beginPath();
           ctx.moveTo(coordsPoint[i].x, coordsPoint[i].y);
@@ -168,7 +200,4 @@ function hierarchical() {
           ctx.stroke(); 
           console.log(1);
         }
-      }   
-    }
-  }
 } 
