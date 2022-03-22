@@ -4,8 +4,14 @@ var coordsPoint = [];
 var coordsPointCluster = [];
 var maxLen = 220;
 var numCenter = 3;
-document.getElementById("tableSizeSlider").onclick = function () {
-  document.getElementById('tableSizeLabel').innerHTML = this.value;
+document.getElementById("sliderNumCenter").onclick = function () {
+  document.getElementById('lableNumCenter').innerHTML = this.value;
+  numCenter = document.getElementById('lableNumCenter').innerText;
+  // maxLen = 210-numCenter*10;
+}
+document.getElementById("sliderMaxLen").onclick = function () {
+  document.getElementById('lableMaxLen').innerHTML = this.value;
+  maxLen = document.getElementById('lableMaxLen').innerText;
 }
 
 function clearCanvas(){
@@ -14,10 +20,16 @@ function clearCanvas(){
   coordsPointCluster = [];
   fiilCanvas();
 }
+function clearStroke(){
+  coordsPointCluster = [];
+  ctx.clearRect(0, 0, canvas.width, canvas.height);
+  fiilCanvas();
+  drawPoint();
+}
 function fiilCanvas() {
-  canvas.width = window.innerWidth*0.58;
+  canvas.width = window.innerWidth*0.56;
   canvas.height = window.innerHeight*0.6;
-  ctx.fillStyle = "rgba(211, 211, 211, 0.3)";
+  ctx.fillStyle = "rgba(211, 211, 211, 0)";
   ctx.strokeStyle = "gray";
   ctx.lineWidth = 5;
   ctx.fillRect(0, 0, canvas.width, canvas.height);
@@ -47,6 +59,11 @@ function kMedium(){
     alert("Обозначьте вершину");
     return 0;
   }
+  if (coordsPoint.length < numCenter) {
+    alert("Кол-во вершин меньше кол-ва центроидов");
+    return 0;
+  }
+  clearStroke();
   findCenter();
   minStroke();
   for (let i = 0; i < 5; i++) 
