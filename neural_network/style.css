@@ -1,0 +1,29 @@
+#canv {
+    margin: 0 auto;
+    background-color: white;
+    border-radius: 5px;
+}
+
+.algorithmView {
+    padding: 15px;
+    flex: 1;
+} 
+
+#clearAll:hover{
+    border: 3.4px solid #d80707;
+  }
+#clearAll:active{
+    background-color: #d80707;
+    border: 3.4px solid #d80707;
+  }
+#run {
+    border: 3px solid #049924;
+    background-color: #049924;
+  }
+#run:hover{
+    border: 3.4px solid #03c02c;
+  }
+#run:active{
+    background-color: #03c02c;
+    border: 3.4px solid #03c02c;
+  }

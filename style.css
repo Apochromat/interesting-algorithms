@@ -1,9 +1,10 @@
 html, body {
   margin: 0;
   padding: 0;
+  height: 100vh;
 }
 html {
-  background-color: rgb(243, 243, 243);
+  background-color: rgb(0, 0, 0);
 }
 .main {
   margin: auto;
@@ -23,25 +24,105 @@ html {
   width: 55%;
 }
 h1 {
-  font-family: "Playfair Display", "Arial Black", sans-serif;
-  font-size: 44px;
-  font-weight: normal;
+  font-family: "Montserrat Alternates", "Arial Black", sans-serif;
+  font-size: 62px;
+  font-weight:normal;
+  text-align: center;
+  color: whitesmoke;
 }
 h2 {
-  font-family: "Playfair Display", "Arial Black", sans-serif;
+  font-family: "Montserrat Alternates", "Arial Black", sans-serif;
   font-size: 44px;
   font-weight: normal;
   text-align: center;
+  color: whitesmoke;
+  padding: 15px;
 }
 h2 a{
-  color: black;
+  color: whitesmoke;
   text-decoration: none;
 }
+h2 a:hover{
+  color: rgb(141, 141, 141);
+}
 .background {
-  background-color: rgb(243, 243, 243);
   position: absolute;
   display: block;
   top: 0;
   left: 0;
   z-index: -1;
+}
+
+.mainContainer {
+  margin-left: 40px;
+}
+
+.mainContainer > .algorithmName {
+  padding-bottom: 8px;
+  border-bottom: 2px solid gray;
+}
+
+.mainContainer > .algorithmName > h3 {
+  margin: 0px auto;
+  font-family: "Montserrat Alternates", "Arial Black", sans-serif;
+  font-size: 36px;
+  font-weight: normal;
+  text-align: center;
+  color: whitesmoke;
+}
+
+.mainContainer > .algorithmBox {
+  display: flex;
+}
+
+.mainContainer > .algorithmBox > * {
+  margin: 20px;
+  border-radius: 10px;
+  background-color: rgba(22, 27, 34, 0.616);
+  padding-top: 15px;
+  padding-left: 15px;
+  padding-right: 19px;
+}
+
+.mainContainer > .algorithmBox > .algorithmOptions > * {
+  margin: 0 auto 20px auto;
+  width: 100%;
+  display: flex;
+  flex-direction: column;
+}
+
+.mainContainer > .algorithmBox > .algorithmOptions {
+  min-width: 250px;
+  max-height: 440px;
+  display: flex;
+  flex-direction: column;
+  flex: 1;
+}
+
+.mainContainer > .algorithmBox > .algorithmView {
+  flex: 2;
+  margin-right: 40px;
+  padding: 15px;
+}
+button{
+  margin: 5px 15px 10px 15px;
+  height: 30px;
+  background-color: rgb(66, 66, 66);
+  font-family: "Montserrat Alternates", "Arial Black", sans-serif;
+  font-size: 16px;
+  border-radius: 5px;
+  border: 3px solid rgb(66, 66, 66);
+  color: whitesmoke; 
+  cursor: pointer;
+}
+button:hover{
+  border: 3.4px solid rgb(78, 78, 78);
+}
+button:active{
+  background-color: rgb(78, 78, 78); 
+}
+
+
+.p5Canvas {
+  z-index: -100;
 }

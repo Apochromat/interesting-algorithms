@@ -1,0 +1,157 @@
+#ioTable{
+  margin: 0 auto;
+}
+
+table, th, td {
+  border: 1px solid black;
+  border-collapse: collapse;
+}
+p{
+  font-size: 17px;
+}
+
+#SizeSlider{
+  display: block;
+  display: flex;
+  flex-direction: row;
+  justify-content: space-between;
+  padding-top: 16px;
+  padding-bottom: 15px;
+  padding-left: 15px;
+  padding-right: 15px;
+}
+#tableSizeLabel{
+  color: whitesmoke;
+  margin-left: 15px;
+  margin-top: -4px;
+  font-size: 20px;
+  font-family: "Montserrat Alternates", "Arial Black", sans-serif;
+}
+#tableSizeSlider{
+  margin-top: 6.5px;
+}
+input[type='range'] {
+  width: 350px;
+  height: 3px;
+  -webkit-appearance: none;
+  background-color: rgb(143, 142, 142);
+  border: 2px solid rgb(66, 66, 66);
+  box-shadow: 0 0 16px rgba(255, 255, 255, 0.6) inset; 
+  border-radius: 4px;
+}
+input[type='range']::-webkit-slider-runnable-track {
+  height: 18px;
+  -webkit-appearance: none;
+}
+input[type='range']::-webkit-slider-thumb {
+  width: 18px;
+  -webkit-appearance: none;
+  height: 18px;
+  cursor: grab;
+  background: #ececec;
+  border: 2px solid rgb(66, 66, 66);
+  box-shadow: 0 0 16px rgba(255, 255, 255, 0.3) inset; 
+  border-radius: 100%;
+}
+
+#buildTable:hover, #buildMaze:hover, #setWall:hover{
+  border: 3.4px solid rgb(78, 78, 78);
+}
+#buildTable:active, #buildMaze:active, #setWall:active{
+  background-color: rgb(78, 78, 78);
+  border: 3.4px solid rgb(78, 78, 78);
+}
+
+#setInput:hover{
+  border: 3.4px solid #005ba5;
+}
+#setInput:active{
+  background-color: #005ba5;
+  border: 3.4px solid #005ba5;
+}
+
+#setOutput:hover{
+  border: 3.4px solid #ff9306;
+}
+#setOutput:active{
+  background-color: #ff9306;
+  border: 3.4px solid #ff9306;
+}
+
+#clearAll:hover, #setClear:hover{
+  border: 3.4px solid #d80707;
+}
+#clearAll:active, #setClear:active{
+  background-color: #d80707;
+  border: 3.4px solid #d80707;
+}
+
+#runBox {
+  display: flex;
+  flex-direction: row;
+  padding-top: 10px;
+}
+#run {
+  background-color: #049924;
+  border: 3px solid #049924;
+  margin-right: 5px;
+  flex: 7;
+}
+#run:hover{
+  border: 3.4px solid #03c02c;
+}
+#run:active{
+  background-color: #03c02c;
+  border: 3.4px solid #03c02c;
+}
+
+#indicator {
+  flex: 1;
+  margin-left: 0;
+  border: 3px solid rgb(66, 66, 66);
+}
+
+.idle {
+  background-color: #999999;
+}
+
+.running {
+  background-color: #fff570;
+}
+
+.success {
+  background-color: #03c02c;
+}
+
+.fail {
+  background-color: #d80707;
+}
+
+td.clear {
+  background-color: rgb(236, 236, 236);
+}
+
+td.wall {
+  background-color: rgb(66, 66, 66);
+}
+
+td.input {
+  background-color: #005ba5;
+}
+
+td.output {
+  background-color: #ff9306;
+}
+
+td.open {
+  background-color: #e2ff70;
+}
+
+td.closed {
+  background-color: #08ce33;
+}
+
+
+td.way {
+  background-color: #55fcbc;
+}

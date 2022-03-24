@@ -7,16 +7,13 @@
     <link href="../style.css" rel="stylesheet">
     <link href="style.css" rel="stylesheet">
     <link href="../menu_style.css" rel="stylesheet">
-    <link href="https://fonts.googleapis.com/css?family=Playfair+Display" rel="stylesheet">
+    <link href="https://fonts.googleapis.com/css?family=Montserrat+Alternates" rel="stylesheet">
+    <link href="https://fonts.googleapis.com/css?family=Dosis" rel="stylesheet">
 </head>
 <body>
     <canvas class = "background"></canvas>
+    <script src="../p5.js"></script>
     <script src="../particles.js"></script>
-    <script>
-        window.onload= function() {
-            Particles.init({ selector: '.background', connectParticles: true, maxParticles:150, color: '#aaaaaa' });
-        };
-    </script>
     <input type="checkbox" id="nav-toggle" hidden>
     <nav class="nav">
         <label for="nav-toggle" class="nav-toggle" onclick></label>
@@ -30,8 +27,21 @@
             <li><a href="../neural_network/neural_network.html">Нейронная сеть</a>
         </ul>
     </nav>
-    <div class="main">
-        <h1>Дерево</h1>
+    <div class="mainContainer">
+        <div class="algorithmName">
+          <h3>Дерево решений</h3>
+        </div>
+        <div class="algorithmBox">
+          <div class="algorithmOptions">
+            <div class="settings">
+              <p>Настройки</p>
+            </div>
+          </div>
+          <div class="algorithmView">
+            <p>Поле алгоритма</p>
+          </div>
+        </div>
+    </div>
 </body>
 </html>
 

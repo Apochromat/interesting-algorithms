@@ -7,16 +7,13 @@
     <link href="../style.css" rel="stylesheet">
     <link href="style.css" rel="stylesheet">
     <link href="../menu_style.css" rel="stylesheet">
-    <link href="https://fonts.googleapis.com/css?family=Playfair+Display" rel="stylesheet">
+    <link href="https://fonts.googleapis.com/css?family=Montserrat+Alternates" rel="stylesheet">
+    <link href="https://fonts.googleapis.com/css?family=Dosis" rel="stylesheet">
 </head>
 <body>
     <canvas class = "background"></canvas>
+    <script src="../p5.js"></script>
     <script src="../particles.js"></script>
-    <script>
-        window.onload= function() {
-            Particles.init({ selector: '.background', connectParticles: true, maxParticles:150, color: '#aaaaaa' });
-        };
-    </script>
     <input type="checkbox" id="nav-toggle" hidden>
     <nav class="nav">
         <label for="nav-toggle" class="nav-toggle" onclick></label>
@@ -30,8 +27,23 @@
             <li><a href="">Нейронная сеть</a>
         </ul>
     </nav>
-    <div class="main">
-        <h1>Нейронка</h1>
+    <div class="mainContainer">
+        <div class="algorithmName">
+          <h3>Нейронная сеть</h3>
+        </div>
+        <div class="algorithmBox">
+          <div class="algorithmOptions">
+            <div class="settings">
+              <button id="clearAll">Очистить все</button>
+              <button id="run">Запустить</button>
+            </div>
+          </div>
+          <div class="algorithmView">
+            <canvas id="canv" style="display: block;">Ваш браузер устарел, обновитесь.</canvas>
+          </div>
+        </div>
+    </div>
+    <script type="text/javascript" src="script.js" defer></script>
 </body>
 </html>
 

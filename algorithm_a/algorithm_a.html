@@ -1,22 +1,21 @@
 <!DOCTYPE html>
 <html lang="ru">
+
 <head>
-    <meta charset="utf-8" />
-    <title> Interesting Algorithms </title>
-    <link rel="shortcut icon" href="../favicon.ico" type="image/x-icon">
-    <link href="../style.css" rel="stylesheet">
-    <link href="style.css" rel="stylesheet">
-    <link href="../menu_style.css" rel="stylesheet">
-    <link href="https://fonts.googleapis.com/css?family=Playfair+Display" rel="stylesheet">
+  <meta charset="utf-8" />
+  <title>Interesting Algorithms</title>
+  <link rel="shortcut icon" href="../favicon.ico" type="image/x-icon" />
+  <link href="../style.css" rel="stylesheet" />
+  <link href="style.css" rel="stylesheet" />
+  <link href="../menu_style.css" rel="stylesheet" />
+  <link href="https://fonts.googleapis.com/css?family=Montserrat+Alternates" rel="stylesheet">
+  <link href="https://fonts.googleapis.com/css?family=Dosis" rel="stylesheet">
 </head>
+
 <body>
     <canvas class = "background"></canvas>
+    <script src="../p5.js"></script>
     <script src="../particles.js"></script>
-    <script>
-        window.onload= function() {
-            Particles.init({ selector: '.background', connectParticles: true, maxParticles:150, color: '#aaaaaa' });
-        };
-    </script>
     <input type="checkbox" id="nav-toggle" hidden>
     <nav class="nav">
         <label for="nav-toggle" class="nav-toggle" onclick></label>
@@ -30,10 +29,33 @@
             <li><a href="../neural_network/neural_network.html">Нейронная сеть</a>
         </ul>
     </nav>
-    <div class="main">
-        <h1>Алгоритм А</h1>
+    <div class="mainContainer">
+      <div class="algorithmName">
+        <h3>Алгоритм A*</h3>
+      </div>
+      <div class="algorithmBox">
+        <div class="algorithmOptions">
+          <div class="settings">
+            <div id="SizeSlider">
+              <input id="tableSizeSlider" type="range" min="5" max="40" value="17" />
+              <label id="tableSizeLabel">17</label>
+            </div> 
+            <button id="buildTable">Построить поле</button>
+            <button id="buildMaze">Построить лабиринт</button>
+            <button id="setInput">Обозначить вход</button>
+            <button id="setOutput">Обозначить выход</button>
+            <button id="setWall">Обозначить стенку</button>
+            <button id="setClear">Очистить клетку</button>
+            <button id="clearAll">Очистить все</button>
+            <div id="runBox">
+              <button id="run">Запустить</button>
+              <button id="indicator" disabled></button>
+            </div>
+          </div>
+        </div>
+      <div class="algorithmView"></div>
+    </div>
+  </div>
+  <script type="text/javascript" src="script.js" defer></script>
 </body>
 </html>
-
-
-

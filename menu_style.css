@@ -31,7 +31,7 @@
 
 
 [id='nav-toggle']:checked ~ .nav {
-    background-color: rgb(243, 243, 243);
+    background-color: rgb(22, 27, 34);
 }
 
 /**
@@ -45,7 +45,7 @@
     /* относительно левого края панели */
     left: 320px;
     /* отступ от верхнего края панели */
-    top: 1em;
+    top: 0.5em;
     /* внутренние отступы */
     padding: 0.5em;
     /* определяем цвет фона переключателя
@@ -53,7 +53,7 @@
     */
     background: inherit;
     /* цвет текста */
-    color: #161515;
+    color: whitesmoke;
     /* вид курсора */
     cursor: pointer;
     /* размер шрифта */
@@ -81,7 +81,7 @@
 /* цвет текста при наведении */
 
 .nav-toggle:hover {
-    color: #0c0b0b;
+    color: whitesmoke;
 }
 
 
@@ -106,7 +106,7 @@
 
 [id='nav-toggle']:checked ~ .nav {
     left: 0;
-    box-shadow:4px 0px 10px 0px rgba(0, 0, 0, 0.2);
+    box-shadow:5px 0px 5px 0px rgba(0, 0, 0, 0.2);
     overflow-y: auto;
 }
 
@@ -139,7 +139,7 @@
     font-size: 1.3em;
     line-height: 1.3em;
     opacity: 0;
-    font-family: "Playfair Display", "Arial Black";
+    font-family: "Dosis", sans-serif;
     font-size: 44px;
     transform: scale(0.1, 0.1);
     -ms-transform: scale(0.1, 0.1);
@@ -155,7 +155,7 @@
     -webkit-transition: opacity 0.8s, -webkit-transform 0.8s;
 }
 .nav h2 a {
-    color: black;
+    color: whitesmoke;
     text-decoration: none;
 }
 
@@ -241,10 +241,10 @@
     display: inline-block;
     position: relative;
     padding: 0;
-    font-family: 'Playfair Display', sans-serif;
+    font-family: "Montserrat Alternates", sans-serif;
     font-weight: 300;
     font-size: 1.2em;
-    color: #000000;
+    color: whitesmoke;
     width: 100%;
     text-decoration: none;
     /* плавный переход */
@@ -260,7 +260,7 @@
 
 .nav > ul > li > a:hover,
 .nav > ul > li > a:focus {
-    color: rgb(20, 19, 19);
+    color: rgb(141, 141, 141);
     padding-left: 15px;
 }
 
@@ -289,7 +289,7 @@
     bottom: 0;
     height: 1px;
     width: 100%;
-    background: gray;
+    background: rgb(141, 141, 141);
     -webkit-transition: width .5s ease;
     transition: width .5s ease;
 }
@@ -302,7 +302,7 @@
 
 .nav > ul > li > a:hover:before {
     width: 0%;
-    background: gray;
+    background: rgb(141, 141, 141);
     -webkit-transition: width .3s ease;
     transition: width .3s ease;
 }
@@ -315,29 +315,3 @@
 }
 
 
-/* фон затемнения на основной контент 
- * при этом элементы блокируютя
- * спорная такая фича, если оно вам надо
- * просто раскомментируйте
-*/
-
-
-.mask-content {
-    display: block;
-    position: fixed;
-    top: 0;
-    left: 0;
-    z-index: 1000;
-    width: 100%;
-    height: 100%;
-    background-color: rgba(0, 0, 0, 0.4);
-    visibility: hidden;
-    opacity: 0;
-}
-
-[id='nav-toggle']:checked ~ .mask-content {
-    visibility: visible;
-    opacity: 1;
-    -webkit-transition: opacity .5s, visibility .5s;
-    transition: opacity .5s, visibility .5s;
-}

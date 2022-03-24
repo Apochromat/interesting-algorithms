@@ -7,16 +7,13 @@
     <link href="../style.css" rel="stylesheet">
     <link href="style.css" rel="stylesheet">
     <link href="../menu_style.css" rel="stylesheet">
-    <link href="https://fonts.googleapis.com/css?family=Playfair+Display" rel="stylesheet">
+    <link href="https://fonts.googleapis.com/css?family=Montserrat+Alternates" rel="stylesheet">
+    <link href="https://fonts.googleapis.com/css?family=Dosis" rel="stylesheet">
 </head>
 <body>
     <canvas class = "background"></canvas>
-    <script src="../particles.js"></script>
-    <script>
-        window.onload= function() {
-            Particles.init({ selector: '.background', connectParticles: true, maxParticles:150, color: '#aaaaaa' });
-        };
-    </script>
+    <!-- <script src="../p5.js"></script>
+    <script src="../particles.js"></script> -->
     <input type="checkbox" id="nav-toggle" hidden>
     <nav class="nav">
         <label for="nav-toggle" class="nav-toggle" onclick></label>
@@ -30,8 +27,37 @@
             <li><a href="../neural_network/neural_network.html">Нейронная сеть</a>
         </ul>
     </nav>
-    <div class="main">
-        <h1>Кластеризация</h1>
+    <div class="mainContainer">
+        <div class="algorithmName">
+          <h3>Алгоритм кластеризации</h3>
+        </div>
+        <div class="algorithmBox">
+          <div class="algorithmOptions">
+            <div class="settings">
+              <p class="about">Количество центроидов</p>
+              <div class="SizeSlider">
+                <input class="tableSizeSlider" id ="sliderNumCenter" type="range" min="1" max="10" value="3" />
+                <label class="tableSizeLabel" id ="lableNumCenter">3</label>
+              </div> 
+              <!-- <p class="about">Минимальное расстояние между центроидами</p>
+              <div class="SizeSlider">
+                <input class="tableSizeSlider" id ="sliderMaxLen" type="range" min="100" max="300" value="220" step="10" />
+                <label class="tableSizeLabel" id ="lableMaxLen">220</label>
+              </div>  -->
+              <button id = "create" onclick = "clearCanvas()"> Создать/Очистить </button>
+              <button id = "setPoint" onclick = "pushPoint()"> Поставить вершину </button>
+              <button id = "clear" onclick = "clearStroke()"> Очистить связи </button>
+              <button id = "run" onclick = "kMedium()"> Алгоритм К-средних </button>
+              <button id = "run" onclick = "hierarchical()"> Алгоритм Иерархический </button>
+              <button id = "run" onclick = ""> Сравнить алгоритмы </button>
+            </div>
+          </div>
+          <div class="algorithmView">
+            <canvas id = "canvasCluster"></canvas>
+          </div>
+        </div>
+    </div>
+    <script src = "cluster.js"></script>
 </body>
 </html>
 
