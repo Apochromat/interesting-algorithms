@@ -75,65 +75,83 @@ function kMedium(){
       minStroke();
     }, 2000);
 }
-function findCenter() {
-  let Point = {
-    x: 0,
-    y: 0,
-    index: 0,
-    color: "blue"
-  };
-  let curI = Math.floor(Math.random()*(coordsPoint.length));
-  Point.x = coordsPoint[curI].x, Point.y = coordsPoint[curI].y, Point.index = curI; 
-  coordsPointCluster.push(Point);
-  for (let i = 1; i < numCenter; i++) {
+//Старая и сложная версия нахождения центроидов
+// function findCenter() {
+//   let Point = {
+//     x: 0,
+//     y: 0,
+//     index: 0,
+//     color: "blue"
+//   };
+//   let curI = Math.floor(Math.random()*(coordsPoint.length));
+//   Point.x = coordsPoint[curI].x, Point.y = coordsPoint[curI].y, Point.index = curI; 
+//   coordsPointCluster.push(Point);
+//   for (let i = 1; i < numCenter; i++) {
 
-    let maxPoint = {
+//     let maxPoint = {
+//       x: 0,
+//       y: 0,
+//       index: 0,
+//       color: "blue"
+//     };
+//     let maxPointer = -1, pointer;
+//     let maxLenForCenter = []
+//     maxLenForCenter.length = coordsPointCluster.length;
+//     for (let index = 0; index < maxLenForCenter.length; index++) maxLenForCenter[index] = -1;
+
+//     for (let j = 0; j < coordsPoint.length; j++) {
+//       let lenForCenter = []
+//       lenForCenter.length = coordsPointCluster.length;
+//       for (let index = 0; index < maxLenForCenter.length; index++) lenForCenter[index] = -1;
+      
+//       let flag = true;
+//       for (let k = 0; k < coordsPointCluster.length; k++) 
+//         if(coordsPointCluster[k].index == j) flag = false;
+        
+      
+//       if(flag)
+//         for (let k = 0; k < coordsPointCluster.length; k++) 
+//             lenForCenter[k] = Math.sqrt(Math.pow((coordsPointCluster[k].x - coordsPoint[j].x), 2) + Math.pow((coordsPointCluster[k].y - coordsPoint[j].y), 2));
+        
+//         pointer = 0;
+//         for (let k = 0; k < lenForCenter.length; k++){
+//           if (lenForCenter[k] > maxLenForCenter[k]) 
+//             pointer++;
+//           if (lenForCenter[k] <= maxLen) {
+//             pointer -= 10;
+//           }
+//         }
+//           console.log(pointer);  
+//         if (maxPointer <= pointer) {
+//           maxLenForCenter = lenForCenter;
+          
+//           maxPointer = pointer;
+//           maxPoint.x = coordsPoint[j].x, maxPoint.y = coordsPoint[j].y, maxPoint.index = j, maxPoint.color = '#' + (Math.random().toString(16) + '000000').substring(2,8).toUpperCase();
+//         }
+//       }
+//     coordsPointCluster.push(maxPoint);
+//   }
+//   console.log("coords");
+//   console.log(coordsPointCluster);
+// }
+function findCenter() {
+  let step =  Math.floor(coordsPoint.length/numCenter);
+  for (let i = 0, curInd = 0; i < numCenter; i++, curInd += step) {
+    Point = {
       x: 0,
       y: 0,
       index: 0,
-      color: "blue"
+      color: "black"
     };
-    let maxPointer = -1, pointer;
-    let maxLenForCenter = []
-    maxLenForCenter.length = coordsPointCluster.length;
-    for (let index = 0; index < maxLenForCenter.length; index++) maxLenForCenter[index] = -1;
-
-    for (let j = 0; j < coordsPoint.length; j++) {
-      let lenForCenter = []
-      lenForCenter.length = coordsPointCluster.length;
-      for (let index = 0; index < maxLenForCenter.length; index++) lenForCenter[index] = -1;
-      
-      let flag = true;
-      for (let k = 0; k < coordsPointCluster.length; k++) 
-        if(coordsPointCluster[k].index == j) flag = false;
-        
-      
-      if(flag)
-        for (let k = 0; k < coordsPointCluster.length; k++) 
-            lenForCenter[k] = Math.sqrt(Math.pow((coordsPointCluster[k].x - coordsPoint[j].x), 2) + Math.pow((coordsPointCluster[k].y - coordsPoint[j].y), 2));
-        
-        pointer = 0;
-        for (let k = 0; k < lenForCenter.length; k++){
-          if (lenForCenter[k] > maxLenForCenter[k]) 
-            pointer++;
-          if (lenForCenter[k] <= maxLen) {
-            pointer -= 10;
-          }
-        }
-          console.log(pointer);  
-        if (maxPointer <= pointer) {
-          maxLenForCenter = lenForCenter;
-          
-          maxPointer = pointer;
-          maxPoint.x = coordsPoint[j].x, maxPoint.y = coordsPoint[j].y, maxPoint.index = j, maxPoint.color = '#' + (Math.random().toString(16) + '000000').substring(2,8).toUpperCase();
-        }
-      }
-    coordsPointCluster.push(maxPoint);
+    Point.x = coordsPoint[curInd].x;
+    Point.y = coordsPoint[curInd].y;
+    Point.index = curInd;
+    Point.color = '#' + (Math.random().toString(16) + '000000').substring(2,8).toUpperCase();
+    coordsPointCluster.push(Point);
   }
   console.log("coords");
   console.log(coordsPointCluster);
 }
-
 function minStroke(){
   for (let i = 0; i < coordsPointCluster.length; i++) 
     coordsPointCluster[i].neigbourPoints = [];

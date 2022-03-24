@@ -1,6 +1,6 @@
 .mainContainer > .algorithmBox > .algorithmOptions {
   min-width: 250px;
-  max-height: 400px;
+  max-height: 340px;
   display: flex;
   flex-direction: column;
   flex: 1;
