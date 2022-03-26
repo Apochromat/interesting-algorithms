@@ -2,39 +2,13 @@ import gzip
 import pickle
 import numpy as np
 
-def zipper(arrayA, arrayB):
-    output = []
-    for x in range(len(arrayA)):
-        output.append({arrayA[x], arrayB[x]})
-
 def load_data():
-    path = "mnist.pkl.gz"
-    file = gzip.open(path)
-    training_data, validation_data, test_data = pickle.load(file, encoding='latin1')
-    file.close()
-    return training_data, validation_data, test_data
+    f = gzip.open('mnist.pkl.gz', 'rb')
+    training_data, validation_data, test_data = pickle.load(f, encoding="latin1")
+    f.close()
+    return (training_data, validation_data, test_data)
 
 def load_data_wrapper():
-    """Возвращает кортеж, содержащий `(training_data, validation_data,
-    test_data)`. Основан на `load_data`, но формат более
-    удобен для использования в нашей реализации нейронных сетей.
-
-    В частности, `training_data` - это список, содержащий 50 000
-    кортежей `(x, y)`. `x` - это 784-мерный numpy.ndarray,
-    содержащий входное изображение. `y` - это 10-мерный
-    numpy.ndarray, представляющий единичный вектор, соответствующий
-    правильной цифре для `x`.
-
-    `validation_data` и `test_data` - это списки, содержащие 10 000
-    кортежей `(x, y)`. В каждом случае `x` представляет собой 784-мерный
-    numpy.ndarray, содержащий входное изображение, а `y` -
-    соответствующую классификацию, т.е. числовые значения (целые числа)
-    соответствующий `x`.
-
-    Очевидно, это означает, что мы используем несколько разные форматы для
-    обучающих данных и данных проверки / тестирования. Эти форматы
-    оказываются наиболее удобными для использования в нашем
-    коде нейронной сети."""
     #Загружаем сырые данные из датасета
     tr_d, va_d, te_d = load_data()
 
