@@ -27,3 +27,18 @@
     background-color: #03c02c;
     border: 3.4px solid #03c02c;
   }
+
+
+#learn:hover{
+    border: 3.4px solid #e8ff1b;
+  }
+#learn:active{
+    background-color: #e8ff1b;
+  }
+
+#learnMode:hover{
+    border: 3.4px solid #e8ff1b;
+  }
+#learnMode:active{
+    background-color: #e8ff1b;
+  }

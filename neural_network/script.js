@@ -4,6 +4,7 @@ var brushColor = "rgb(1, 1, 1)";
 var pixelSide = 56;
 var d;
 var net;
+var learnData, learnMax, learnIter, testData;
 
 document.addEventListener("DOMContentLoaded", ready);
 function ready() {
@@ -11,6 +12,8 @@ function ready() {
   net = new Network(coeffs);
   document.getElementById("clearAll").onclick = function () { d.clear() }
   document.getElementById("run").onclick = function () { run() }
+  document.getElementById("learnMode").onclick = function () { learnMode() }
+  document.getElementById("learn").onclick = function () { learn() }
 }
 
 function run() {
@@ -160,4 +163,29 @@ class Network {
     return output
   }
 
+}
+
+function learn(){
+  let learnImage = makeDataForResponsing(convoluteMatrix(d.calculate(), 1, 0.25));
+  let learnNumber = prompt(`${learnIter}/${learnMax}: Что это за число?`);
+  let ldn = []
+  for (let index = 0; index < 10; index++) {
+    ldn[index] = 0.0;
+  }
+  ldn[parseInt(learnNumber)] = 1.0;
+  testData["testdata"].push([learnImage, parseInt(learnNumber)]);
+  learnData["learndata"].push([learnImage, ldn]);
+  if (learnIter++ == learnMax){
+    alert("Обучение завершено");
+    console.log(learnData);
+    console.log(testData);
+  }
+  d.clear();
+}
+
+function learnMode(){
+  testData = {"testdata": []};
+  learnData = {"learndata": []};
+  learnMax = prompt("ВВедите кол-во обучений");
+  learnIter = 1;
 }

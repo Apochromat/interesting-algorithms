@@ -43,6 +43,10 @@ class Network():
                 output = i
         return output
 
+    def evaluateTest(self, test):
+        test_results = [(np.argmax(self.feedforward(i[0])), i[1]) for i in test]
+        return sum(int(x == y) for (x, y) in test_results)
+
     def evaluate(self, test_data):
         """Return the number of test inputs for which the neural
         network outputs the correct result. Note that the neural
@@ -52,12 +56,13 @@ class Network():
                         for (x, y) in test_data]
         return sum(int(x == y) for (x, y) in test_results)
 
-    def StochasticGradientDescent(self, training_data, epochs, mini_batch_size, grad_step, test_data = None):
+    def StochasticGradientDescent(self, training_data, epochs, mini_batch_size, grad_step, test_data = None, test = None):
         """Обучение нейронной сети с использованием мини-пакетного стохастического
         градиентного спуска. `training_data` - это список кортежей
         `(x, y)`, представляющий входные данные для обучения и желаемый
         выходы."""
         if test_data: n_test = len(test_data)
+        if test: n_test = len(test)
         n = len(training_data)
         for j in range(epochs):
             random.shuffle(training_data)
@@ -66,6 +71,8 @@ class Network():
                 self.update_mini_batch(mini_batch, grad_step)
             if test_data:
                 print("Epoch {0}: {1} / {2}".format(j, self.evaluate(test_data), n_test))
+            elif test:
+                print("Epoch {0}: {1} / {2}".format(j, self.evaluateTest(test), n_test))
             else:
                 print("Epoch {0} complete".format(j))
 
