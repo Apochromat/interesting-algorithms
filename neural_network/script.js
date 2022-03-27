@@ -1,10 +1,9 @@
 import {coeffs} from './data.js';
-var brushSize = 3;
+var brushSize = 4;
 var brushColor = "rgb(1, 1, 1)";
 var pixelSide = 56;
 var d;
 var net;
-var learnData, learnMax, learnIter, testData;
 
 document.addEventListener("DOMContentLoaded", ready);
 function ready() {
@@ -12,13 +11,12 @@ function ready() {
   net = new Network(coeffs);
   document.getElementById("clearAll").onclick = function () { d.clear() }
   document.getElementById("run").onclick = function () { run() }
-  document.getElementById("learnMode").onclick = function () { learnMode() }
-  document.getElementById("learn").onclick = function () { learn() }
 }
 
 function run() {
   var data = d.calculate();
-  alert(net.recognising(makeDataForResponsing(convoluteMatrix(data, 1, 0.25))));
+  console.log(convoluteMatrix(data, 1, 0.25))
+  net.recognising(makeDataForResponsing(convoluteMatrix(data, 1, 0.25)));
 }
 
 function convoluteMatrix(matrix, type = 0, threshold = 0) {
@@ -49,7 +47,7 @@ function makeDataForResponsing(matrix) {
 
 function DCanvas(canvas) {
   const ctx = canvas.getContext("2d");
-  let boxSize = Math.min(window.innerHeight - 180, window.innerWidth - document.querySelector('.algorithmOptions').offsetWidth - 200);
+  let boxSize = 560;
   canvas.width = boxSize;
   canvas.height = boxSize;
   const pixel = boxSize / pixelSide;
@@ -61,18 +59,15 @@ function DCanvas(canvas) {
   };
 
   this.calculate = function () {
-    const w = canvas.width;
-    const h = canvas.height;
-    const p = w / pixel;
-
-    const xStep = w / p;
-    const yStep = h / p;
+    const wide = canvas.width;
+    const p = wide / pixel;
+    const Step = wide / p;
 
     const vector = [];
 
-    for (let y = 0; y < h; y += yStep) {
-      for (let x = 0; x < w; x += xStep) {
-        const data = ctx.getImageData(x, y, xStep, yStep);
+    for (let y = 0; y < wide; y += Step) {
+      for (let x = 0; x < wide; x += Step) {
+        const data = ctx.getImageData(x, y, Step, Step);
         let nonEmptyPixelsCount = 0;
         for (let i = 0; i < data.data.length; i += 10) {
           const isEmpty = data.data[i] === 0;
@@ -127,7 +122,7 @@ function DCanvas(canvas) {
 }
 
 function sigmoid(z) {
-  return 1.0 / (1.0 + (2.718 ** (-z)))
+  return 1.0 / (1.0 + (Math.E ** (-z)))
 }
 
 class Network {
@@ -136,7 +131,6 @@ class Network {
     this.weights = data["weights"]
   }
   recognising(a) {
-    console.log(a);
     var matr = []
     for (let k = 0; k < this.biases.length; k++) {
       let bias = this.biases[k];
@@ -150,42 +144,30 @@ class Network {
       }
       a = matr
       matr = []
-      console.log(a);
     }
-    let output = 0;
-    let maximum = 0;
+    let top1 = 0;
+    let top2 = 0;
+    let top3 = 0;
+    let top1m = 0;
+    let top2m = 0;
+    let top3m = 0;
     for(let i = 0; i < a.length; i++){
-      if (a[i][0] > maximum){
-        maximum = a[i][0]
-        output = i
+      if (a[i][0] > top1m){
+        top1m = a[i][0]
+        top1 = i
+      }
+      else if (a[i][0] > top2m){
+        top2m = a[i][0]
+        top2 = i
+      }
+      else if (a[i][0] > top3m){
+        top3m = a[i][0]
+        top3 = i
       }
     }
-    return output
+    document.getElementById("top1").innerHTML = `"${top1}": ${(top1m * 100).toFixed(4)}%`
+    document.getElementById("top2").innerHTML = `"${top2}": ${(top2m * 100).toFixed(4)}%`
+    document.getElementById("top3").innerHTML = `"${top3}": ${(top3m * 100).toFixed(4)}%`
+    return top1
   }
-
-}
-
-function learn(){
-  let learnImage = makeDataForResponsing(convoluteMatrix(d.calculate(), 1, 0.25));
-  let learnNumber = prompt(`${learnIter}/${learnMax}: Что это за число?`);
-  let ldn = []
-  for (let index = 0; index < 10; index++) {
-    ldn[index] = 0.0;
-  }
-  ldn[parseInt(learnNumber)] = 1.0;
-  testData["testdata"].push([learnImage, parseInt(learnNumber)]);
-  learnData["learndata"].push([learnImage, ldn]);
-  if (learnIter++ == learnMax){
-    alert("Обучение завершено");
-    console.log(learnData);
-    console.log(testData);
-  }
-  d.clear();
-}
-
-function learnMode(){
-  testData = {"testdata": []};
-  learnData = {"learndata": []};
-  learnMax = prompt("ВВедите кол-во обучений");
-  learnIter = 1;
 }

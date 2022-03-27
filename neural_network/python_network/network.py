@@ -1,20 +1,14 @@
 """
-При создании использованы материалы:
-- 3Blue1Brown
-- http://neuralnetworksanddeeplearning.com/
-- https://github.com/MichalDanielDobrzanski/DeepLearningPython
+Source: https://github.com/MichalDanielDobrzanski/DeepLearningPython
 """
 import math
 import random
-
 import numpy as np
 
 def sigmoid(z):
-    """The sigmoid function."""
     return 1.0/(1.0+np.exp(-z))
 
 def sigmoid_prime(z):
-    """Derivative of the sigmoid function."""
     return sigmoid(z)*(1-sigmoid(z))
 
 class Network():
@@ -28,58 +22,35 @@ class Network():
             self.weights = np.array(data["weights"], dtype=object)
 
     def feedforward(self, a):
-        """Возвращает выходные данные сети, если вводится `a`."""
         for bias, weight in zip(self.biases, self.weights):
             a = sigmoid(np.dot(weight, a) + bias)
         return a
 
-    def recognising(self, a):
-        vectorised = self.feedforward(a)
-        output = 0
-        maximum = 0
+    def recognising(self, input):
+        vectorised = self.feedforward(input)
+        output, maximum = 0
         for i in range(len(vectorised)):
             if (vectorised[i][0] > maximum):
                 maximum = vectorised[i][0]
                 output = i
         return output
 
-    def evaluateTest(self, test):
-        test_results = [(np.argmax(self.feedforward(i[0])), i[1]) for i in test]
-        return sum(int(x == y) for (x, y) in test_results)
-
     def evaluate(self, test_data):
-        """Return the number of test inputs for which the neural
-        network outputs the correct result. Note that the neural
-        network's output is assumed to be the index of whichever
-        neuron in the final layer has the highest activation."""
-        test_results = [(np.argmax(self.feedforward(x)), y)
-                        for (x, y) in test_data]
+        test_results = [(np.argmax(self.feedforward(x)), y) for (x, y) in test_data]
         return sum(int(x == y) for (x, y) in test_results)
 
-    def StochasticGradientDescent(self, training_data, epochs, mini_batch_size, grad_step, test_data = None, test = None):
-        """Обучение нейронной сети с использованием мини-пакетного стохастического
-        градиентного спуска. `training_data` - это список кортежей
-        `(x, y)`, представляющий входные данные для обучения и желаемый
-        выходы."""
+    def training(self, training_data, epochs, mini_batch_size, grad_step):
         if test_data: n_test = len(test_data)
-        if test: n_test = len(test)
         n = len(training_data)
         for j in range(epochs):
             random.shuffle(training_data)
             mini_batches = [training_data[k:k + mini_batch_size] for k in range(0, n, mini_batch_size)]
             for mini_batch in mini_batches:
                 self.update_mini_batch(mini_batch, grad_step)
-            if test_data:
-                print("Epoch {0}: {1} / {2}".format(j, self.evaluate(test_data), n_test))
-            elif test:
-                print("Epoch {0}: {1} / {2}".format(j, self.evaluateTest(test), n_test))
             else:
                 print("Epoch {0} complete".format(j))
 
     def update_mini_batch(self, mini_batch, grad_step):
-        """Обновляет веса и смещения сети, применив градиентный спуск с использованием
-        обратного распространения до одной мини-партии. `mini_batch` - это список кортежей `(x, y)`,
-        и `grad_step` это скорость обучения."""
         grad_b = [np.zeros(b.shape) for b in self.biases]
         grad_w = [np.zeros(w.shape) for w in self.weights]
         for x, y in mini_batch:
@@ -90,10 +61,6 @@ class Network():
         self.biases = [b - (grad_step / len(mini_batch)) * gb for b, gb in zip(self.biases, grad_b)]
 
     def backprop(self, x, y):
-        """Возвращает кортеж `(grad_b, grad_w)`, представляющий
-        градиент для функции затрат C_x. `grad_b` и `grad_w`
-        представляют собой послойные списки массивов numpy, аналогичные
-        ``self.biases`` и ``self.weights``."""
         grad_b = [np.zeros(b.shape) for b in self.biases]
         grad_w = [np.zeros(w.shape) for w in self.weights]
         # feedforward
@@ -119,5 +86,4 @@ class Network():
         return (grad_b, grad_w)
 
     def cost_derivative(self, output_activations, y):
-        """Возвращает вектор частных производных C_x для выходных активаций."""
         return (output_activations - y)

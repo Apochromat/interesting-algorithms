@@ -28,17 +28,23 @@
     border: 3.4px solid #03c02c;
   }
 
+#topLabel{
+  margin: 5px 15px 10px 15px;
+  padding: 5px;
+  background-color: rgb(66, 66, 66);
+  font-family: "Montserrat Alternates", "Arial Black", sans-serif;
+  font-size: 18px;
+  text-align: center;
+  border-radius: 5px;
+  color: whitesmoke; 
+}
 
-#learn:hover{
-    border: 3.4px solid #e8ff1b;
-  }
-#learn:active{
-    background-color: #e8ff1b;
-  }
-
-#learnMode:hover{
-    border: 3.4px solid #e8ff1b;
-  }
-#learnMode:active{
-    background-color: #e8ff1b;
-  }
+#topList{
+  margin: -16px 15px 10px 15px;
+  padding: 10px 25px;
+  background-color: rgb(66, 66, 66);
+  border-radius: 5px;
+  font-family: "Montserrat Alternates", "Arial Black", sans-serif;
+  font-size: 18px;
+  color: whitesmoke; 
+}
