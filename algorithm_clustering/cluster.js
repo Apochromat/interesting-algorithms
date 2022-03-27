@@ -3,17 +3,19 @@ var ctx = canvas.getContext("2d");
 var coordsPoint = [];
 var coordsClusterKMeans = [];
 var coordsClusterHier = [];
-var maxLen = 250;
+var maxLen = 150;
 var numCenter = 3;
+var coof = 2;
+var colorKMeans = "rgb(13, 92, 145)";
+var colorHier = "white";
 document.getElementById("sliderNumCenter").onclick = function () {
   document.getElementById('lableNumCenter').innerHTML = this.value;
   numCenter = document.getElementById('lableNumCenter').innerText;
-  // maxLen = 210-numCenter*10;
 }
-document.getElementById("sliderMaxLen").onclick = function () {
-  document.getElementById('lableMaxLen').innerHTML = this.value;
-  maxLen = document.getElementById('lableMaxLen').innerText;
-}
+// document.getElementById("sliderMaxLen").onclick = function () {
+//   document.getElementById('lableMaxLen').innerHTML = this.value;
+//   maxLen = document.getElementById('lableMaxLen').innerText;
+// }
 
 function delay(delayInms) {
   return new Promise(resolve => {
@@ -37,7 +39,7 @@ function clearStroke(){
   drawPoint();
 }
 function fiilCanvas() {
-  canvas.width = window.innerWidth*0.56;
+  canvas.width = window.innerWidth*0.58;
   canvas.height = window.innerHeight*0.6;
   ctx.fillStyle = "rgba(211, 211, 211, 0)";
   ctx.strokeStyle = "whitesmoke";
@@ -160,12 +162,10 @@ function findCenter() {
       x: 0,
       y: 0,
       index: 0,
-      color: "black"
     };
     Point.x = coordsPoint[curInd].x;
     Point.y = coordsPoint[curInd].y;
     Point.index = curInd;
-    Point.color = '#' + (Math.random().toString(16) + '000000').substring(2,8).toUpperCase();
     coordsClusterKMeans.push(Point);
   }
 }
@@ -177,7 +177,6 @@ function minStroke(){
     var minPoint = {
       x: 0,
       y: 0,
-      color: "black",
       index: 0
     };
     var minLen = 999999;
@@ -197,7 +196,7 @@ function minStroke(){
     ctx.beginPath();
     ctx.moveTo(coordsPoint[i].x, coordsPoint[i].y);
     ctx.lineTo(minPoint.x, minPoint.y);
-    ctx.strokeStyle = "rgb(13, 92, 145)"; 
+    ctx.strokeStyle = colorKMeans; 
     ctx.lineWidth = "4"; 
     ctx.stroke(); 
   };
@@ -231,7 +230,8 @@ async function hierarchical() {
       y: coordsPoint[i].y,
       index: i,
       neigbourPoints: [i], 
-      nearCluster: 0
+      nearCluster: -1,
+      lastLen: 99999
     };
      coordsClusterHier.push(Point);
   }
@@ -257,7 +257,7 @@ function findNearCluster() {
     for (let j = 0; j < coordsClusterHier.length; j++){ 
       if (i != j) {
         let len = Math.sqrt(Math.pow((coordsClusterHier[i].x - coordsClusterHier[j].x), 2) + Math.pow((coordsClusterHier[i].y -coordsClusterHier[j].y), 2));
-        if (len < minLen && len < maxLen) {
+        if (len < minLen && (!(len/coordsClusterHier[i].lastLen > coof) || len < maxLen )) {
           minLen = len;
           coordsClusterHier[i].nearCluster = j;
         }
@@ -280,8 +280,9 @@ function updateClusters(flag) {
   return flag;
 } 
 function mergeCluster(i, j) {
-for (let k = 0; k < coordsClusterHier[j].neigbourPoints.length; k++) 
-  coordsClusterHier[i].neigbourPoints.push(coordsClusterHier[j].neigbourPoints[k])
+  coordsClusterHier[i].lastLen = Math.sqrt(Math.pow((coordsClusterHier[i].x - coordsClusterHier[j].x), 2) + Math.pow((coordsClusterHier[i].y -coordsClusterHier[j].y), 2));
+  for (let k = 0; k < coordsClusterHier[j].neigbourPoints.length; k++) 
+    coordsClusterHier[i].neigbourPoints.push(coordsClusterHier[j].neigbourPoints[k])
   coordsClusterHier[j] = 0;
   var sumX = 0, sumY = 0;
   for (let k = 0; k < coordsClusterHier[i].neigbourPoints.length; k++) {
@@ -297,7 +298,7 @@ function drawStroke() {
       ctx.beginPath();
       ctx.moveTo(coordsClusterHier[i].x, coordsClusterHier[i].y);
       ctx.lineTo(coordsPoint[coordsClusterHier[i].neigbourPoints[k]].x, coordsPoint[coordsClusterHier[i].neigbourPoints[k]].y);
-      ctx.strokeStyle = "white"; 
+      ctx.strokeStyle = colorHier; 
       ctx.lineWidth = "1.5"; 
       ctx.stroke(); 
     }
@@ -323,7 +324,8 @@ async function compareClusterizations() {
       y: coordsPoint[i].y,
       index: i,
       neigbourPoints: [i], 
-      nearCluster: 0
+      nearCluster: 0,
+      lastLen: 99999
     };
      coordsClusterHier.push(Point);
   }
