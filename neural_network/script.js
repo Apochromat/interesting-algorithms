@@ -15,8 +15,8 @@ function ready() {
 
 function run() {
   var data = d.calculate();
-  console.log(convoluteMatrix(data, 1, 0.25))
-  net.recognising(makeDataForResponsing(convoluteMatrix(data, 1, 0.25)));
+  console.log(convoluteMatrix(data, 1, 0.25));
+  console.log(makeDataForResponsing(convoluteMatrix(data, 1, 0.25)));
 }
 
 function convoluteMatrix(matrix, type = 0, threshold = 0) {
