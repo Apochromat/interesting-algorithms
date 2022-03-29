@@ -18,7 +18,7 @@ body{
   }
 
 #fileInput {
-    margin: 5px 15px 10px 15px;
+    margin: 5px 5px 10px 15px;
     padding: 5px;
     height: 50px;
     line-height: 50px;
@@ -29,3 +29,17 @@ body{
     border-radius: 5px;
     color: whitesmoke; 
   }
+
+#run {
+    background-color: #049924;
+    border: 3px solid #049924;
+    margin-right: 5px;
+    flex: 7;
+}
+#run:hover{
+    border: 3.4px solid #03c02c;
+}
+#run:active{
+    background-color: #03c02c;
+    border: 3.4px solid #03c02c;
+}
