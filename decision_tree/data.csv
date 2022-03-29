@@ -1,4 +1,4 @@
-ID;Age;Size;Color;Hair;Friendly;Class
+Id;Age;Size;Color;Hair;Friendly;Class
 0;10;Medium;Cream;Wild;True;Take
 1;10;Big;Black;Long;False;Take
 2;1;Big;Gold;Short;True;Leave
