@@ -20,8 +20,8 @@ function fiilCanvas() {
 function clearCanvas(){
   canvas.removeEventListener("mousedown", pushPointListener);
   coordsPoint = [];
-  coordsClusterKMeans = [];
-  coordsClusterHier = [];
+   nodes = new Array();
+   NODE_ID = 0;
   fiilCanvas();
 }
 function pushPointListener(e) {
