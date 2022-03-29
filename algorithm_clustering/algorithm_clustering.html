@@ -34,7 +34,7 @@
         <div class="algorithmBox">
           <div class="algorithmOptions">
             <div class="settings">
-              <p class="about">Количество центроидов</p>
+              <p class="about">Количество центроидов для К-средних</p>
               <div class="SizeSlider">
                 <input class="tableSizeSlider" id ="sliderNumCenter" type="range" min="1" max="10" value="3" />
                 <label class="tableSizeLabel" id ="lableNumCenter">3</label>
@@ -49,7 +49,7 @@
               <button id = "clear" onclick = "clearStroke()"> Очистить связи </button>
               <button id = "run" onclick = "kMedium()"> Алгоритм К-средних </button>
               <button id = "run" onclick = "hierarchical()"> Алгоритм Иерархический </button>
-              <button id = "run" onclick = ""> Сравнить алгоритмы </button>
+              <button id = "run" onclick = "compareClusterizations()"> Сравнить алгоритмы </button>
             </div>
           </div>
           <div class="algorithmView">

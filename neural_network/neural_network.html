@@ -11,9 +11,6 @@
     <link href="https://fonts.googleapis.com/css?family=Dosis" rel="stylesheet">
 </head>
 <body>
-    <canvas class = "background"></canvas>
-    <script src="../p5.js"></script>
-    <script src="../particles.js"></script>
     <input type="checkbox" id="nav-toggle" hidden>
     <nav class="nav">
         <label for="nav-toggle" class="nav-toggle" onclick></label>
@@ -36,6 +33,12 @@
             <div class="settings">
               <button id="clearAll">Очистить все</button>
               <button id="run">Запустить</button>
+              <label id="topLabel">Топ-3</label>
+                <ul id = "topList">
+                  <li id = "top1">Пусто</li>
+                  <li id = "top2">Пусто</li>
+                  <li id = "top3">Пусто</li>
+                </ul>
             </div>
           </div>
           <div class="algorithmView">
@@ -43,7 +46,7 @@
           </div>
         </div>
     </div>
-    <script type="text/javascript" src="script.js" defer></script>
+    <script type="module" src="script.js" defer></script>
 </body>
 </html>
 
