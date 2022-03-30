@@ -32,11 +32,13 @@
           <div class="algorithmOptions">
             <div class="settings">
               <input type="file" id="fileInput" onchange=read(this)>
-              <button id="run">Запустить</button>
+              <button class="run" id="runTree">Построить дерево</button>
+              <input id="csvInput">
+              <button class="run" id="runFeed">Прогнать данные</button>
             </div>
           </div>
           <div class="algorithmView">
-            <p>Поле алгоритма</p>
+            <p id="result">Поле алгоритма</p>
           </div>
         </div>
     </div>

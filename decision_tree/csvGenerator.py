@@ -1,10 +1,11 @@
 import csv
 import random
+length = 150
 
-header = ['ID', 'Age', 'Size', 'Color', 'Hair', 'Friendly', 'Class']
-colors = ['Brown', 'Gold', 'Cream', 'Black', 'Grey']
-hairs = ['Wild', 'Short', 'Long', 'Hairless']
+header = ['Id', 'Age', 'Sex', 'Size', 'Breed', 'Friendly', 'Class']
+breeds = ['Labrador', 'Bulldog', 'Retriever', 'Beagle', 'Rottweiler', 'Shepherd']
 boolean = ['True', 'False']
+sexes = ['Female', 'Male']
 sizes = ['Little', 'Medium', 'Big']
 classes = ['Take', 'Leave']
 
@@ -15,21 +16,70 @@ with open('data.csv', 'w', encoding='UTF8', newline='') as f:
     writer.writerow(header)
 
     # write the data
-    for ID in range(0, 50-1):
-        writer.writerow([str(ID), str(random.randint(1, 15)),
-                         str(random.choices(population=sizes,
-                                            weights=[0.2, 0.2, 0.6],
-                                            k=1)[0]),
-                         str(random.choices(population=colors,
-                                            weights=[0.25, 0.1, 0.25, 0.2, 0.2],
-                                            k=1)[0]),
-                         str(random.choices(population=hairs,
-                                            weights=[0.3, 0.4, 0.2, 0.1],
-                                            k=1)[0]),
-                         str(random.choices(population=boolean,
-                                            weights=[0.85, 0.15],
-                                            k=1)[0]),
-                         str(random.choices(population=classes,
-                                            weights=[0.65, 0.35],
-                                            k=1)[0])
-                         ])
+    for ID in range(0, length):
+        row = [str(ID),
+               str(random.randint(1, 15)),
+               str(random.choice(sexes)),
+               str(random.choices(population=sizes,
+                                  weights=[0.2, 0.2, 0.6],
+                                  k=1)[0]),
+               str(random.choice(breeds)),
+               str(random.choices(population=boolean,
+                                  weights=[0.85, 0.15],
+                                  k=1)[0])
+               ]
+        if int(row[1]) > 10:
+            if row[5] == 'True':
+                if row[3] == 'Little':
+                    if row[2] == 'Female':
+                        row.append(classes[1])
+                    elif row[2] == 'Male':
+                        row.append(classes[0])
+                elif row[3] == 'Medium':
+                    row.append(classes[0])
+                elif row[3] == 'Big':
+                    row.append(classes[1])
+            else:
+                row.append(classes[0])
+        else:
+            if row[4] == 'Labrador':
+                row.append(classes[0])
+            elif row[4] == 'Bulldog':
+                if row[3] == 'Little':
+                    row.append(classes[1])
+                elif row[3] == 'Medium':
+                    row.append(classes[0])
+                elif row[3] == 'Big':
+                    row.append(classes[0])
+            elif row[4] == 'Retriever':
+                if row[2] == 'Female':
+                    if int(row[1]) > 8:
+                        if row[5] == 'True':
+                            row.append(classes[0])
+                        else:
+                            row.append(classes[1])
+                    else:
+                        row.append(classes[0])
+                elif row[2] == 'Male':
+                    if row[3] == 'Little':
+                        row.append(classes[0])
+                    elif row[3] == 'Medium':
+                        row.append(classes[0])
+                    elif row[3] == 'Big':
+                        row.append(classes[1])
+            elif row[4] == 'Beagle':
+                row.append(classes[0])
+            elif row[4] == 'Rottweiler':
+                if row[5] == 'True':
+                    if row[2] == 'Female':
+                        row.append(classes[0])
+                    elif row[2] == 'Male':
+                        if int(row[1]) > 5:
+                            row.append(classes[0])
+                        else:
+                            row.append(classes[1])
+                elif row[5] == 'False':
+                    row.append(classes[1])
+            elif row[4] == 'Shepherd':
+                row.append(classes[1])
+        writer.writerow(row)
