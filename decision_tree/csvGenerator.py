@@ -1,6 +1,6 @@
 import csv
 import random
-length = 150
+length = 1500
 
 header = ['Id', 'Age', 'Sex', 'Size', 'Breed', 'Friendly', 'Class']
 breeds = ['Labrador', 'Bulldog', 'Retriever', 'Beagle', 'Rottweiler', 'Shepherd']
