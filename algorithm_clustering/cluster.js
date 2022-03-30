@@ -108,8 +108,6 @@ async function kMedium(){
       break;
     }
     findMinStroke();
-    console.log("coords");
-    console.log(coordsClusterKMeans);
     await delay(900);  
   }
   
@@ -176,8 +174,6 @@ function findCentroids() {
       }
     coordsClusterKMeans.push(maxPoint);
   }
-  console.log("coords");
-  console.log(coordsClusterKMeans);
 }
 function findMinStroke(){
   for (let i = 0; i < coordsClusterKMeans.length; i++) 
@@ -257,8 +253,6 @@ async function hierarchical() {
     }
     updateStroke();
     await delay(100);  
-    console.log("coords");
-    console.log(coordsClusterHier);
   }
 }
 function findNearCluster() {
@@ -336,21 +330,16 @@ function findOstov() {
   for (let i = 0; i < coordsPoint.length; i++) 
     for (let j = 0; j < coordsPoint.length; j++)
       Graph[i][j] = findLenBeetwenPoints(coordsPoint[i], coordsPoint[j]);
-    
-  console.log(Graph);
   let numVer = coordsPoint.length, minDistance = 0;
   var Ostov = [];
-  for (let i = 0; i < numVer; i++) {
+  for (let i = 0; i < numVer; i++) 
       Ostov[i] = [];
-  }
   for (let i = 0; i < numVer; i++)
-      for (let j = 0; j < numVer; j++) {
+      for (let j = 0; j < numVer; j++) 
           Ostov[i][j] = 0;
-      }
   let visited = [];
-  for (let i = 0; i < numVer; i++){
+  for (let i = 0; i < numVer; i++)
       visited[i] = false;
-  }
   visited[0] = true;
 
   for (let l = 0; l < numVer - 1; l++) {
@@ -365,7 +354,6 @@ function findOstov() {
       Ostov[min_i][min_j] = Graph[min_j][min_i];
       visited[min_i] = true;
   }
-  console.log(Ostov);
   return Ostov;
 }  
 function deleteMaxStroke() {
