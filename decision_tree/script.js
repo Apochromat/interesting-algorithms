@@ -5,6 +5,8 @@ var tree;
 var nonNumberPropertyValuesAmount = 5;
 var minEntropy = 0.05;
 var minDeltaEntropy = 0.01;
+var maxDepth = 6;
+var basicDeltaEntropy = 0;
 //Выполнение при инициализации, привязка обработчиков
 document.addEventListener("DOMContentLoaded", ready);
 function ready() {
@@ -35,6 +37,7 @@ function runFeed() {
   if (tree == undefined) { alert("Не загружена выборка") }
   else if(tree.head.childs.length == 0) { alert("Не построено дерево") }
   else {
+    console.log(tree.head.feedForward(readCSVInput()))
     document.getElementById("result").innerHTML=(tree.head.feedForward(readCSVInput()))
   }
 }
@@ -115,7 +118,7 @@ class Node {
   }
   split() {
     this.tree.maxDepth = Math.max(this.tree.maxDepth, this.depth);
-    if (this.tree.findBestSplit(this.batch) == undefined) {
+    if ((this.tree.findBestSplit(this.batch) == undefined) || (this.depth > maxDepth)) {
       this.type = "leaf";
       this.result = this.conclusion();
       this.tree.leaves.push(this);
@@ -164,6 +167,7 @@ class Node {
       return this.result;
     }
   }
+
 }
 
 class Tree {
@@ -250,7 +254,7 @@ class Tree {
 
   findBestSplit(batch) {
     var initialEntropy = this.calculateEntropy(batch);
-    let bestDeltaEntropy = 0;
+    let bestDeltaEntropy = basicDeltaEntropy;
     let predict;
     for (let key of this.keys) {
       if (key == "Class") continue;
@@ -415,8 +419,8 @@ class Tree {
       ctx.save();
       ctx.translate(medPoint.x, medPoint.y);
       ctx.rotate(this.findAng(node, node.childs[j], node.childs[i])/2);
-      ctx.strokeText(node.condition == "more" ? (i == 0 ? "True" : "False") : Array.from(tree.propertyValues[node.property])[j], 0, 0);
-      ctx.fillText(node.condition == "more" ? (i == 0 ? "True" : "False") : Array.from(tree.propertyValues[node.property])[j], 0, 0);
+      ctx.strokeText(node.condition == "more" ? (j == 0 ? "True" : "False") : Array.from(tree.propertyValues[node.property])[j], 0, 0);
+      ctx.fillText(node.condition == "more" ? (j == 0 ? "True" : "False") : Array.from(tree.propertyValues[node.property])[j], 0, 0);
       ctx.restore();
     }
   }
