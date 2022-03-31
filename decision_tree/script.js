@@ -1,4 +1,6 @@
-const reader = new FileReader()
+var canvas = document.getElementById("canvasTree");
+var ctx = canvas.getContext("2d");
+const reader = new FileReader();
 var tree;
 var nonNumberPropertyValuesAmount = 5;
 var minEntropy = 0.05;
@@ -24,6 +26,8 @@ function runTree() {
   else {
     tree.head.split(tree);
     console.log(tree);
+    tree.createCanvas()
+    tree.drawTree();
   }
 }
 
@@ -77,6 +81,9 @@ class Node {
     this.condition;
     this.value;
     this.tree = tree;
+
+    this.x;
+    this.y;
   }
   conclusion(){
     var array = [];
@@ -169,6 +176,9 @@ class Tree {
     this.keys = Object.keys(this.csvData[0]);
     this.keys.splice(this.keys.indexOf("Id"), 1);
     this.propertyValues = {};
+
+    this.lenBetweenNode;
+    this.fontSize;
   }
 
   calculatePropertyValues() {
@@ -286,5 +296,128 @@ class Tree {
       }
     }
     return predict
+  }
+  drawCircle(point, radius, color) {
+    ctx.beginPath();
+    ctx.arc(point.x, point.y, radius, 0, Math.PI*2);
+    ctx.fillStyle = color;
+    ctx.fill();  
+  }
+  drawStroke(point1, point2, width, color) {
+    ctx.beginPath();
+    ctx.moveTo(point1.x, point1.y);
+    ctx.lineTo(point2.x, point2.y);
+    ctx.strokeStyle = color; 
+    ctx.lineWidth = width; 
+    ctx.stroke(); 
+  }
+  findLenBeetwenPoints(p1, p2) {
+    return Math.sqrt(Math.pow((p1.x - p2.x), 2) + Math.pow((p1.y - p2.y), 2));
+  }
+  findAng(p1, p2, p3){
+    let 
+    a = this.findLenBeetwenPoints(p1, p2), 
+    b = this.findLenBeetwenPoints(p1, p3),
+    c = this.findLenBeetwenPoints(p2, p3);
+    let cosC = (a*a + b*b - c*c) / (2*a*b);
+    let angelC = Math.acos(cosC);
+
+    return angelC;
+  }
+  findMediumPoint(p1, p2){
+    let Point = {
+      x: 0, y: 0
+    };
+    Point.x = (p1.x+p2.x)/2;
+    Point.y = (p1.y+p2.y)/2;
+    return Point;
+  } 
+  delay(delayInms) {
+    return new Promise(resolve => {
+      setTimeout(() => {
+        resolve(2);
+      }, delayInms);
+    });
+  }
+  createCanvas(){
+    canvas.width = window.innerWidth*0.905;
+    canvas.height = window.innerHeight*(1+tree.maxDepth*0.2);
+    ctx.fillStyle = "rgba(211, 211, 211, 0)";
+    ctx.strokeStyle = "whitesmoke";
+    ctx.lineWidth = 5;
+    ctx.fillRect(0, 0, canvas.width, canvas.height);
+    ctx.strokeRect(0, 0, canvas.width, canvas.height);
+    this.lenBetweenNode =  (canvas.width - 200)/tree.maxDepth;
+    this.fontSize = 60/tree.maxDepth;
+    ctx.font = this.fontSize + "pt Arial";
+    ctx.lineWidth = 7;
+  }
+  drawTree() {
+    ctx.fillStyle = "white";
+    ctx.lineWidth = 9;
+    ctx.strokeStyle = "black";
+    tree.head.x = 100;
+    tree.head.y = canvas.height/2;
+    this.drawCircle(tree.head, 8, "white")
+    ctx.strokeText(tree.head.label, tree.head.x - ctx.measureText(tree.head.label).width/2, tree.head.y - 15)
+    ctx.fillText(tree.head.label, tree.head.x - ctx.measureText(tree.head.label).width/2, tree.head.y - 15);
+    this.drawNewNode(tree.head, 0, canvas.height);
+  }
+  async drawNewNode(node, startHeight, endHeight) { 
+    let step = (endHeight-startHeight)/node.childs.length;
+    for (let i = 0, curHeight = startHeight; i < node.childs.length; i++, curHeight += step) {
+      node.childs[i].x = node.x + this.lenBetweenNode;
+      node.childs[i].y = curHeight + step / 2;
+      this.drawStroke(node, node.childs[i], "2", "white");
+      ctx.lineWidth = 9;
+      ctx.strokeStyle = "black";
+      if (node.childs[i].type == "leaf") {  
+        this.drawCircle(node.childs[i], 8, "green"); 
+        ctx.strokeText(node.childs[i].result, node.childs[i].x - ctx.measureText(node.childs[i].label).width/2 , node.childs[i].y - 15);
+        ctx.fillText(node.childs[i].result, node.childs[i].x - ctx.measureText(node.childs[i].label).width/2 , node.childs[i].y - 15);
+      }
+      else{
+        this.drawCircle(node.childs[i], 8, "white"); 
+        ctx.strokeText(node.childs[i].label, node.childs[i].x - ctx.measureText(node.childs[i].label).width/2 , node.childs[i].y - 15);
+        ctx.fillText(node.childs[i].label, node.childs[i].x - ctx.measureText(node.childs[i].label).width/2 , node.childs[i].y - 15);
+      }
+      
+    }
+    this.drawAngLabel(node);
+    for (let i = 0, start = startHeight; i < node.childs.length; i++, start += step) 
+      if (node.childs[i].type == "node") 
+        this.drawNewNode(node.childs[i], start, start+step);
+    
+  }
+  drawAngLabel(node){
+    ctx.fillStyle = "orange";
+    ctx.strokeStyle = "black";
+    ctx.lineWidth = 7;
+    if (node.childs.length % 2 != 0) {
+      ctx.save()
+      let i = Math.floor(node.childs.length/2);
+      let medPoint = this.findMediumPoint(node, node.childs[i]);
+      ctx.translate(medPoint.x, medPoint.y);
+      ctx.strokeText(node.condition == "more" ? (i == 0 ? "True" : "False") : Array.from(tree.propertyValues[node.property])[i], 0, 0)
+      ctx.fillText(node.condition == "more" ? (i == 0 ? "True" : "False") : Array.from(tree.propertyValues[node.property])[i], 0, 0);
+      ctx.restore();
+    }
+    for (let i = 0; i < Math.floor(node.childs.length/2); i++) {
+      let j = node.childs.length-(i+1);
+      let medPoint = this.findMediumPoint(node, node.childs[i]);
+      ctx.save();
+      ctx.translate(medPoint.x, medPoint.y);
+      ctx.rotate(-this.findAng(node, node.childs[i], node.childs[j])/2);
+      ctx.strokeText(node.condition == "more" ? (i == 0 ? "True" : "False") : Array.from(tree.propertyValues[node.property])[i], 0, 0);
+      ctx.fillText(node.condition == "more" ? (i == 0 ? "True" : "False") : Array.from(tree.propertyValues[node.property])[i], 0, 0);
+      ctx.restore();
+      medPoint = this.findMediumPoint(node, node.childs[j]);
+      ctx.save();
+      ctx.translate(medPoint.x, medPoint.y);
+      ctx.rotate(this.findAng(node, node.childs[j], node.childs[i])/2);
+      ctx.strokeText(node.condition == "more" ? (i == 0 ? "True" : "False") : Array.from(tree.propertyValues[node.property])[j], 0, 0);
+      ctx.fillText(node.condition == "more" ? (i == 0 ? "True" : "False") : Array.from(tree.propertyValues[node.property])[j], 0, 0);
+      ctx.restore();
+    }
   }
 }
