@@ -114,6 +114,17 @@ function findDirection(point, unvisited) {
   }
   return null;
 }
+//Озвучивает вердикт
+function play(result) {
+  var fail = new Audio('../sounds/fail.wav');
+  var success = new Audio('../sounds/success.wav');
+  if (result) {
+    success.play();
+  }
+  else{
+    fail.play();
+  }
+}
 
 //Создает задержку
 function delay(delayInms) {
@@ -294,6 +305,7 @@ async function aStar (startCell, endCell) {
     if (curr.cell == endCell) {
       traceWay(map, points, end, start);
       setIndicator(2);
+      play(true);
       return true;
     }
     end = getIndexByPoint(points, curr);
@@ -312,6 +324,7 @@ async function aStar (startCell, endCell) {
     }
   }
   setIndicator(3);
+  play(false);
   return false
 }
 
