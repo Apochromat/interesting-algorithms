@@ -1,8 +1,20 @@
-var canvas = document.getElementById("canvasTree");
-var ctx = canvas.getContext("2d");
+var 
+canvas = document.getElementById("canvasTree"),
+ctx = canvas.getContext("2d"),
+colorNode = "white",
+colorLeaf = "rgb(4, 199, 10)",
+colorWayNode = "rgb(255, 229, 0)",
+colorWayLeaf = "rgb(0, 255, 0)",
+colorAngLabel = "orange",
+colorStroke = "white",
+colorStrokeLabel = "black",
+widthStroke = "2",
+widthStrokeLabel = "6";
+raduisNode = 8;
+
 const reader = new FileReader();
 var tree;
-var nonNumberPropertyValuesAmount = 5;
+var nonNumberPropertyValuesAmount = 7;
 var minEntropy = 0.05;
 var minDeltaEntropy = 0.01;
 var maxDepth = 6;
@@ -37,6 +49,7 @@ function runFeed() {
   if (tree == undefined) { alert("Не загружена выборка") }
   else if(tree.head.childs.length == 0) { alert("Не построено дерево") }
   else {
+    tree.drawAllNodes(tree.head);
     console.log(tree.head.feedForward(readCSVInput()))
     document.getElementById("result").innerHTML=(tree.head.feedForward(readCSVInput()))
   }
@@ -151,6 +164,7 @@ class Node {
     }
   }
   feedForward(input) {
+    this.nodeIndicator(this)
     if (this.type == "node") {
       if (this.condition == "equal") {
         for (let index = 0; index < this.childs.length; index++) {
@@ -167,7 +181,15 @@ class Node {
       return this.result;
     }
   }
-
+  nodeIndicator(node){
+    if (node.type == "node"){ 
+      tree.drawCircle(node, raduisNode, colorWayNode);
+    }
+    else {
+      tree.drawCircle(node, raduisNode, colorWayLeaf);
+      ctx.fillText(node.result, node.x - ctx.measureText(node.label).width/2 , node.y - 15);
+    }
+  }
 }
 
 class Tree {
@@ -301,51 +323,9 @@ class Tree {
     }
     return predict
   }
-  drawCircle(point, radius, color) {
-    ctx.beginPath();
-    ctx.arc(point.x, point.y, radius, 0, Math.PI*2);
-    ctx.fillStyle = color;
-    ctx.fill();  
-  }
-  drawStroke(point1, point2, width, color) {
-    ctx.beginPath();
-    ctx.moveTo(point1.x, point1.y);
-    ctx.lineTo(point2.x, point2.y);
-    ctx.strokeStyle = color; 
-    ctx.lineWidth = width; 
-    ctx.stroke(); 
-  }
-  findLenBeetwenPoints(p1, p2) {
-    return Math.sqrt(Math.pow((p1.x - p2.x), 2) + Math.pow((p1.y - p2.y), 2));
-  }
-  findAng(p1, p2, p3){
-    let 
-    a = this.findLenBeetwenPoints(p1, p2), 
-    b = this.findLenBeetwenPoints(p1, p3),
-    c = this.findLenBeetwenPoints(p2, p3);
-    let cosC = (a*a + b*b - c*c) / (2*a*b);
-    let angelC = Math.acos(cosC);
-
-    return angelC;
-  }
-  findMediumPoint(p1, p2){
-    let Point = {
-      x: 0, y: 0
-    };
-    Point.x = (p1.x+p2.x)/2;
-    Point.y = (p1.y+p2.y)/2;
-    return Point;
-  } 
-  delay(delayInms) {
-    return new Promise(resolve => {
-      setTimeout(() => {
-        resolve(2);
-      }, delayInms);
-    });
-  }
   createCanvas(){
     canvas.width = window.innerWidth*0.905;
-    canvas.height = window.innerHeight*(1+tree.maxDepth*0.2);
+    canvas.height = window.innerHeight*(1+tree.maxDepth*tree.maxDepth*0.2);
     ctx.fillStyle = "rgba(211, 211, 211, 0)";
     ctx.strokeStyle = "whitesmoke";
     ctx.lineWidth = 5;
@@ -354,49 +334,56 @@ class Tree {
     this.lenBetweenNode =  (canvas.width - 200)/tree.maxDepth;
     this.fontSize = 60/tree.maxDepth;
     ctx.font = this.fontSize + "pt Arial";
-    ctx.lineWidth = 7;
   }
   drawTree() {
-    ctx.fillStyle = "white";
-    ctx.lineWidth = 9;
-    ctx.strokeStyle = "black";
     tree.head.x = 100;
     tree.head.y = canvas.height/2;
-    this.drawCircle(tree.head, 8, "white")
-    ctx.strokeText(tree.head.label, tree.head.x - ctx.measureText(tree.head.label).width/2, tree.head.y - 15)
-    ctx.fillText(tree.head.label, tree.head.x - ctx.measureText(tree.head.label).width/2, tree.head.y - 15);
-    this.drawNewNode(tree.head, 0, canvas.height);
+    this.findCoordsAllNodes(tree.head, 15, canvas.height-15);
+    this.drawAllLink(tree.head);
+    this.drawAllNodes(tree.head);
   }
-  async drawNewNode(node, startHeight, endHeight) { 
+  findCoordsAllNodes(node, startHeight, endHeight) { 
     let step = (endHeight-startHeight)/node.childs.length;
     for (let i = 0, curHeight = startHeight; i < node.childs.length; i++, curHeight += step) {
       node.childs[i].x = node.x + this.lenBetweenNode;
       node.childs[i].y = curHeight + step / 2;
-      this.drawStroke(node, node.childs[i], "2", "white");
-      ctx.lineWidth = 9;
-      ctx.strokeStyle = "black";
-      if (node.childs[i].type == "leaf") {  
-        this.drawCircle(node.childs[i], 8, "green"); 
-        ctx.strokeText(node.childs[i].result, node.childs[i].x - ctx.measureText(node.childs[i].label).width/2 , node.childs[i].y - 15);
-        ctx.fillText(node.childs[i].result, node.childs[i].x - ctx.measureText(node.childs[i].label).width/2 , node.childs[i].y - 15);
-      }
-      else{
-        this.drawCircle(node.childs[i], 8, "white"); 
-        ctx.strokeText(node.childs[i].label, node.childs[i].x - ctx.measureText(node.childs[i].label).width/2 , node.childs[i].y - 15);
-        ctx.fillText(node.childs[i].label, node.childs[i].x - ctx.measureText(node.childs[i].label).width/2 , node.childs[i].y - 15);
-      }
-      
     }
-    this.drawAngLabel(node);
     for (let i = 0, start = startHeight; i < node.childs.length; i++, start += step) 
       if (node.childs[i].type == "node") 
-        this.drawNewNode(node.childs[i], start, start+step);
-    
+        this.findCoordsAllNodes(node.childs[i], start, start+step);
+  }
+  drawAllLink(node){
+    for (let i = 0; i < node.childs.length; i++) {
+      this.drawStroke(node, node.childs[i], widthStroke, colorStroke);
+      this.drawAllLink(node.childs[i]);
+    }
+    this.drawAngLabel(node);
+  }
+  drawAllNodes(node){
+    ctx.lineWidth = widthStrokeLabel;
+    ctx.strokeStyle = colorStrokeLabel;
+    if(node.depth == 0){
+      this.drawCircle(node, raduisNode, colorNode);
+      ctx.strokeText(node.label, node.x-90, node.y - 15);
+      ctx.fillText(node.label, node.x-90, node.y - 15);
+    }
+    else if (node.type == "node"){
+      this.drawCircle(node, raduisNode, colorNode);
+      ctx.strokeText(node.label, node.x - ctx.measureText(node.label).width/2 , node.y - 15);
+      ctx.fillText(node.label, node.x - ctx.measureText(node.label).width/2 , node.y - 15);
+    }
+    else{
+      this.drawCircle(node, raduisNode, colorLeaf);
+      ctx.strokeText(node.result, node.x - ctx.measureText(node.label).width/2 , node.y - 15);
+      ctx.fillText(node.result, node.x - ctx.measureText(node.label).width/2 , node.y - 15);
+    }
+    for (let i = 0; i < node.childs.length; i++)
+      this.drawAllNodes(node.childs[i]);
   }
   drawAngLabel(node){
-    ctx.fillStyle = "orange";
-    ctx.strokeStyle = "black";
-    ctx.lineWidth = 7;
+    ctx.fillStyle = colorAngLabel;
+    ctx.strokeStyle = colorStrokeLabel;
+    ctx.lineWidth = widthStrokeLabel;
     if (node.childs.length % 2 != 0) {
       ctx.save()
       let i = Math.floor(node.childs.length/2);
@@ -424,4 +411,37 @@ class Tree {
       ctx.restore();
     }
   }
+  drawCircle(point, radius, color) {
+    ctx.beginPath();
+    ctx.arc(point.x, point.y, radius, 0, Math.PI*2);
+    ctx.fillStyle = color;
+    ctx.fill();  
+  }
+  drawStroke(point1, point2, width, color) {
+    ctx.beginPath();
+    ctx.moveTo(point1.x, point1.y);
+    ctx.lineTo(point2.x, point2.y);
+    ctx.strokeStyle = color; 
+    ctx.lineWidth = width; 
+    ctx.stroke(); 
+  }
+  findLenBeetwenPoints(p1, p2) {
+    return Math.sqrt(Math.pow((p1.x - p2.x), 2) + Math.pow((p1.y - p2.y), 2));
+  }
+  findAng(p1, p2, p3){
+    let 
+    a = this.findLenBeetwenPoints(p1, p2), 
+    b = this.findLenBeetwenPoints(p1, p3),
+    c = this.findLenBeetwenPoints(p2, p3);
+    let cosC = (a*a + b*b - c*c) / (2*a*b);
+    let angelC = Math.acos(cosC);
+    return angelC;
+  }
+  findMediumPoint(p1, p2){
+    let Point = {
+      x: (p1.x+p2.x)/2, 
+      y: (p1.y+p2.y)/2
+    };
+    return Point;
+  } 
 }
