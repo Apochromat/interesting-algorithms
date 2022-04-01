@@ -14,9 +14,8 @@ var
 
 const reader = new FileReader();
 var tree;
-var nonNumberPropertyValuesAmount = 7;
-var minEntropy = 0.05;
-var minDeltaEntropy = 0.01;
+var minEntropy = 0.005;
+var minDeltaEntropy = 0.001;
 var maxDepth = 6;
 var basicDeltaEntropy = 0;
 //Выполнение при инициализации, привязка обработчиков
@@ -27,6 +26,7 @@ function ready() {
     tree.calculatePropertyValues();
   });
   document.getElementById("runTree").onclick = function () { runTree() }
+  document.getElementById("cutTree").onclick = function () { cutTree() }
   document.getElementById("runFeed").onclick = function () { runFeed() }
   document.getElementById("btnInput").onclick = function () { document.getElementById("fileInput").click() }
 }
@@ -40,8 +40,21 @@ function runTree() {
   if (tree == undefined) { alert("Не загружена выборка") }
   else {
     tree.head.split(tree);
-    console.log(tree);
-    tree.createCanvas()
+    console.log("Origin: ", tree);
+    tree.clearCanvas();
+    tree.createCanvas();
+    tree.drawTree();
+  }
+}
+
+function cutTree() {
+  if (tree == undefined) { alert("Не загружена выборка") }
+  else if(tree.head.childs.length == 0) { alert("Не построено дерево") }
+  else {
+    tree.cutBrunches();
+    console.log("Cutted: ", tree);
+    tree.clearCanvas();
+    tree.createCanvas();
     tree.drawTree();
   }
 }
@@ -132,6 +145,7 @@ class Node {
   }
   split() {
     this.tree.maxDepth = Math.max(this.tree.maxDepth, this.depth);
+    this.tree.width[this.depth]++;
     if ((this.tree.findBestSplit(this.batch) == undefined) || (this.depth > maxDepth)) {
       this.type = "leaf";
       this.result = this.conclusion();
@@ -149,7 +163,7 @@ class Node {
         this.condition = predict["condition"];
         this.value = predict["value"];
       }
-      if ((predict["entropy"][0] > minEntropy) || (predict["entropy"][1] > minDeltaEntropy)) {
+      if ((predict["entropy"][0] > minEntropy) && (predict["entropy"][1] > minDeltaEntropy)) {
         for (let i = 0; i < predict["split"].length; i++) {
           this.childs.push(new Node(predict["split"][i], this.depth + 1, this, this.tree));
         }
@@ -199,6 +213,7 @@ class Tree {
     this.headers = csvData[0];
     this.head = new Node(this.csvData, 0, this, this);
     this.maxDepth = 0;
+    this.width = [];
     this.leaves = [];
     this.keys = Object.keys(this.csvData[0]);
     this.keys.splice(this.keys.indexOf("Id"), 1);
@@ -206,6 +221,41 @@ class Tree {
 
     this.lenBetweenNode;
     this.fontSize;
+
+    for (let i = 0; i <= maxDepth; i++){
+      this.width[i] = 0;
+    }
+  }
+
+  cutBrunches(){
+    for (let i = 0; i < Math.ceil(Math.log2(this.leaves.length)); i++) {
+      for (let j = 0; j < this.leaves.length; j++) {
+        if(j > this.leaves.length) break;
+        let sLeaf = this.leaves[j];
+        let sLeafParent = sLeaf.parent;
+        let cutFlag = true;
+        let toDel = [];
+        for (let el of sLeafParent.childs) {
+          if ((el.type == "leaf") && (el.result == sLeaf.result)){
+            toDel.push(el);
+          }
+          else {
+            cutFlag = false;
+            break;
+          }
+        }
+        if (cutFlag) {
+          sLeafParent.result = sLeaf.result;
+          sLeafParent.type = "leaf";
+          for (let el of toDel) {
+            this.leaves.splice(this.leaves.indexOf(el), 1);
+          }
+        }
+        else {
+          continue;
+        }
+      }
+    }
   }
 
   calculatePropertyValues() {
@@ -275,6 +325,11 @@ class Tree {
     return filtred
   }
 
+  isPropertyNumeric(prop){
+    let value = Array.from(this.propertyValues[prop])[0];
+    return ((value == `${parseFloat(value)}`) || (value == `${parseInt(value)}`) || (value+"1" == `${parseFloat(value+"1")}`))
+  }
+
   findBestSplit(batch) {
     var initialEntropy = this.calculateEntropy(batch);
     let bestDeltaEntropy = basicDeltaEntropy;
@@ -282,7 +337,7 @@ class Tree {
     for (let key of this.keys) {
       if (key == "Class") continue;
       var tempSplit = [];
-      if (this.propertyValues[key].size > nonNumberPropertyValuesAmount) {
+      if (this.isPropertyNumeric(key)) {
         for (let propertyValue of this.propertyValues[key]) {
           tempSplit = [this.filterByProperty(batch, propertyValue, key, "more"), this.filterByProperty(batch, propertyValue, key, "nomore")];
           if ((tempSplit[0].length != 0) && (tempSplit[1].length != 0)) {
@@ -326,6 +381,9 @@ class Tree {
   }
 
   ///////////////////////////////Рисовалка//////////////////////////////////
+  clearCanvas(){
+    ctx.clearRect(0, 0, canvas.width, canvas.height);
+  }
   createCanvas(){
     canvas.width = window.innerWidth*0.92;
     canvas.height = window.innerHeight*(1+tree.maxDepth*tree.maxDepth*0.2);
@@ -339,6 +397,7 @@ class Tree {
     ctx.font = this.fontSize + "pt Arial";
   }
   drawTree() {
+    canvas.clear
     tree.head.x = 100;
     tree.head.y = canvas.height/2;
     this.findCoordsAllNodes(tree.head, 15, canvas.height-15);
