@@ -20,30 +20,48 @@ body{
 .mainContainer > .algorithmBox {
     flex-direction: column;
 }
+.mainContainer > .algorithmBox > .algorithmOptions > * {
+    margin: 0 auto 20px auto;
+    width: 100%;
+    display: flex;
+    justify-content: space-around;
+    flex-direction: row;
+  }
 .mainContainer > .algorithmBox > .algorithmView  {
+    margin: 20px;
+    padding: 15px 19px 0px 15px;
+}
+.chooseFileBox{
+    width: 50%;
+    display: flex;
+    justify-content: center;
+    flex-direction: column;
+}
+.inputCVSBox{
+    width: 50%;
+    display: flex;
+    justify-content: center;
+    flex-direction: column;
+}
+.buttonBox{
+    width: 100%;
+    display: flex;
+    flex-direction: row;
+}
+input[type="file"] {
+    display:none;
+} 
+
+h2{
+    margin: 0 0 0 0 ;
+    height: 30px;
     font-family: "Montserrat Alternates", "Arial Black", sans-serif;
-    font-size: 18px;
+    font-size: 16px;
     color: whitesmoke; 
 }
-
-#fileInput {
-    margin: 5px 5px 10px 15px;
-    padding: 5px;
-    height: 50px;
-    line-height: 50px;
-    background-color: rgb(66, 66, 66);
-    font-family: "Montserrat Alternates", "Arial Black", sans-serif;
-    font-size: 18px;
-    text-align: center;
-    border-radius: 5px;
-    color: whitesmoke; 
-}
-
 #csvInput {
     margin: 5px 5px 10px 15px;
     padding: 5px;
-    height: 25px;
-    line-height: 50px;
     background-color: rgb(66, 66, 66);
     font-family: "Montserrat Alternates", "Arial Black", sans-serif;
     font-size: 18px;
@@ -51,11 +69,25 @@ body{
     border-radius: 5px;
     color: whitesmoke; 
 }
-
+#btnInput {
+    margin: 5px 5px 10px 15px;
+    padding: 5px;
+    height: 37px;
+    border-radius: 5px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+}
+#docIMG{
+    height: 23px;
+    width: 23px;
+    padding-right: 15px;
+}
 .run {
     background-color: #049924;
     border: 3px solid #049924;
     margin-right: 5px;
+    max-height: 26px;
     flex: 7;
 }
 .run:hover{

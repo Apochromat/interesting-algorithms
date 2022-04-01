@@ -31,11 +31,20 @@
         <div class="algorithmBox">
           <div class="algorithmOptions">
             <div class="settings">
-              <input type="file" id="fileInput" onchange=read(this)>
-              <button class="run" id="runTree">Построить дерево</button>
-              <input id="csvInput">
-              <button class="run" id="runFeed">Прогнать данные</button>
-              <label id = "result"></label>
+              <div class = "chooseFileBox"> 
+                <h2 for="fileInput">Выберете CVS файл для построения дерева решений</h2>
+                <input type="file" id="fileInput" onchange=read(this)>
+                <button id="btnInput"><img id ="docIMG" src="doc.png">Выбрать файл</button>
+                <div class="buttonBox">
+                  <button class="run" id="runTree">Построить дерево</button>
+                  <button class="run">Обрезать ветви</button>
+                </div>
+              </div>
+              <div class = "inputCVSBox">
+                <h2 id = "result">Впишите данные для анализа</h2>
+                <input id="csvInput">
+                <button class="run" id="runFeed">Прогнать данные</button>
+              </div> 
             </div>
           </div>
           <div class="algorithmView">

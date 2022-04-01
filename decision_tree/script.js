@@ -28,6 +28,7 @@ function ready() {
   });
   document.getElementById("runTree").onclick = function () { runTree() }
   document.getElementById("runFeed").onclick = function () { runFeed() }
+  document.getElementById("btnInput").onclick = function () { document.getElementById("fileInput").click() }
 }
 
 function read(input) {
@@ -51,7 +52,7 @@ function runFeed() {
   else {
     tree.drawAllNodes(tree.head);
     console.log(tree.head.feedForward(readCSVInput()))
-    document.getElementById("result").innerHTML=(tree.head.feedForward(readCSVInput()))
+    document.getElementById("result").innerHTML=("Вердикт: " + tree.head.feedForward(readCSVInput()))
   }
 }
 
@@ -326,7 +327,7 @@ class Tree {
 
   ///////////////////////////////Рисовалка//////////////////////////////////
   createCanvas(){
-    canvas.width = window.innerWidth*0.905;
+    canvas.width = window.innerWidth*0.92;
     canvas.height = window.innerHeight*(1+tree.maxDepth*tree.maxDepth*0.2);
     ctx.fillStyle = "rgba(211, 211, 211, 0)";
     ctx.strokeStyle = "whitesmoke";
