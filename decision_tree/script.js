@@ -1,16 +1,16 @@
 var 
-canvas = document.getElementById("canvasTree"),
-ctx = canvas.getContext("2d"),
-colorNode = "white",
-colorLeaf = "rgb(4, 199, 10)",
-colorWayNode = "rgb(255, 229, 0)",
-colorWayLeaf = "rgb(0, 255, 0)",
-colorAngLabel = "orange",
-colorStroke = "white",
-colorStrokeLabel = "black",
-widthStroke = "2",
-widthStrokeLabel = "6";
-raduisNode = 8;
+  canvas = document.getElementById("canvasTree"),
+  ctx = canvas.getContext("2d"),
+  colorNode = "white",
+  colorLeaf = "rgb(4, 199, 10)",
+  colorWayNode = "rgb(255, 229, 0)",
+  colorWayLeaf = "rgb(0, 255, 0)",
+  colorAngLabel = "orange",
+  colorStroke = "white",
+  colorStrokeLabel = "black",
+  widthStroke = "2",
+  widthStrokeLabel = "6";
+  raduisNode = 8;
 
 const reader = new FileReader();
 var tree;
@@ -323,6 +323,8 @@ class Tree {
     }
     return predict
   }
+
+  ///////////////////////////////Рисовалка//////////////////////////////////
   createCanvas(){
     canvas.width = window.innerWidth*0.905;
     canvas.height = window.innerHeight*(1+tree.maxDepth*tree.maxDepth*0.2);
