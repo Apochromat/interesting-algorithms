@@ -386,7 +386,7 @@ class Tree {
   }
   createCanvas(){
     canvas.width = window.innerWidth*0.92;
-    canvas.height = window.innerHeight*(1+tree.maxDepth*tree.maxDepth*0.2);
+    canvas.height = window.innerHeight*(1+tree.maxDepth*0.3);
     ctx.fillStyle = "rgba(211, 211, 211, 0)";
     ctx.strokeStyle = "whitesmoke";
     ctx.lineWidth = 5;
@@ -415,11 +415,13 @@ class Tree {
         this.findCoordsAllNodes(node.childs[i], start, start+step);
   }
   drawAllLink(node){
-    for (let i = 0; i < node.childs.length; i++) {
-      this.drawStroke(node, node.childs[i], widthStroke, colorStroke);
-      this.drawAllLink(node.childs[i]);
+    if (node.type != "leaf"){
+      for (let i = 0; i < node.childs.length; i++) {
+        this.drawStroke(node, node.childs[i], widthStroke, colorStroke);
+        this.drawAllLink(node.childs[i]);;
+      }
+      this.drawAngLabel(node);
     }
-    this.drawAngLabel(node);
   }
   drawAllNodes(node){
     ctx.lineWidth = widthStrokeLabel;
@@ -439,8 +441,12 @@ class Tree {
       ctx.strokeText(node.result, node.x - ctx.measureText(node.label).width/2 , node.y - 15);
       ctx.fillText(node.result, node.x - ctx.measureText(node.label).width/2 , node.y - 15);
     }
-    for (let i = 0; i < node.childs.length; i++)
-      this.drawAllNodes(node.childs[i]);
+    for (let i = 0; i < node.childs.length; i++){
+      if (node.type != "leaf") {
+        this.drawAllNodes(node.childs[i]);
+      }
+      
+    }
   }
   drawAngLabel(node){
     ctx.fillStyle = colorAngLabel;
