@@ -14,16 +14,16 @@ var
 
 const reader = new FileReader();
 var tree;
-var minEntropy = 0.005;
-var minDeltaEntropy = 0.001;
-var maxDepth = 6;
+var readerData;
+var minEntropy = 0.2;
+var minDeltaEntropy = 0.15;
+var maxDepth = 4;
 var basicDeltaEntropy = 0;
 //Выполнение при инициализации, привязка обработчиков
 document.addEventListener("DOMContentLoaded", ready);
 function ready() {
   reader.addEventListener('load', function (e) {
-    tree = new Tree(csvToArray(e.target.result));
-    tree.calculatePropertyValues();
+    readerData = csvToArray(e.target.result)
   });
   document.getElementById("runTree").onclick = function () { runTree() }
   document.getElementById("cutTree").onclick = function () { cutTree() }
@@ -37,8 +37,10 @@ function read(input) {
 }
 
 function runTree() {
-  if (tree == undefined) { alert("Не загружена выборка") }
+  if (readerData == undefined) { alert("Не загружена выборка") }
   else {
+    tree = new Tree(readerData);
+    tree.calculatePropertyValues();
     tree.head.split(tree);
     console.log("Origin: ", tree);
     tree.clearCanvas();
@@ -48,8 +50,8 @@ function runTree() {
 }
 
 function cutTree() {
-  if (tree == undefined) { alert("Не загружена выборка") }
-  else if(tree.head.childs.length == 0) { alert("Не построено дерево") }
+  if (readerData == undefined) { alert("Не загружена выборка") }
+  else if(tree == undefined) { alert("Не построено дерево") }
   else {
     tree.cutBrunches();
     console.log("Cutted: ", tree);
@@ -155,6 +157,7 @@ class Node {
       var predict = this.tree.findBestSplit(this.batch);
       if (predict["condition"] == "equal") {
         this.label = `Divide by ${predict["property"]}`;
+        this.condition = predict["condition"];
         this.property = predict["property"];
       }
       else {
@@ -163,18 +166,18 @@ class Node {
         this.condition = predict["condition"];
         this.value = predict["value"];
       }
-      if ((predict["entropy"][0] > minEntropy) && (predict["entropy"][1] > minDeltaEntropy)) {
+      if ((predict["entropy"][0] < minEntropy) || (predict["entropy"][1] < minDeltaEntropy)) {
+        this.type = "leaf";
+        this.result = this.conclusion();
+        this.tree.leaves.push(this);
+      }
+      else {
         for (let i = 0; i < predict["split"].length; i++) {
           this.childs.push(new Node(predict["split"][i], this.depth + 1, this, this.tree));
         }
         for (let el of this.childs) {
           el.split();
         }
-      }
-      else {
-        this.type = "leaf";
-        this.result = this.conclusion();
-        this.tree.leaves.push(this);
       }
     }
   }
@@ -183,7 +186,7 @@ class Node {
     if (this.type == "node") {
       if (this.condition == "equal") {
         for (let index = 0; index < this.childs.length; index++) {
-          if (this.childs[index][this.property] == input[this.property]){
+          if (this.childs[index].batch[0][this.property] == input[this.property]){
             return this.childs[index].feedForward(input);
           }
         }
@@ -222,7 +225,7 @@ class Tree {
     this.lenBetweenNode;
     this.fontSize;
 
-    for (let i = 0; i <= maxDepth; i++){
+    for (let i = 0; i <= maxDepth+2; i++){
       this.width[i] = 0;
     }
   }
@@ -248,6 +251,7 @@ class Tree {
           sLeafParent.result = sLeaf.result;
           sLeafParent.type = "leaf";
           for (let el of toDel) {
+            this.width[el.depth]--;
             this.leaves.splice(this.leaves.indexOf(el), 1);
           }
         }
