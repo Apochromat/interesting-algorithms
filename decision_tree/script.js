@@ -3,7 +3,7 @@ var
   ctx = canvas.getContext("2d"),
   colorNode = "white",
   colorLeaf = "rgb(4, 199, 10)",
-  colorWayNode = "rgb(255, 229, 0)",
+  colorWayNode = "yellow",
   colorWayLeaf = "rgb(0, 255, 0)",
   colorAngLabel = "orange",
   colorStroke = "white",
@@ -17,7 +17,7 @@ var tree;
 var readerData;
 var minEntropy = 0.2;
 var minDeltaEntropy = 0.15;
-var maxDepth = 4;
+var maxDepth = 6;
 var basicDeltaEntropy = 0;
 //Выполнение при инициализации, привязка обработчиков
 document.addEventListener("DOMContentLoaded", ready);
@@ -57,7 +57,11 @@ function cutTree() {
     console.log("Cutted: ", tree);
     tree.clearCanvas();
     tree.createCanvas();
+    for (let i = 0; i <= tree.maxDepth+2; i++){
+      tree.nodePointer[i] = 0;
+    }
     tree.drawTree();
+    
   }
 }
 
@@ -200,6 +204,8 @@ class Node {
     }
   }
   nodeIndicator(node){
+    tree.drawStroke(node, node.parent, widthStroke, colorWayLeaf);
+    tree.drawCircle(node.parent, raduisNode, colorWayNode);
     if (node.type == "node"){ 
       tree.drawCircle(node, raduisNode, colorWayNode);
     }
@@ -224,9 +230,11 @@ class Tree {
 
     this.lenBetweenNode;
     this.fontSize;
+    this.nodePointer = [];
 
     for (let i = 0; i <= maxDepth+2; i++){
       this.width[i] = 0;
+      this.nodePointer[i] = 0;
     }
   }
 
@@ -390,7 +398,7 @@ class Tree {
   }
   createCanvas(){
     canvas.width = window.innerWidth*0.92;
-    canvas.height = window.innerHeight*(1+tree.maxDepth*0.3);
+    canvas.height = window.innerHeight*(1+Math.pow(tree.maxDepth, 1.2)*0.2);
     ctx.fillStyle = "rgba(211, 211, 211, 0)";
     ctx.strokeStyle = "whitesmoke";
     ctx.lineWidth = 5;
@@ -398,7 +406,7 @@ class Tree {
     ctx.strokeRect(0, 0, canvas.width, canvas.height);
     this.lenBetweenNode =  (canvas.width - 200)/tree.maxDepth;
     this.fontSize = 60/tree.maxDepth;
-    ctx.font = this.fontSize + "pt Arial";
+    ctx.font = this.fontSize + "pt Montserrat Alternates";
   }
   drawTree() {
     canvas.clear
@@ -408,16 +416,27 @@ class Tree {
     this.drawAllLink(tree.head);
     this.drawAllNodes(tree.head);
   }
-  findCoordsAllNodes(node, startHeight, endHeight) { 
-    let step = (endHeight-startHeight)/node.childs.length;
-    for (let i = 0, curHeight = startHeight; i < node.childs.length; i++, curHeight += step) {
+  findCoordsAllNodes(node) { 
+    let step = canvas.height/tree.width[node.depth+1];
+    for (let i = 0, curHeight = step*this.nodePointer[node.depth+1]; i < node.childs.length; i++, curHeight += step) {
       node.childs[i].x = node.x + this.lenBetweenNode;
       node.childs[i].y = curHeight + step / 2;
+      this.nodePointer[node.depth+1]++;
     }
-    for (let i = 0, start = startHeight; i < node.childs.length; i++, start += step) 
+    for (let i = 0; i < node.childs.length; i++) 
       if (node.childs[i].type == "node") 
-        this.findCoordsAllNodes(node.childs[i], start, start+step);
+        this.findCoordsAllNodes(node.childs[i]);
   }
+  // findCoordsAllNodes(node, startHeight, endHeight) { 
+  //   let step = (endHeight-startHeight)/node.childs.length;
+  //   for (let i = 0, curHeight = startHeight; i < node.childs.length; i++, curHeight += step) {
+  //     node.childs[i].x = node.x + this.lenBetweenNode;
+  //     node.childs[i].y = curHeight + step / 2;
+  //   }
+  //   for (let i = 0, start = startHeight; i < node.childs.length; i++, start += step) 
+  //     if (node.childs[i].type == "node") 
+  //       this.findCoordsAllNodes(node.childs[i], start, start+step);
+  // }
   drawAllLink(node){
     if (node.type != "leaf"){
       for (let i = 0; i < node.childs.length; i++) {
@@ -442,8 +461,8 @@ class Tree {
     }
     else{
       this.drawCircle(node, raduisNode, colorLeaf);
-      ctx.strokeText(node.result, node.x - ctx.measureText(node.label).width/2 , node.y - 15);
-      ctx.fillText(node.result, node.x - ctx.measureText(node.label).width/2 , node.y - 15);
+      ctx.strokeText(node.result, node.x, node.y - 15);
+      ctx.fillText(node.result, node.x, node.y - 15);
     }
     for (let i = 0; i < node.childs.length; i++){
       if (node.type != "leaf") {
@@ -456,30 +475,10 @@ class Tree {
     ctx.fillStyle = colorAngLabel;
     ctx.strokeStyle = colorStrokeLabel;
     ctx.lineWidth = widthStrokeLabel;
-    if (node.childs.length % 2 != 0) {
-      ctx.save()
-      let i = Math.floor(node.childs.length/2);
+    for (let i = 0; i < node.childs.length; i++) {
       let medPoint = this.findMediumPoint(node, node.childs[i]);
-      ctx.translate(medPoint.x, medPoint.y);
-      ctx.strokeText(node.condition == "more" ? (i == 0 ? "True" : "False") : Array.from(tree.propertyValues[node.property])[i], 0, 0)
-      ctx.fillText(node.condition == "more" ? (i == 0 ? "True" : "False") : Array.from(tree.propertyValues[node.property])[i], 0, 0);
-      ctx.restore();
-    }
-    for (let i = 0; i < Math.floor(node.childs.length/2); i++) {
-      let j = node.childs.length-(i+1);
-      let medPoint = this.findMediumPoint(node, node.childs[i]);
-      ctx.save();
-      ctx.translate(medPoint.x, medPoint.y);
-      ctx.rotate(-this.findAng(node, node.childs[i], node.childs[j])/2);
-      ctx.strokeText(node.condition == "more" ? (i == 0 ? "True" : "False") : Array.from(tree.propertyValues[node.property])[i], 0, 0);
-      ctx.fillText(node.condition == "more" ? (i == 0 ? "True" : "False") : Array.from(tree.propertyValues[node.property])[i], 0, 0);
-      ctx.restore();
-      medPoint = this.findMediumPoint(node, node.childs[j]);
-      ctx.save();
-      ctx.translate(medPoint.x, medPoint.y);
-      ctx.rotate(this.findAng(node, node.childs[j], node.childs[i])/2);
-      ctx.strokeText(node.condition == "more" ? (j == 0 ? "True" : "False") : Array.from(tree.propertyValues[node.property])[j], 0, 0);
-      ctx.fillText(node.condition == "more" ? (j == 0 ? "True" : "False") : Array.from(tree.propertyValues[node.property])[j], 0, 0);
+      ctx.strokeText(node.condition == "more" ? (i == 0 ? "True" : "False") : Array.from(tree.propertyValues[node.property])[i], medPoint.x-this.fontSize*1.5, medPoint.y)
+      ctx.fillText(node.condition == "more" ? (i == 0 ? "True" : "False") : Array.from(tree.propertyValues[node.property])[i], medPoint.x-this.fontSize*1.5, medPoint.y);
       ctx.restore();
     }
   }
@@ -499,15 +498,6 @@ class Tree {
   }
   findLenBeetwenPoints(p1, p2) {
     return Math.sqrt(Math.pow((p1.x - p2.x), 2) + Math.pow((p1.y - p2.y), 2));
-  }
-  findAng(p1, p2, p3){
-    let 
-    a = this.findLenBeetwenPoints(p1, p2), 
-    b = this.findLenBeetwenPoints(p1, p3),
-    c = this.findLenBeetwenPoints(p2, p3);
-    let cosC = (a*a + b*b - c*c) / (2*a*b);
-    let angelC = Math.acos(cosC);
-    return angelC;
   }
   findMediumPoint(p1, p2){
     let Point = {
