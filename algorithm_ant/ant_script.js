@@ -14,8 +14,9 @@ var tau = null;
 var dist = null;
 var bestSolution = null;
 var intervalID = 0;
-function Node(id,mouseX,mouseY){
+function Node(id,ant,mouseX,mouseY){
 		this.id = id;
+		this.ant=ant;
 		this.x = mouseX;
 		this.y = mouseY;
 		this.radius = 15;
@@ -31,9 +32,10 @@ function fiilCanvas() {
 }
 function clearCanvas(){
   canvas.removeEventListener("mousedown", pushPointListener);
-  coordsPoint = [];
    nodes = new Array();
    NODE_ID = 0;
+   ants = new Array();
+   ANT_ID = 0;
   fiilCanvas();
 }
 function pushPointListener(e) {
@@ -44,7 +46,7 @@ function pushPointListener(e) {
   ctx.beginPath();
   ctx.arc(e.pageX - e.target.offsetLeft, e.pageY - e.target.offsetTop, 8, 0, Math.PI*2);
   var ant = new Ant(ANT_ID++,e.pageX - e.target.offsetLeft,e.pageY - e.target.offsetTop);
-  var node = new Node(NODE_ID++,e.pageX - e.target.offsetLeft,e.pageY - e.target.offsetTop);
+  var node = new Node(NODE_ID++,ant,e.pageX - e.target.offsetLeft,e.pageY - e.target.offsetTop);
   nodes.push(node);
   ant.initialNode = node.id;
   ants.push(ant);
@@ -98,14 +100,13 @@ function Ant(i,x,y){
 			this.visitedNodes.push(this.initialNode);
 			this.currentNode = this.initialNode;
 			this.nextNode = -1;
-			this.angle = 0;
 			//проходим по всем узлам и добавляем в массив с узлами те узлы, которые не являются начальным 
 			for(var i=0;i<nodes.length;i++){
 	  			if(i != this.initialNode){
 	  				this.nodesToVisit.push(i);
 	  			}
 	  		}
-	  		console.log(this.nodesToVisit);
+	  		//console.log(this.nodesToVisit);
 	  		//составляем массив путей 
 	  		//типо дуга из текущего узла в следующий 
 	  		//дуга из следующего в текущий 
@@ -120,6 +121,7 @@ function Ant(i,x,y){
 		//функция отвечающая за передвижение по узлам 
 		this.move = function(){
 			//зачем это? хз
+			//console.log("in move")
 			if(this.start === false){
 				return;
 			}
@@ -129,33 +131,17 @@ function Ant(i,x,y){
 			}
 			//определяем следущий узел 
 			var node = nodes[this.nextNode];
-			
+			this.x = node.x;			
+			this.y = node.y;
 
-			//считаем углы
-			//как то по умному
 			var x = (node.x-this.x);
 			var y = (node.y-this.y);
 			var z = Math.sqrt(Math.pow(x,2)+Math.pow(y,2));
-			//определяем, в каком секторе находится угол 
-			//Сюда еще перевод в градусы нужен 
-			if(x > 0 && y < 0){	
-				this.angle = 90 - toDegrees(Math.asin(Math.abs(y/z)))
-			}else if(x > 0 && y > 0){	
-				this.angle = 180 - toDegrees(Math.acos(Math.abs(y/z)));
-			}else if(x < 0 && y > 0){	
-				this.angle = 180 + toDegrees(Math.acos(Math.abs(y/z)))
-			}else if(x < 0 && y < 0){	
-				this.angle = toDegrees(Math.asin(x/z));
-			}else if(y == 0 && x < 0){
-				this.angle = -90;
-			}else if(y == 0 && x > 0){
-				this.angle = 90;
-			}else if(y > 0 && x == 0){
-				this.angle = -180;
-			}
-
 			//Проверка, находится ли муравей в узле 
-				//помечаем дугу, как посещенную
+		    //помечаем дугу, как посещенную
+		    //console.log(this.visitedNodes);
+		    //console.log(this.nextNode);
+			if(Math.pow((node.x - this.x),2) + Math.pow((node.y - this.y),2) <= Math.pow(node.radius,2)){
 				this.path[this.currentNode][this.nextNode] = 1; 
 				this.path[this.nextNode][this.currentNode] = 1;
 				//Помечаем узел, как опсещенный 
@@ -166,22 +152,21 @@ function Ant(i,x,y){
 				this.x = node.x;			
 				this.y = node.y;
 				//если закончились узлы, которые надо посетить, то возвращаемся в исходный 
-				console.log(15);
+				//console.log(15);
+				//console.log(this.nodesToVisit.length);
 				if(this.nodesToVisit.length == 0){
-					//возвращаемся на старт 
 					if(this.currentNode !== this.initialNode){
 						this.nextNode = this.initialNode;
-						console.log("AnFin")
+						console.log("Change");
 					}else{
-						//заканчиваем путь 
 						this.start = false;
 						if(this.callback !== null){
 							this.callback();
-							console.log("Fin")
 						}						
 					}
 				}
 			}
+		}
 		//функиця исследования
 		this.doExploration = function(i){
 			var nextNode = -1;
@@ -226,20 +211,18 @@ function Ant(i,x,y){
 
 			// находим и вырезаем узел из массива 
 			var i = this.nodesToVisit.indexOf(nextNode);
-			
 			if(i != -1) {
 				this.nodesToVisit.splice(i, 1);
 			}else{
 				throw "indexOf not found";
 			}
-			console.log(this.nodesToVisit);
+			//console.log(this.nodesToVisit);
 			return nextNode;
 		}
 	}
 //стартовые параметры феромонов и т.д при старте 
 function initParameters(){
   		if(tau === null){
-  			console.log("Creating a new pheromone matrix...");
 			//создание феромона и матрицы расстояний 
 			tau = new Array(nodes.length);
 			dist = new Array(nodes.length);
@@ -274,7 +257,7 @@ function initParameters(){
 			ant.init();	
 	  		ant.start = true;
 	  	});
-  	}
+}
   //высчитываем лучшее значение для выбора узла (или не лучшее значение)
  function rouletteWheel(probability, sumProbability) {
 		var j = 0;
@@ -299,13 +282,14 @@ function euclideanDistance(x1,y1, x2, y2){
 
 		return Math.sqrt(Math.pow(xDistance, 2) + Math.pow(yDistance, 2));
 }
+
 // берем значени N ij 
 function getNij(i,j){
 		return 1.0 / dist[i][j];
 }
 //рисует лучший путь
 function drawBestSolution(ant){
-	console.log(ant);
+	//console.log(ant);
 		if(ant == null){
 			return;
 		}
@@ -317,26 +301,39 @@ function drawBestSolution(ant){
 			
 			drawLine(nodes[i].x-4,nodes[i].y-4,nodes[j].x-4,nodes[j].y-4,2,"red");
 		}
-	}
+}
 function Start(){
+	nodes.forEach(function(node) {
+			node.ant.x = node.x;
+			node.ant.y = node.y;
+			node.ant.init();
+		});
 	initParameters();
 	start();
 	drawBestSolution(bestSolution);
 }
-function start(){	
+ function start(){	
+	
 		move(function(){
+			console.log(ants);
 			ants.forEach(function(ant) {
 				ant.start = true;
+				console.log("This ant")
+				console.log(ant);
 				ant.init();
+
 				
 			});			
 		})
 }
 var finishedAnts = 0;
+
 function move(callback){
+	console.log("move");
 		ants.forEach(function(ant) {
+			while(ant.start!=false){
 			ant.move();
-			console.log(2);
+			console.log(ant);
 			ant.callback = function(){
 				finishedAnts++;
 				console.log(4);
@@ -348,17 +345,20 @@ function move(callback){
 				if(finishedAnts == ants.length){
 					globalUpdateRule();
 					finishedAnts = 0;
-				}
+				
 				console.log(callback);
 					if(callback !== null){
 						callback();
 					}				
-				
+				}
 			}
+		}
+			
 
 		});
-		drawBestSolution(bestSolution);
-	}
+
+	drawBestSolution(bestSolution);
+}
 	function evaluate(ant){
 		var totalDistance = 0;
 		console.log(3);
