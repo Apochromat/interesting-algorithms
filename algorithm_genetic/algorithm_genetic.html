@@ -31,14 +31,21 @@
         <div class="algorithmBox">
           <div class="algorithmOptions">
             <div class="settings">
-              <p>Настройки</p>
+              <button id = "create" onclick = "clearCanvas()"> Создать/Очистить </button>
+              <button id = "setPoint" onclick = "pushPoint()"> Поставить вершину </button>
+              <button id = "startAlgorithm" onclick = "GeneticAlgorithm()"> Найти путь </button>
+              <button id = "startAlgorithm" onclick = "stopAlgorithm()"> Стоп </button>
+              <p id = "countCity">Кол-во городов:</p>
+              <p id = "countIter">Итерация:</p>
+              <p id = "curLen">Длина:</p>
             </div>
           </div>
           <div class="algorithmView">
-            <p>Поле алгоритма</p>
+            <canvas id ="geneticCanvas"></canvas>
           </div>
         </div>
     </div>
+    <script src = "genetic.js"></script>
 </body>
 </html>
 
