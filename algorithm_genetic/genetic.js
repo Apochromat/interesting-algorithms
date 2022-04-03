@@ -8,14 +8,31 @@ var
   bestPath = [],
   bestLen = 99999999,
   sizePopulathion = 50,
-  globalChanceParent = 10,
-  globalChanceMutat = 90,
+  globalChanceParent = 30,
+  globalChanceMutat = 70,
   flag = true;
 
 function stopAlgorithm(){
   flag = false;
 }  
 async function GeneticAlgorithm() {
+  if (coordsPoint.length == 0) {
+    alert("В этом мире так одиноко...");
+    return;
+  }
+  else if (coordsPoint.length == 1) {
+    document.getElementById("countIter").innerHTML=("Итерация: 1");
+    document.getElementById("curLen").innerHTML=("Длина: 0");
+    coordsPoint = [];
+    return;
+  }
+  else if (coordsPoint.length == 2) {
+    document.getElementById("countIter").innerHTML=("Итерация: 1");
+    document.getElementById("curLen").innerHTML=("Длина: " + Math.floor(findLenBeetwenPoints(coordsPoint[0], coordsPoint[1])*2));
+    drawStroke(coordsPoint[0], coordsPoint[1], "2", "white");
+    coordsPoint = [];
+    return;
+  }
   populathion = [];
   bestPath = [];
   flag = true;
@@ -30,7 +47,7 @@ async function GeneticAlgorithm() {
     crossover(); 
     mutation();
     selection();
-    await delay(0.5);
+    await delay(0.001);
     document.getElementById("countIter").innerHTML=("Итерация: " + iterathion);
     document.getElementById("curLen").innerHTML=("Длина: " + Math.floor(bestLen));
   }
