@@ -225,7 +225,7 @@ class Tree {
     this.width = [];
     this.leaves = [];
     this.keys = Object.keys(this.csvData[0]);
-    this.keys.splice(this.keys.indexOf("Id"), 1);
+    if(this.keys.indexOf("Id") != -1) this.keys.splice(this.keys.indexOf("Id"), 1);
     this.propertyValues = {};
 
     this.lenBetweenNode;
@@ -353,7 +353,7 @@ class Tree {
         for (let propertyValue of this.propertyValues[key]) {
           tempSplit = [this.filterByProperty(batch, propertyValue, key, "more"), this.filterByProperty(batch, propertyValue, key, "nomore")];
           if ((tempSplit[0].length != 0) && (tempSplit[1].length != 0)) {
-            let tempEntropy = Math.max(this.calculateEntropy(tempSplit[0]) + this.calculateEntropy(tempSplit[1]));
+            let tempEntropy = Math.max(this.calculateEntropy(tempSplit[0]), this.calculateEntropy(tempSplit[1]));
             if ((initialEntropy - tempEntropy) > bestDeltaEntropy) {
               bestDeltaEntropy = initialEntropy - tempEntropy;
               predict = {
@@ -405,7 +405,7 @@ class Tree {
     ctx.fillRect(0, 0, canvas.width, canvas.height);
     ctx.strokeRect(0, 0, canvas.width, canvas.height);
     this.lenBetweenNode =  (canvas.width - 200)/tree.maxDepth;
-    this.fontSize = 60/tree.maxDepth;
+    this.fontSize = 8*Math.ceil(Math.log2(Math.max.apply(null, tree.width))+1)/tree.maxDepth;
     ctx.font = this.fontSize + "pt Montserrat Alternates";
   }
   drawTree() {
