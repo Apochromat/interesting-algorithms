@@ -126,15 +126,28 @@ function exchangeGene(parent1, parent2) {
       pointer++;
     child2.push(populathion[parent1].path[pointer]);
   }
-  if (findLenPath(populathion[parent1].path) > findLenPath(child1)) {
-    populathion[parent1].path = child1.slice(0);
-  }
-  if (findLenPath(populathion[parent2].path) > findLenPath(child2)) {
-    populathion[parent2].path = child2.slice(0);
-  }
+  // if (findLenPath(populathion[parent1].path) > findLenPath(child1)) {
+  //   populathion[parent1].path = child1.slice(0);
+  // }
+  // if (findLenPath(populathion[parent2].path) > findLenPath(child2)) {
+  //   populathion[parent2].path = child2.slice(0);
+  // }
   // populathion[parent1].path = child1.slice(0);
   // populathion[parent2].path = child2.slice(0);
-  
+  person = {
+    path: child1.slice(0),
+    chanceParent: getRandChance(),
+    chanceMutat: getRandChance(),
+    lenPath: 0
+  }
+  populathion.push(person);
+  person2 = {
+    path: child2.slice(0),
+    chanceParent: getRandChance(),
+    chanceMutat: getRandChance(),
+    lenPath: 0
+  }
+  populathion.push(person2);
 }
 
 function mutation() {
@@ -169,23 +182,23 @@ function selection() {
   for (let i = 0; i < populathion.length; i++) {
     populathion[i].lenPath = findLenPath(populathion[i].path);
   }
-  // for (let i = 0; i < populathion.length-sizePopulathion; i++){
-  //   let maxLen = -1, maxIndex = -1;
-  //   for (let j = 0; j < populathion.length; j++) {
-  //     if (populathion[j].lenPath > maxLen &&  populathion[j].lenPath != 0) {
-  //       maxLen = populathion[j].lenPath;
-  //       maxIndex = j;
-  //     }
-  //   }
-  //   populathion[maxIndex].lenPath = 0;
-  // }
-  // let temp = [];
-  // for (let i = 0; i < populathion.length; i++) {
-  //   if (populathion[i].lenPath != 0) {
-  //     temp.push(populathion[i]);
-  //   }
-  // }
-  // populathion = temp.slice(0);
+  for (let i = 0; i < populathion.length-sizePopulathion; i++){
+    let maxLen = -1, maxIndex = -1;
+    for (let j = 0; j < populathion.length; j++) {
+      if (populathion[j].lenPath > maxLen &&  populathion[j].lenPath != 0) {
+        maxLen = populathion[j].lenPath;
+        maxIndex = j;
+      }
+    }
+    populathion[maxIndex].lenPath = 0;
+  }
+  let temp = [];
+  for (let i = 0; i < populathion.length; i++) {
+    if (populathion[i].lenPath != 0) {
+      temp.push(populathion[i]);
+    }
+  }
+  populathion = temp.slice(0);
   for (let i = 0; i < populathion.length; i++) {
     populathion[i].chanceParent = getRandChance();
     populathion[i].chanceMutat = getRandChance();
