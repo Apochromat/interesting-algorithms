@@ -1,3 +1,21 @@
+body{
+  background: rgb(12,11,37);
+  background: linear-gradient(90deg, rgb(8, 8, 26) 0%, rgb(13, 49, 73) 53%, rgba(8, 8, 26) 100%);
+	background-size: 400% 400%;
+	animation: gradient 30s ease infinite;
+	height: 100vh;
+}
+@keyframes gradient {
+	0% {
+		background-position: 0% 50%;
+	}
+	50% {
+		background-position: 100% 50%;
+	}
+	100% {
+		background-position: 0% 50%;
+	}
+}
 #canv {
     margin: 0 auto;
     background-color: white;
@@ -27,3 +45,24 @@
     background-color: #03c02c;
     border: 3.4px solid #03c02c;
   }
+
+#topLabel{
+  margin: 5px 15px 10px 15px;
+  padding: 5px;
+  background-color: rgb(66, 66, 66);
+  font-family: "Montserrat Alternates", "Arial Black", sans-serif;
+  font-size: 18px;
+  text-align: center;
+  border-radius: 5px;
+  color: whitesmoke; 
+}
+
+#topList{
+  margin: -16px 15px 10px 15px;
+  padding: 10px 25px;
+  background-color: rgb(66, 66, 66);
+  border-radius: 5px;
+  font-family: "Montserrat Alternates", "Arial Black", sans-serif;
+  font-size: 18px;
+  color: whitesmoke; 
+}

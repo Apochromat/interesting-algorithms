@@ -11,9 +11,6 @@
     <link href="https://fonts.googleapis.com/css?family=Dosis" rel="stylesheet">
 </head>
 <body>
-    <canvas class = "background"></canvas>
-    <script src="../p5.js"></script>
-    <script src="../particles.js"></script>
     <input type="checkbox" id="nav-toggle" hidden>
     <nav class="nav">
         <label for="nav-toggle" class="nav-toggle" onclick></label>
@@ -34,14 +31,28 @@
         <div class="algorithmBox">
           <div class="algorithmOptions">
             <div class="settings">
-              <p>Настройки</p>
+              <div class = "chooseFileBox"> 
+                <h2 for="fileInput">Выберете CVS файл для построения дерева решений</h2>
+                <input type="file" id="fileInput" onchange=read(this)>
+                <button id="btnInput"><img id ="docIMG" src="doc.png">Выбрать файл</button>
+                <div class="buttonBox">
+                  <button class="run" id="runTree">Построить дерево</button>
+                  <button class="run" id="cutTree">Обрезать ветви</button>
+                </div>
+              </div>
+              <div class = "inputCVSBox">
+                <h2 id = "result">Впишите данные для анализа</h2>
+                <input id="csvInput">
+                <button class="run" id="runFeed">Прогнать данные</button>
+              </div> 
             </div>
           </div>
           <div class="algorithmView">
-            <p>Поле алгоритма</p>
+            <canvas id = "canvasTree"></canvas>
           </div>
         </div>
     </div>
+    <script type="text/javascript" src="script.js" defer></script>
 </body>
 </html>
 
