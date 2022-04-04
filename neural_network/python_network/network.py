@@ -1,4 +1,3 @@
-import math
 import random
 import gzip
 import pickle
@@ -7,7 +6,7 @@ import numpy as np
 def sigmoid(z):
     return 1.0/(1.0+np.exp(-z))
 
-def sigmoid_prime(z):
+def deltaSigmoid(z):
     return sigmoid(z)*(1-sigmoid(z))
 
 class Network():
@@ -89,7 +88,7 @@ class Network():
         # activasion - значение активации нейрона
         activation = x
         activations = [x]  # список всех активаций
-        z_vectors = []  # список всех z - векторов
+        z_vectors = []
         for i in range(len(self.weights)):
             z = np.dot(self.weights[i], activation) + self.biases[i]
             z_vectors.append(z)
@@ -97,7 +96,7 @@ class Network():
             activations.append(activation)
         # вычисляем локальный градиент, delta - вектор частных производных на последнем слое
         # (delta = deltaC/deltaZ)
-        delta = self.cost_derivative(activations[-1], y) * sigmoid_prime(z_vectors[-1])
+        delta = self.deltaCost(activations[-1], y) * deltaSigmoid(z_vectors[-1])
         # градиент смещений = локальный градиент
         # (deltaC/deltaB = deltaC/deltaZ)
         grad_b[-1] = delta
@@ -108,11 +107,11 @@ class Network():
         # для каждого слоя, с конца последовательно начинаем высчитыввать градиент аналогично, используя цепное правило
         for l in range(2, self.num_layers):
             z = z_vectors[-l]
-            sp = sigmoid_prime(z)
+            sp = deltaSigmoid(z)
             delta = np.dot(self.weights[-l + 1].transpose(), delta) * sp
             grad_b[-l] = delta
             grad_w[-l] = np.dot(delta, activations[-l - 1].transpose())
         return (grad_b, grad_w)
 
-    def cost_derivative(self, output_activations, y):
+    def deltaCost(self, output_activations, y):
         return (output_activations - y)

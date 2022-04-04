@@ -69,15 +69,6 @@ function pushPointListener(e) {
   ants.push(ant);
   ctx.fillStyle = "whitesmoke";
   ctx.fill();
-  if(nodes.length>1){
-  	for(var i=0; i<nodes.length; i++){
-			for(var j=0; j<nodes.length; j++){
-				if(i != j){
-						drawLine(nodes[i].x,nodes[i].y,nodes[j].x,nodes[j].y,1,"whitesmoke");
-				}
-			}
-		}
-  }
   
   
 } 
@@ -306,13 +297,18 @@ function Start(){
 		alert("Нужно поставить больше 1 города");
 		return;
 	}
+	var i=0;
+	initParameters();
+	while (i!=100){
+		i++;
 	nodes.forEach(function(node) {
 			node.ant.x = node.x;
 			node.ant.y = node.y;
 			node.ant.init();
 		});
-	initParameters();
 	start();
+	globalUpdateRule()
+}
 	drawBestSolution(bestSolution);
 }
  function start(){	
@@ -329,30 +325,19 @@ function Start(){
 var finishedAnts = 0;
 
 function move(callback){
+	    ants.forEach(function(ant) {ant.start=true;});
 		ants.forEach(function(ant) {
 			while(ant.start!=false){
 			ant.move();
-			ant.callback = function(){
-				finishedAnts++;
-				if(bestSolution == null ||  evaluate(ant) < evaluate(bestSolution)){
+				
+			}
+			if(bestSolution == null ||  evaluate(ant) < evaluate(bestSolution)){
 					bestSolution = clone(ant);
 				}
-
-				if(finishedAnts == ants.length){
-					globalUpdateRule();
-					finishedAnts = 0;
-				
-					if(callback !== null){
-						callback();
-					}				
-				}
-			}
-		}		
-
-		});
-
-	drawBestSolution(bestSolution);
-}
+		});		
+		
+}	
+	
 //функция для оценивая дистанции 
 function evaluate(ant){
 		var totalDistance = 0;
