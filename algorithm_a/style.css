@@ -16,6 +16,9 @@ body{
 		background-position: 0% 50%;
 	}
 }
+.mainContainer > .algorithmBox > .algorithmOptions {
+  max-height: 510px;
+}
 #ioTable{
   margin: 0 auto;
 }
@@ -27,13 +30,40 @@ table, th, td {
 p{
   font-size: 17px;
 }
-
+.about{
+  font-family: "Montserrat Alternates", "Arial Black", sans-serif;
+  font-size: 14px;
+  color: whitesmoke;
+  padding-left: 15px;
+  margin-bottom: 7px; 
+  margin-top: 0px; 
+}
+#chooseHeuristic {
+  height: 30px;
+  border: 1px solid #999;
+  font-family: "Montserrat Alternates", "Arial Black", sans-serif;
+  font-size: 16px;
+  background-color: #eee;
+  border-radius: 5px;
+  margin: 5px 15px 10px 15px;
+  background-color: rgb(66, 66, 66);
+  border: 3px solid rgb(66, 66, 66);
+  color: whitesmoke; 
+  cursor: pointer;
+}
+#chooseHeuristic:hover{
+  border: 3px solid rgb(78, 78, 78);
+}
+#chooseHeuristic:focus{
+  border: 3px solid rgb(78, 78, 78);
+  outline: none; 
+}
 #SizeSlider{
   display: block;
   display: flex;
   flex-direction: row;
   justify-content: space-between;
-  padding-top: 16px;
+  padding-top: 0px;
   padding-bottom: 15px;
   padding-left: 15px;
   padding-right: 15px;
