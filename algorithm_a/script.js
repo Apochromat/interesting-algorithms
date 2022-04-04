@@ -18,7 +18,6 @@ class Point {
 
 var h;
 var state = -1; // Режим рисования: 0 - очистить, 1 - вход, 2 - выход, -1 - стенка, 3 - open, 4 - closed, 5 - правильный путь
-var searchSpeed = 200;
 var traceSpeed = 75;
 var maxWay = 10000;
 
@@ -310,7 +309,7 @@ async function aStar (startCell, endCell) {
   G[getIndexByCell(points, startCell)] = 0;
   F[getIndexByCell(points, startCell)] = G[getIndexByCell(points, startCell)] + h(getPointByCell(startCell), getPointByCell(endCell));
   while (open.length > 0) {
-    await delay(searchSpeed);
+    await delay(25000/(objectTable.size*objectTable.size));
     var curr = minF(open, F, points);
     if (curr.cell == endCell) {
       traceWay(map, points, end, start);
