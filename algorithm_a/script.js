@@ -70,6 +70,23 @@ function run() {
     alert("Не указано начало или конец пути");
   }
   else {
+    switch(chooseHeuristic.selectedIndex) {
+      case 0:
+        alert("Евклидово расстояние");
+        break;
+      case 1:  
+        alert("Расстояние Чебышева");
+        break;
+      case 2:
+        alert("Манхэттенское расстояние");
+        break;
+      case 3:
+        alert("Константа");
+        break;
+      default:
+        alert("Чмоня");
+        break;
+    }
     setIndicator(1);
     for (el of objectTable.cellList) {
       let attr = el.getAttribute("class");

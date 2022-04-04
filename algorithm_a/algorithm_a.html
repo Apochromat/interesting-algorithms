@@ -37,6 +37,12 @@
               <input id="tableSizeSlider" type="range" min="5" max="40" value="17" />
               <label id="tableSizeLabel">17</label>
             </div> 
+            <select id = "chooseHeuristic">
+              <option value="Evklid">Евклидово расстояние</option>
+              <option value ="Chebish">Расстояние Чебышева</option>
+              <option value = "Manchetten">Манхэттенское расстояние</option>
+              <option value = "Const">Константа</option>
+            </select>
             <button id="buildTable">Построить поле</button>
             <button id="buildMaze">Построить лабиринт</button>
             <button id="setInput">Обозначить вход</button>
