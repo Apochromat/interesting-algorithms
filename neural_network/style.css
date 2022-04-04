@@ -65,4 +65,10 @@ body{
   font-family: "Montserrat Alternates", "Arial Black", sans-serif;
   font-size: 18px;
   color: whitesmoke; 
+  display: flex;
+  flex-direction: column;
+}
+
+.mainContainer > .algorithmBox > .algorithmOptions {
+  max-height: 600px;
 }

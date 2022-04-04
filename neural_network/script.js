@@ -13,9 +13,19 @@ function ready() {
   document.getElementById("run").onclick = function () { run() }
 }
 
-function run() {
-  var data = d.calculate();
-  net.recognising(makeDataForResponsing(convoluteMatrix(data, 1, 0.25)));
+function delay(delayInms) {
+  return new Promise(resolve => {
+    setTimeout(() => {
+      resolve(2);
+    }, delayInms);
+  });
+}
+
+async function run() {
+  while (true) {
+    await delay(50);
+    net.recognising(makeDataForResponsing(convoluteMatrix(d.calculate(), 1, 0.25)));
+  }
 }
 
 function convoluteMatrix(matrix, type = 0, threshold = 0) {
@@ -144,29 +154,12 @@ class Network {
       a = matr
       matr = []
     }
-    let top1 = 0;
-    let top2 = 0;
-    let top3 = 0;
-    let top1m = 0;
-    let top2m = 0;
-    let top3m = 0;
+    
     for(let i = 0; i < a.length; i++){
-      if (a[i][0] > top1m){
-        top1m = a[i][0]
-        top1 = i
-      }
-      else if (a[i][0] > top2m){
-        top2m = a[i][0]
-        top2 = i
-      }
-      else if (a[i][0] > top3m){
-        top3m = a[i][0]
-        top3 = i
-      }
+      let bar = document.getElementById("progressbar"+i);
+      bar.value = `${(a[i] * 100).toFixed(4)}`;
+      let label = document.getElementById("barLabel"+i);
+      label.innerHTML = `"${i}": ${(a[i] * 100).toFixed(4)}%`
     }
-    document.getElementById("top1").innerHTML = `"${top1}": ${(top1m * 100).toFixed(4)}%`
-    document.getElementById("top2").innerHTML = `"${top2}": ${(top2m * 100).toFixed(4)}%`
-    document.getElementById("top3").innerHTML = `"${top3}": ${(top3m * 100).toFixed(4)}%`
-    return top1
   }
 }
