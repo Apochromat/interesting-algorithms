@@ -16,6 +16,7 @@ class Point {
   }
 }
 
+var h;
 var state = -1; // Режим рисования: 0 - очистить, 1 - вход, 2 - выход, -1 - стенка, 3 - open, 4 - closed, 5 - правильный путь
 var searchSpeed = 200;
 var traceSpeed = 75;
@@ -72,19 +73,16 @@ function run() {
   else {
     switch(chooseHeuristic.selectedIndex) {
       case 0:
-        alert("Евклидово расстояние");
+        h = function(point1, point2){return Math.sqrt(((point1.i - point2.i)**2)+((point1.j - point2.j)**2))}
         break;
       case 1:  
-        alert("Расстояние Чебышева");
+        h = function(point1, point2){return Math.max(Math.abs(point2.i - point1.i), Math.abs(point2.j - point1.j))}
         break;
       case 2:
-        alert("Манхэттенское расстояние");
-        break;
-      case 3:
-        alert("Константа");
+        h = function(point1, point2){return Math.abs(point2.i - point1.i) + Math.abs(point2.j - point1.j)}
         break;
       default:
-        alert("Чмоня");
+        h = function(point1, point2){return Math.abs(point2.i - point1.i) + Math.abs(point2.j - point1.j)}
         break;
     }
     setIndicator(1);
@@ -218,11 +216,6 @@ function dfsMazeConstructor() {
 }
 
 //Функции для А*
-
-function h(point1, point2){
-  return 3*Math.sqrt(((point1.i - point2.i)**2)+((point1.j - point2.j)**2));
-}
-
 function getPointByCell(cell){
   for (let i = 0; i < objectTable.size; i++) {
     for (let j = 0; j < objectTable.size; j++) {
