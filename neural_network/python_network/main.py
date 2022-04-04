@@ -3,7 +3,7 @@ import json
 
 
 def run():
-    layers = [784, 32, 16, 10]
+    layers = [784, 128, 32, 10]
     isLearn = True
     if not isLearn:
         with open("data.json") as f:
