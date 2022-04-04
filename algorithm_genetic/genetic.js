@@ -10,7 +10,9 @@ var
   sizePopulathion = 50,
   globalChanceParent = 30,
   globalChanceMutat = 70,
-  flag = true;
+  flag = true,
+  pointerCrossing = 0,
+  pointerMutat = 0;
 
 function stopAlgorithm(){
   flag = false;
@@ -33,6 +35,8 @@ async function GeneticAlgorithm() {
     coordsPoint = [];
     return;
   }
+  pointerCrossing = 0;
+  pointerMutat = 0;
   populathion = [];
   bestPath = [];
   flag = true;
@@ -50,6 +54,8 @@ async function GeneticAlgorithm() {
     await delay(0.001);
     document.getElementById("countIter").innerHTML=("Итерация: " + iterathion);
     document.getElementById("curLen").innerHTML=("Длина: " + Math.floor(bestLen));
+    document.getElementById("countCrossover").innerHTML=("Кол-во скрещиваний: " + pointerCrossing);
+    document.getElementById("countMutat").innerHTML=("Кол-во мутаций: " + pointerMutat);
   }
   drawPath();
   coordsPoint = [];
@@ -78,37 +84,17 @@ function crossover() {
     if (populathion[i].chanceParent >= globalChanceParent) 
       parents.push(i);
     
-  let countCrossover = Math.floor(parents.length/2);
-  for (let i = 0; i < countCrossover; i++) {
+  let pointerCrossingover = Math.floor(parents.length/2);
+  for (let i = 0; i < pointerCrossingover; i++) {
     parents = shuffle(parents).slice(0);
     exchangeGene(parents[0], parents[1]);
+    pointerCrossing++;
     parents = parents.slice(2);
   }
 }
 
 function exchangeGene(parent1, parent2) {
   let child1 = [], child2 = [], pointer = 0;
-
-  // for (let i = 0; i < numCity; i++) {
-  //   while(child1.includes(populathion[parent1].path[pointer1], 0))
-  //     pointer1++;
-  //   child2.push(populathion[parent1].path[pointer1]);
-  //   while(child1.includes(populathion[parent2].path[pointer2], 0))
-  //     pointer2++;
-  //   child1.push(populathion[parent2].path[pointer2]);
-  //   pointer1 = 0, pointer2 = 0;
-  // }
-  // pointer1 = 0, pointer2 = 0;
-  // for (let i = 0; i < numCity; i++) {
-  //   while(child2.includes(populathion[parent2].path[pointer2], 0))
-  //     pointer2++;
-  //   child2.push(populathion[parent2].path[pointer2]);
-  //   while(child2.includes(populathion[parent1].path[pointer1], 0))
-  //     pointer1++;
-  //   child2.push(populathion[parent1].path[pointer1]);
-  //   pointer1 = 0, pointer2 = 0;
-  // }
-
   for (let i = 0; i < Math.floor(numCity/2); i++) 
     child1.push(populathion[parent1].path[i]);
   
@@ -126,14 +112,6 @@ function exchangeGene(parent1, parent2) {
       pointer++;
     child2.push(populathion[parent1].path[pointer]);
   }
-  // if (findLenPath(populathion[parent1].path) > findLenPath(child1)) {
-  //   populathion[parent1].path = child1.slice(0);
-  // }
-  // if (findLenPath(populathion[parent2].path) > findLenPath(child2)) {
-  //   populathion[parent2].path = child2.slice(0);
-  // }
-  // populathion[parent1].path = child1.slice(0);
-  // populathion[parent2].path = child2.slice(0);
   person = {
     path: child1.slice(0),
     chanceParent: getRandChance(),
@@ -154,6 +132,7 @@ function mutation() {
   for (let i = 0; i < populathion.length; i++)
     if (populathion[i].chanceMutat >= globalChanceMutat){
       populathion[i].path = mutat(populathion[i].path).slice(0);
+      pointerMutat++;
     }
 }
 function mutat(arr) {
