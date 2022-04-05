@@ -30,16 +30,19 @@
         </div>
         <div class="algorithmBox">
           <div class="algorithmOptions">
-            <div class="settings">
-              <button id = "create" onclick = "clearCanvas()"> Создать/Очистить </button>
-              <button id = "setPoint" onclick = "pushPoint()"> Поставить вершину </button>
-              <button id = "startAlgorithm" onclick = "GeneticAlgorithm()"> Найти путь </button>
-              <button id = "startAlgorithm" onclick = "stopAlgorithm()"> Стоп </button>
+            <div>
+              <p id = "statistic">Статистика</p>
               <p id = "countCity">Кол-во городов: 0</p>
               <p id = "countIter">Итерация: 0</p>
               <p id = "curLen">Длина: 0</p>
               <p id = "countCrossover">Кол-во скрещиваний: 0</p>
               <p id = "countMutat">Кол-во мутаций: 0</p>
+            </div>
+            <div class="settings">
+              <button id = "create" onclick = "resetCanvas()"> Создать/Очистить </button>
+              <button id = "setPoint" onclick = "pushPoint()"> Поставить вершину </button>
+              <button id = "startAlgorithm" onclick = "GeneticAlgorithm()"> Найти путь </button>
+              <button id = "stopAlgorithm" onclick = "stopAlgorithm()"> Стоп </button> 
             </div>
           </div>
           <div class="algorithmView">

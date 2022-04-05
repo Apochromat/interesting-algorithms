@@ -16,6 +16,38 @@ body{
           background-position: 0% 50%;
       }
   }
+  .mainContainer > .algorithmBox > .algorithmOptions {
+    max-height: 415px;
+  }
 p{
-    color: white;
+    font-family: "Montserrat Alternates", "Arial Black", sans-serif;
+    font-size: 14px;
+    color: whitesmoke;
+    margin: 5px 15px 10px 15px;
 }
+#statistic{
+    text-align: center;
+    font-size: 19px;
+}
+#stopAlgorithm{
+    border: 3px solid #8d0101;
+    background-color: #8d0101;
+}
+#stopAlgorithm:hover{
+    border: 3.4px solid #d80707;
+  }
+#stopAlgorithm:active{
+    background-color: #d80707;
+    border: 3.4px solid #d80707;
+  }
+#startAlgorithm {
+    border: 3px solid #049924;
+    background-color: #049924;
+  }
+#startAlgorithm:hover{
+    border: 3.4px solid #03c02c;
+  }
+#startAlgorithm:active{
+    background-color: #03c02c;
+    border: 3.4px solid #03c02c;
+  }
