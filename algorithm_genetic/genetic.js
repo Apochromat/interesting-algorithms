@@ -12,6 +12,7 @@ var
   numCity = 0,
   pointerCrossing = 0,
   pointerMutat = 0,
+  pointerDeathPerson = 0,
   iterathion = 0;
   flagWork = true,
   colorGenetic = "red",
@@ -153,6 +154,7 @@ function selection() {
       }
     }
     populathion[maxIndex].lenPath = 0;
+    pointerDeathPerson++;
   }
 
   let temp = [];
@@ -186,11 +188,13 @@ function resetData() {
   document.getElementById("curLen").innerHTML=("Длина: " + Math.floor(bestLen));
   document.getElementById("countCrossover").innerHTML=("Кол-во скрещиваний: " + pointerCrossing);
   document.getElementById("countMutat").innerHTML=("Кол-во мутаций: " + pointerMutat);
+  document.getElementById("countDeathPerson").innerHTML=("Кол-во погибших особей: " + pointerDeathPerson);
 }
 
 function clearData() {
   pointerCrossing = 0;
   pointerMutat = 0;
+  pointerDeathPerson = 0;
   iterathion = 0;
   populathion = [];
   bestPath = [];
