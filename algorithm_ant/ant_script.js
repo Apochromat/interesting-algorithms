@@ -27,7 +27,7 @@ function Node(id,ant,mouseX,mouseY){
 //канвас
 function fiilCanvas() {
   canvas.width = window.innerWidth*0.58;
-  canvas.height = window.innerHeight*0.6;
+  canvas.height = window.innerHeight*0.8;
   ctx.fillStyle = "rgba(211, 211, 211, 0)";
   ctx.strokeStyle = "whitesmoke";
   ctx.lineWidth = 5;
@@ -67,7 +67,7 @@ function pushPointListener(e) {
   nodes.push(node);
   ant.initialNode = node.id;
   ants.push(ant);
-  ctx.fillStyle = "whitesmoke";
+  ctx.fillStyle = "red";
   ctx.fill();
   
   

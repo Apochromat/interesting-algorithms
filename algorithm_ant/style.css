@@ -16,3 +16,17 @@ body{
           background-position: 0% 50%;
       }
   }
+  .mainContainer > .algorithmBox > .algorithmOptions {
+    max-height: 150px;
+  }
+#run {
+    border: 3px solid #049924;
+    background-color: #049924;
+    }
+#run:hover{
+    border: 3.4px solid #03c02c;
+    }
+#run:active{
+    background-color: #03c02c;
+    border: 3.4px solid #03c02c;
+  }
