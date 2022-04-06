@@ -23,7 +23,7 @@ function delay(delayInms) {
 
 async function run() {
   while (true) {
-    await delay(50);
+    await delay(75);
     net.recognising(makeDataForResponsing(convoluteMatrix(d.calculate(), 1, 0.25)));
   }
 }
