@@ -17,8 +17,14 @@ body{
       }
   }
   .mainContainer > .algorithmBox > .algorithmOptions {
-    max-height: 440px;
+    max-height: 450px;
   }
+#statisticBox{
+  padding-top: 15px;
+  padding-bottom: 20px;
+  margin-bottom: 0px;
+  border: 2px solid whitesmoke;
+}
 p{
     font-family: "Montserrat Alternates", "Arial Black", sans-serif;
     font-size: 14px;

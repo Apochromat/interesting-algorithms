@@ -7,10 +7,11 @@ var
   Ostov = [],
   lonelyCluster = [],
   numCenter = 3,
+  colorsKMeans = ["rgb(13, 92, 145)", "rgb(177, 12, 237)", "rgb(12, 237, 211)", "rgb(5, 255, 47)", "rgb(12, 19, 237)", "rgb(233, 237, 12)","rgb(237, 147, 12)", "rgb(0, 150, 105)", "rgb(237, 12, 132)", "rgb(0, 150, 15)"],
   colorKMeans = "rgb(13, 92, 145)",
   colorHier = "white",
   colorOstov = "red";
-  widthKMeans = "5";
+  widthKMeans = "2";
   widthHier = "1";
   widthOstov = "1";
   
@@ -95,19 +96,19 @@ async function kMedium(){
     return 0;
   }
   canvas.removeEventListener("mousedown", pushPointListener);
+  let flagCompare = false;
   clearStroke();
   findCentroids();
-  findMinStroke();
+  findMinStroke(flagCompare);
   while (true){
     ctx.clearRect(0, 0, canvas.width, canvas.height);
     fiilCanvas();
-    drawPoint();
     let flag = false;
     if(!replaceCentroids(flag)){
-      findMinStroke();
+      findMinStroke(flagCompare);
       break;
     }
-    findMinStroke();
+    findMinStroke(flagCompare);
     await delay(900);  
   }
   
@@ -117,6 +118,7 @@ function findCentroids() {
     x: 0,
     y: 0,
     index: 0,
+    color: colorsKMeans[0]
   };
 
   // let maximus = 99999;
@@ -142,6 +144,7 @@ function findCentroids() {
       x: 0,
       y: 0,
       index: 0,
+      color: colorsKMeans[i]
     };
     let maxMedLen = -1;
     let maxLenForCenter = []
@@ -175,7 +178,7 @@ function findCentroids() {
     coordsClusterKMeans.push(maxPoint);
   }
 }
-function findMinStroke(){
+function findMinStroke(flagCompare){
   for (let i = 0; i < coordsClusterKMeans.length; i++) 
     coordsClusterKMeans[i].neigbourPoints = [];
   
@@ -183,7 +186,8 @@ function findMinStroke(){
     var minPoint = {
       x: 0,
       y: 0,
-      index: 0
+      index: 0,
+      color: "black"
     };
     var minLen = 999999;
     for (let j = 0; j < coordsClusterKMeans.length; j++) 
@@ -198,12 +202,19 @@ function findMinStroke(){
     }
     coordsClusterKMeans[minPoint.index].neigbourPoints.push(Point);
     
-    drawStroke(coordsPoint[i], minPoint, widthKMeans, colorKMeans);
-    drawCircle(coordsPoint[i], 8, colorKMeans); 
+    if (!flagCompare) {
+      drawStroke(coordsPoint[i], minPoint, widthKMeans, minPoint.color);
+      drawCircle(coordsPoint[i], 5, minPoint.color); 
+    }
+    else{
+      drawCircle(coordsPoint[i], 10, minPoint.color);
+    }
   };
   for (let i = 0; i < coordsClusterKMeans.length; i++) 
-    if (coordsClusterKMeans[i].neigbourPoints.length == 1) 
-      drawCircle(coordsClusterKMeans[i].neigbourPoints[0], 15, colorKMeans);    
+    if (coordsClusterKMeans[i].neigbourPoints.length == 1) {
+      if (!flagCompare) drawCircle(coordsClusterKMeans[i].neigbourPoints[0], 8, coordsClusterKMeans[i].color); 
+      else drawCircle(coordsClusterKMeans[i].neigbourPoints[0], 18, coordsClusterKMeans[i].color);    
+    } 
 }
 function replaceCentroids(flag){
   for (let i = 0; i < coordsClusterKMeans.length; i++) {
@@ -299,7 +310,7 @@ function updateStroke() {
   for (let i = 0; i < coordsClusterHier.length; i++) 
     for (let k = 0; k < coordsClusterHier[i].neigbourPoints.length; k++) {
       if (coordsClusterHier[i].neigbourPoints.length == 1) 
-        drawCircle(coordsPoint[coordsClusterHier[i].neigbourPoints[k]], 6, colorHier);
+        drawCircle(coordsPoint[coordsClusterHier[i].neigbourPoints[k]], 4, colorHier);
       else{
         drawStroke(coordsClusterHier[i], coordsPoint[coordsClusterHier[i].neigbourPoints[k]], widthHier, colorHier);
         drawCircle(coordsPoint[coordsClusterHier[i].neigbourPoints[k]], 2, colorHier);
@@ -393,7 +404,7 @@ function drawOstov() {
         drawCircle(coordsPoint[j], 4, colorOstov);
       }
   for (let i = 0; i < lonelyCluster.length; i++) 
-    drawCircle(coordsPoint[lonelyCluster[i]], 10, colorOstov);
+    drawCircle(coordsPoint[lonelyCluster[i]], 7, colorOstov);
 }
 
 async function compareClusterizations() {
@@ -406,9 +417,10 @@ async function compareClusterizations() {
     return 0;
   }
   canvas.removeEventListener("mousedown", pushPointListener);
+  let flagCompare = true;
   clearStroke();
   findCentroids();
-  findMinStroke();
+  findMinStroke(flagCompare);
   Ostov = findOstov();
   deleteMaxStroke();
   for (let i = 0; i < coordsPoint.length; i++){
@@ -431,7 +443,7 @@ async function compareClusterizations() {
     }
     let flag2 = false;
     flag2 = replaceCentroids(flag2);
-    findMinStroke();
+    findMinStroke(flagCompare);
     drawOstov();
     updateStroke();
     if (coordsClusterHier.length == numCenter && flag2 == false) break;
