@@ -3,7 +3,7 @@ var
   ctx = canvas.getContext("2d"),
   colorNode = "white",
   colorLeaf = "rgb(4, 199, 10)",
-  colorWayNode = "yellow",
+  colorWayNode = "rgb(0, 255, 0)",
   colorWayLeaf = "rgb(0, 255, 0)",
   colorAngLabel = "orange",
   colorStroke = "white",
@@ -211,7 +211,7 @@ class Node {
     }
     else {
       tree.drawCircle(node, raduisNode, colorWayLeaf);
-      ctx.fillText(node.result, node.x - ctx.measureText(node.label).width/2 , node.y - 15);
+      ctx.fillText(node.result, node.x, node.y - 15);
     }
   }
 }
