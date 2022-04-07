@@ -23,7 +23,7 @@ body{
   padding-top: 15px;
   padding-bottom: 20px;
   margin-bottom: 0px;
-  border: 2px solid whitesmoke;
+  border: 0.5px solid whitesmoke;
 }
 p{
     font-family: "Montserrat Alternates", "Arial Black", sans-serif;

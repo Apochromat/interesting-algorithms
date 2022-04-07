@@ -83,7 +83,7 @@ p {
   padding-top: 15px;
   padding-bottom: 20px;
   margin-bottom: 10px;
-  border: 2px solid whitesmoke;
+  border: 0.5px solid whitesmoke;
 }
 .about{
   text-align:left;
