@@ -20,10 +20,12 @@ body{
     max-height: 450px;
   }
 #statisticBox{
+  margin: 5px 15px 10px 15px;
+  border-radius: 5px;
   padding-top: 15px;
   padding-bottom: 20px;
   margin-bottom: 0px;
-  border: 0.5px solid whitesmoke;
+  border: 0.5px solid gray;
 }
 p{
     font-family: "Montserrat Alternates", "Arial Black", sans-serif;

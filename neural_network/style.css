@@ -74,6 +74,9 @@ progress::-webkit-progress-value {
   margin-top: 10px;
   display: flex;
   flex-direction: column;
+  border: 0.5px solid gray;
+  margin: 5px 15px 10px 15px;
+  border-radius: 5px;
 }
 #topLabel{
   margin: 10px 0px 0px 0px;
