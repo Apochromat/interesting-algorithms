@@ -157,9 +157,9 @@ class Network {
     
     for(let i = 0; i < a.length; i++){
       let bar = document.getElementById("progressbar"+i);
-      bar.value = `${(a[i] * 100).toFixed(4)}`;
+      bar.value = `${(a[i] * 100).toFixed(2)}`;
       let label = document.getElementById("barLabel"+i);
-      label.innerHTML = `"${i}": ${(a[i] * 100).toFixed(4)}%`
+      label.innerHTML = `"${i}": ${(a[i] * 100).toFixed(2)}%`
     }
   }
 }
