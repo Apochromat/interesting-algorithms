@@ -3,7 +3,7 @@ var
   ctx = canvas.getContext("2d"),
   sizePopulathion = 50,
   globalChanceParent = 30,
-  globalChanceMutat = 70,
+  globalChanceMutat = 30,
   coordsPoint = [],
   populathion = [],
   parentsID = [],
