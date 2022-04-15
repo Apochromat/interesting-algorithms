@@ -9,10 +9,10 @@ var ALPHA = 1 ;//параметр контролирующий влияние ta
 var BETA = 2; //параметр контролирующий влияние nij
 var RHO = 0.1; //скорость испарения феромона 
 var Q = 1; //регулируемый параметр 
-
+var coordsPoint=[];
 var mouseX = 0; 
 var mouseY = 0;
-
+var work=true;
 var tau = null; //колличество феромона на ребре 
 var dist = null; //длина 
 var bestSolution = null; //лучшее решение 
@@ -40,6 +40,7 @@ function clearCanvas(){
    ants = new Array();  //массив для всех муравьев 
    ANT_ID = 0; //порядковый номер муравья 
    NODE_ID=0;
+   coordsPoint=[];
 //величины для подсчета феромона 
  ALPHA = 1 ;//параметр контролирующий влияние tau
  BETA = 2; //параметр контролирующий влияние nij
@@ -56,6 +57,7 @@ function clearCanvas(){
   fiilCanvas();
 }
 function pushPointListener(e) {
+
   var Point = {
     x: e.pageX - e.target.offsetLeft,
     y: e.pageY - e.target.offsetTop
@@ -69,9 +71,23 @@ function pushPointListener(e) {
   ants.push(ant);
   ctx.fillStyle = "red";
   ctx.fill();
-  
+  tau=null;
+
+  coordsPoint.push(Point);
   
 } 
+function drawPoint(){
+	ctx.clearRect(0, 0, canvas.width, canvas.height);
+  fiilCanvas();
+	for (let i = 0; i < coordsPoint.length; i++) drawCircle(coordsPoint[i]);
+
+};
+function drawCircle(point) {
+  ctx.beginPath();
+  ctx.arc(point.x, point.y, 8, 0, Math.PI*2);
+  ctx.fillStyle = "red";
+  ctx.fill();  
+}
 function NewNode(){
 
     canvas.addEventListener("mousedown", pushPointListener);
@@ -283,6 +299,7 @@ function drawBestSolution(ant){
 		if(ant == null){
 			return;
 		}
+		drawPoint();
 		ctx.beginPath();
 		for (var h = 1; h < ant.visitedNodes.length; h++) {
 			var i = ant.visitedNodes[h - 1];
@@ -292,15 +309,15 @@ function drawBestSolution(ant){
 		}
 }
 //функция для старта 
-function Start(){
+async function Start(){
 	if(nodes.length==1){
 		alert("Нужно поставить больше 1 города");
 		return;
 	}
 	var i=0;
 	initParameters();
-	while (i!=100){
-		i++;
+  work=true;
+	while (work){
 	nodes.forEach(function(node) {
 			node.ant.x = node.x;
 			node.ant.y = node.y;
@@ -308,8 +325,11 @@ function Start(){
 		});
 	start();
 	globalUpdateRule()
-}
+	console.log(2);
+	await delay(0.001);
 	drawBestSolution(bestSolution);
+}
+drawBestSolution(bestSolution);
 }
  function start(){	
 	
@@ -317,8 +337,6 @@ function Start(){
 			ants.forEach(function(ant) {
 				ant.start = true;
 				ant.init();
-
-				
 			});			
 		})
 }
@@ -392,3 +410,20 @@ function clone(obj) {
 	        return copy;
 	    }
 	}
+	function Stop(){
+		work=false;
+	};
+	function delay(delayInms) {
+  return new Promise(resolve => {
+    setTimeout(() => {
+      resolve(2);
+    }, delayInms);
+  });
+}
+function delay(delayInms) {
+  return new Promise(resolve => {
+    setTimeout(() => {
+      resolve(2);
+    }, delayInms);
+  });
+}

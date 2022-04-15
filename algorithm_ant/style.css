@@ -16,9 +16,9 @@ body{
           background-position: 0% 50%;
       }
   }
-  .mainContainer > .algorithmBox > .algorithmOptions {
+/*  .mainContainer > .algorithmBox > .algorithmOptions {
     max-height: 150px;
-  }
+  }*/
 #run {
     border: 3px solid #049924;
     background-color: #049924;
@@ -30,3 +30,7 @@ body{
     background-color: #03c02c;
     border: 3.4px solid #03c02c;
   }
+#stop{
+    border: 3px solid #8d0101;
+    background-color: #8d0101;
+}
