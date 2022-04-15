@@ -248,15 +248,13 @@ async function hierarchical() {
       x: coordsPoint[i].x,
       y: coordsPoint[i].y,
       index: i,
-      neigbourPoints: [i], 
-      nearCluster: -1,
+      neigbourPoints: [i]
     };
      coordsClusterHier.push(Point);
   }
   while (coordsClusterHier.length > numCenter) {
     ctx.clearRect(0, 0, canvas.width, canvas.height);
     fiilCanvas();
-    findNearCluster();
     updateClusters();
     if(coordsClusterHier.length == numCenter){
       updateStroke();
@@ -266,28 +264,14 @@ async function hierarchical() {
     await delay(100);  
   }
 }
-function findNearCluster() {
-  for (let i = 0; i < coordsClusterHier.length; i++){ 
-    let minLen = 999999;
-    for (let j = 0; j < coordsClusterHier.length; j++)
-      if (i != j) 
-        if ( minLen > findLenBeetwenPoints(coordsClusterHier[i], coordsClusterHier[j]) ) {
-          minLen = findLenBeetwenPoints(coordsClusterHier[i], coordsClusterHier[j]);
-          coordsClusterHier[i].nearCluster = j;
-        }
-  }
-}
 function updateClusters() {
   let minCluster1 = -1, minCluster2 = -1, minLen = 9999;
-  for (let i = 0; i < coordsClusterHier.length; i++) 
-    for (let j = 0; j < coordsClusterHier.length; j++) 
-      if (i != j && coordsClusterHier[i] != 0 && coordsClusterHier[j] != 0) 
-        if (coordsClusterHier[i].nearCluster == j && coordsClusterHier[j].nearCluster == i){
-          if (minLen >= findLenBeetwenPoints(coordsClusterHier[i], coordsClusterHier[j])){
-          minCluster1 = i, minCluster2 = j;
-          minLen = findLenBeetwenPoints(coordsClusterHier[i], coordsClusterHier[j]);
-          }
-        }  
+  for (let i = 0; i < coordsClusterHier.length-1; i++) 
+    for (let j = i+1; j < coordsClusterHier.length; j++) 
+      if (minLen >= findLenBeetwenPoints(coordsClusterHier[i], coordsClusterHier[j])){
+        minCluster1 = i, minCluster2 = j;
+        minLen = findLenBeetwenPoints(coordsClusterHier[i], coordsClusterHier[j]);
+      }      
   mergeCluster(minCluster1, minCluster2);       
   temp = [];
   for (let i = 0; i < coordsClusterHier.length; i++) 
@@ -428,8 +412,7 @@ async function compareClusterizations() {
       x: coordsPoint[i].x,
       y: coordsPoint[i].y,
       index: i,
-      neigbourPoints: [i], 
-      nearCluster: 0,
+      neigbourPoints: [i]
     };
      coordsClusterHier.push(Point);
   }
@@ -438,7 +421,6 @@ async function compareClusterizations() {
     fiilCanvas();
     drawPoint();
     if(coordsClusterHier.length > numCenter){
-      findNearCluster();
       updateClusters();
     }
     let flag2 = false;
