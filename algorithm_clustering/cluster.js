@@ -248,8 +248,7 @@ async function hierarchical() {
       x: coordsPoint[i].x,
       y: coordsPoint[i].y,
       index: i,
-      neigbourPoints: [i], 
-      nearCluster: -1,
+      neigbourPoints: [i]
     };
      coordsClusterHier.push(Point);
   }
@@ -413,8 +412,7 @@ async function compareClusterizations() {
       x: coordsPoint[i].x,
       y: coordsPoint[i].y,
       index: i,
-      neigbourPoints: [i], 
-      nearCluster: 0,
+      neigbourPoints: [i]
     };
      coordsClusterHier.push(Point);
   }
