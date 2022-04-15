@@ -16,21 +16,46 @@ body{
           background-position: 0% 50%;
       }
   }
-/*  .mainContainer > .algorithmBox > .algorithmOptions {
-    max-height: 150px;
-  }*/
-#run {
-    border: 3px solid #049924;
-    background-color: #049924;
-    }
-#run:hover{
-    border: 3.4px solid #03c02c;
-    }
-#run:active{
-    background-color: #03c02c;
-    border: 3.4px solid #03c02c;
+  .mainContainer > .algorithmBox > .algorithmOptions {
+    max-height: 450px;
   }
-#stop{
+#statisticBox{
+  margin: 5px 15px 10px 15px;
+  border-radius: 5px;
+  padding-top: 15px;
+  padding-bottom: 20px;
+  margin-bottom: 0px;
+  border: 0.5px solid gray;
+}
+p{
+    font-family: "Montserrat Alternates", "Arial Black", sans-serif;
+    font-size: 14px;
+    color: whitesmoke;
+    margin: 5px 15px 10px 15px;
+}
+#statistic{
+    text-align: center;
+    font-size: 19px;
+}
+#stopAlgorithm{
     border: 3px solid #8d0101;
     background-color: #8d0101;
 }
+#stopAlgorithm:hover{
+    border: 3.4px solid #d80707;
+  }
+#stopAlgorithm:active{
+    background-color: #d80707;
+    border: 3.4px solid #d80707;
+  }
+#startAlgorithm {
+    border: 3px solid #049924;
+    background-color: #049924;
+  }
+#startAlgorithm:hover{
+    border: 3.4px solid #03c02c;
+  }
+#startAlgorithm:active{
+    background-color: #03c02c;
+    border: 3.4px solid #03c02c;
+  }

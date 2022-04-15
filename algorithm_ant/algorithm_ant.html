@@ -19,7 +19,7 @@
             <li><a href="../algorithm_a/algorithm_a.html">Алгоритм A*</a>
             <li><a href="../algorithm_clustering/algorithm_clustering.html">Алгоритм кластеризации</a>
             <li><a href="../algorithm_genetic/algorithm_genetic.html">Генетический алгоритм</a>
-            <li>Муравьиный алгоритм</a>
+            <li><a href="">Муравьиный алгоритм</a></li>
             <li><a href="../decision_tree/decision_tree.html">Дерево решений</a>
             <li><a href="../neural_network/neural_network.html">Нейронная сеть</a>
         </ul>
@@ -30,11 +30,19 @@
         </div>
         <div class="algorithmBox">
           <div class="algorithmOptions">
+            <div>
+              <div id="statisticBox">
+                <p id = "statistic">Статистика</p>
+                <p id = "countCity">Кол-во городов: 0</p>
+                <p id = "countIter">Итерация: 0</p>
+                <p id = "curLen">Длина: 0</p>
+              </div>
+            </div>
             <div class="settings">
               <button id = "create" onclick = "clearCanvas()"> Создать/Очистить </button>
               <button id = "NewNode" onclick = "NewNode()"> Создать узел </button>
               <button id = "run" onclick = "Start()"> Найти путь </button>
-               <button id = "stop" onclick = "Stop()"> Остановить </button>
+              <button id = "stop" onclick = "Stop()"> Остановить </button>
             </div>
           </div>
           <div class="algorithmView">

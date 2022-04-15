@@ -5,8 +5,8 @@ var ants = new Array();  //массив для всех муравьев
 var ANT_ID = 0; //порядковый номер муравья 
 var NODE_ID=0; //порядковый номер узла
 //величины для подсчета феромона 
-var ALPHA = 1 ;//параметр контролирующий влияние tau
-var BETA = 2; //параметр контролирующий влияние nij
+var ALPHA = 1.0 ;//параметр контролирующий влияние tau(предыдущий опыт)
+var BETA = 5.0; //параметр контролирующий влияние nij(жадность)
 var RHO = 0.1; //скорость испарения феромона 
 var Q = 1; //регулируемый параметр 
 var coordsPoint=[];
@@ -16,6 +16,7 @@ var work=true;
 var tau = null; //колличество феромона на ребре 
 var dist = null; //длина 
 var bestSolution = null; //лучшее решение 
+var iterathion =0;
 //функция для определения узла 
 function Node(id,ant,mouseX,mouseY){
 		this.id = id;
@@ -42,19 +43,16 @@ function clearCanvas(){
    NODE_ID=0;
    coordsPoint=[];
 //величины для подсчета феромона 
- ALPHA = 1 ;//параметр контролирующий влияние tau
- BETA = 2; //параметр контролирующий влияние nij
- RHO = 0.1; //скорость испарения феромона 
- Q = 1; //регулируемый параметр 
-
- mouseX = 0; 
- mouseY = 0;
-
+ 		mouseX = 0; 
+		 mouseY = 0;
  tau = null; //колличество феромона на ребре 
  dist = null; //длина 
  bestSolution = null; //лучшее решение 
 //функция для определения узла 
+	iterathion=0;
+	
   fiilCanvas();
+  resetData();
 }
 function pushPointListener(e) {
 
@@ -63,7 +61,7 @@ function pushPointListener(e) {
     y: e.pageY - e.target.offsetTop
   };
   ctx.beginPath();
-  ctx.arc(e.pageX - e.target.offsetLeft, e.pageY - e.target.offsetTop, 8, 0, Math.PI*2);
+  ctx.arc(e.pageX - e.target.offsetLeft, e.pageY - e.target.offsetTop, 6, 0, Math.PI*2);
   var ant = new Ant(ANT_ID++,e.pageX - e.target.offsetLeft,e.pageY - e.target.offsetTop);
   var node = new Node(NODE_ID++,ant,e.pageX - e.target.offsetLeft,e.pageY - e.target.offsetTop);
   nodes.push(node);
@@ -72,9 +70,13 @@ function pushPointListener(e) {
   ctx.fillStyle = "red";
   ctx.fill();
   tau=null;
-
+	mouseX = 0; 
+  mouseY = 0;
+  dist = null; //длина 
+  bestSolution = null; //лучшее решение 
+//функция для определения узла 
   coordsPoint.push(Point);
-  
+  resetData();
 } 
 function drawPoint(){
 	ctx.clearRect(0, 0, canvas.width, canvas.height);
@@ -325,8 +327,9 @@ async function Start(){
 		});
 	start();
 	globalUpdateRule()
-	console.log(2);
 	await delay(0.001);
+	resetData();
+	iterathion++;
 	drawBestSolution(bestSolution);
 }
 drawBestSolution(bestSolution);
@@ -376,7 +379,6 @@ function globalUpdateRule(){
 
 					for (var k = 0; k < ants.length; k++) {
 						if (ants[k].path[i][j] == 1) {
-							//deltaTau += p.getDeltaTau(ant[k], i, j);
 							deltaTau += Q / evaluate(ants[k]);
 						}
 					}
@@ -426,4 +428,9 @@ function delay(delayInms) {
       resolve(2);
     }, delayInms);
   });
+}
+function resetData() {
+  document.getElementById("countCity").innerHTML=("Кол-во городов: " + coordsPoint.length);
+  document.getElementById("countIter").innerHTML=("Итерация: " + iterathion);
+  document.getElementById("curLen").innerHTML=("Длина: " + Math.floor(evaluate(bestSolution)));
 }
