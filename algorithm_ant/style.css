@@ -17,7 +17,7 @@ body{
       }
   }
   .mainContainer > .algorithmBox > .algorithmOptions {
-    max-height: 450px;
+    max-height: 380px;
   }
 #statisticBox{
   margin: 5px 15px 10px 15px;
@@ -37,25 +37,25 @@ p{
     text-align: center;
     font-size: 19px;
 }
-#stopAlgorithm{
+#stop{
     border: 3px solid #8d0101;
     background-color: #8d0101;
 }
-#stopAlgorithm:hover{
+#stop:hover{
     border: 3.4px solid #d80707;
   }
-#stopAlgorithm:active{
+#stop:active{
     background-color: #d80707;
     border: 3.4px solid #d80707;
   }
-#startAlgorithm {
+#run {
     border: 3px solid #049924;
     background-color: #049924;
   }
-#startAlgorithm:hover{
+#run:hover{
     border: 3.4px solid #03c02c;
   }
-#startAlgorithm:active{
+#run:active{
     background-color: #03c02c;
     border: 3.4px solid #03c02c;
   }
