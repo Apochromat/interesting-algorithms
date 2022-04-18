@@ -30,11 +30,7 @@ class Network():
         training_inputs = [np.reshape(x, (784, 1)) for x in tr_d[0]]
         training_results = [self.vectorized_result(y) for y in tr_d[1]]
         training_data = list(zip(training_inputs, training_results))
-        validation_inputs = [np.reshape(x, (784, 1)) for x in va_d[0]]
-        validation_data = list(zip(validation_inputs, va_d[1]))
-        test_inputs = [np.reshape(x, (784, 1)) for x in te_d[0]]
-        test_data = list(zip(test_inputs, te_d[1]))
-        return training_data, validation_data, test_data
+        return training_data
 
     def feedforward(self, a):
         for bias, weight in zip(self.biases, self.weights):
@@ -50,37 +46,31 @@ class Network():
                 output = i
         return output
 
-    def evaluate(self, test_data):
-        test_results = [(np.argmax(self.feedforward(x)), y) for (x, y) in test_data]
-        return sum(int(x == y) for (x, y) in test_results)
-
     def training(self, epochs, mini_batch_size, grad_step):
-        test_data = self.getdata()[2]
-        n_test = len(test_data)
-        training_data = self.getdata()[0]
+        training_data = self.getdata()
         n = len(training_data)
         for j in range(epochs):
             random.shuffle(training_data)
             mini_batches = [training_data[k:k + mini_batch_size] for k in range(0, n, mini_batch_size)]
             for mini_batch in mini_batches:
-                self.update_mini_batch(mini_batch, grad_step)
-            print("Epoch {0}: {1} / {2}".format(j, self.evaluate(test_data), n_test))
-        print("Training compleated: {0} / {1}".format(self.evaluate(self.getdata()[1]), len(self.getdata()[1])))
+                self.updateCoeffs(mini_batch, grad_step)
+            print("Epoch {0}".format(j))
+        print("Training compleated")
 
-    def update_mini_batch(self, mini_batch, grad_step):
+    def updateCoeffs(self, mini_batch, grad_step):
         # для мини партии вычисляем градиент как сумму градиентов отдельных элементов,
         # деленную на количество элементов в партии
         grad_b = [np.zeros(b.shape) for b in self.biases]
         grad_w = [np.zeros(w.shape) for w in self.weights]
         for x, y in mini_batch:
-            delta_grad_b, delta_grad_w = self.backprop(x, y)
+            delta_grad_b, delta_grad_w = self.backpropagation(x, y)
             grad_b = [gb + dgb for gb, dgb in zip(grad_b, delta_grad_b)]
             grad_w = [gw + dgw for gw, dgw in zip(grad_w, delta_grad_w)]
         # применяем полученный градиент, изменяем веса и смещения
         self.weights = [w - (grad_step / len(mini_batch)) * gw for w, gw in zip(self.weights, grad_w)]
         self.biases = [b - (grad_step / len(mini_batch)) * gb for b, gb in zip(self.biases, grad_b)]
 
-    def backprop(self, x, y):
+    def backpropagation(self, x, y):
         grad_b = [np.zeros(b.shape) for b in self.biases]
         grad_w = [np.zeros(w.shape) for w in self.weights]
         # строим матрицы всех данных нейросети, полученых при feedforward
